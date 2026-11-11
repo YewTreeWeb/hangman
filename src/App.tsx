@@ -1,46 +1,96 @@
+import { DifficultyLevel } from "./components/difficultyLevel";
+import { Badge } from "./components/ui/badge";
+import { Button } from "./components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { APITester } from "./APITester";
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemMedia,
+  ItemTitle,
+} from "./components/ui/item";
 import "./index.css";
-
-import logo from "./logo.svg";
-import reactLogo from "./react.svg";
+import { useGameStore } from "./store/gameStore";
 
 export function App() {
+  const { setCategory, setVoice: toggleVoice, voice } = useGameStore();
+  const categories = [
+    "Random",
+    "Animals",
+    "Food",
+    "Science",
+    "Geography",
+    "Movies",
+    "Music",
+    "Sports",
+    "Technology",
+    "History",
+    "Art",
+    "Mythology",
+    "Nature",
+    "Structure",
+    "Languages",
+    "Weather",
+    "Gems",
+    "Tools",
+    "Places",
+    "Objects",
+  ];
+
   return (
-    <div className="container mx-auto p-8 text-center relative z-10">
-      <div className="flex justify-center items-center gap-8 mb-8">
-        <img
-          src={logo}
-          alt="Bun Logo"
-          className="h-36 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa] scale-120"
-        />
-        <img
-          src={reactLogo}
-          alt="React Logo"
-          className="h-36 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#61dafbaa] [animation:spin_20s_linear_infinite]"
-        />
+    <div className="relative z-10 container mx-auto p-4 text-center">
+      <div className="mb-8 flex items-center justify-center gap-8">
+        <h1 className="text-4xl font-bold">Hangman</h1>
       </div>
       <Card>
-        <CardHeader className="gap-4">
-          <CardTitle className="text-3xl font-bold">Bun + React</CardTitle>
-          <CardDescription>
-            Edit{" "}
-            <code className="rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono">
-              src/App.tsx
-            </code>{" "}
-            and save to test HMR
-          </CardDescription>
+        <CardHeader>
+          <CardTitle>Difficulty Levels</CardTitle>
         </CardHeader>
         <CardContent>
-          <APITester />
+          <DifficultyLevel
+            level="Easy"
+            tries={14}
+            timer={false}
+            powers={true}
+          />
+          <DifficultyLevel level="Medium" tries={10} timer={true} powers={2} />
+          <DifficultyLevel level="Hard" tries={8} timer={true} powers={1} />
+          <DifficultyLevel
+            level="Executioner"
+            tries={5}
+            timer={true}
+            powers={false}
+          />
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Category</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {categories.map((category) => (
+            <Badge
+              variant="outline"
+              key={category}
+              onClick={() => setCategory(category)}
+            >
+              {category}
+            </Badge>
+          ))}
+        </CardContent>
+      </Card>
+      <Item variant="outline">
+        <ItemMedia></ItemMedia>
+        <ItemContent>
+          <ItemTitle className="font-bold">Voice</ItemTitle>
+        </ItemContent>
+        <ItemActions>
+          <Button variant="outline" onClick={() => toggleVoice(!voice)}>
+            {voice ? "Disable" : "Enable"}
+          </Button>
+        </ItemActions>
+      </Item>
+      <Button className="w-full">Play</Button>
     </div>
   );
 }
