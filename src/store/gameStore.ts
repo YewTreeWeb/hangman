@@ -5,7 +5,7 @@ import type { GamePageProps, LevelTypes } from "@/types/game-types";
 type GameState = {
   page: GamePageProps;
   difficulty: LevelTypes | null;
-  category: string | "random";
+  category: string | "Random";
   voice: boolean;
   setPage: (page: GamePageProps) => void;
   setDifficulty: (level: LevelTypes) => void;
@@ -16,7 +16,7 @@ type GameState = {
 export const useGameStore = create<GameState>((set) => ({
   page: "home",
   difficulty: null,
-  category: "random",
+  category: "Random",
   voice: false,
   setPage: (page: GamePageProps) => set((s) => ({ page })),
   setDifficulty: (level: LevelTypes) => set((s) => ({ difficulty: level })),

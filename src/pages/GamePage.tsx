@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button";
+import type { ReactNode } from "react";
+
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import {
   Menubar,
   MenubarContent,
@@ -14,13 +16,68 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { cn } from "@/lib/utils";
 import { useGameStore } from "@/store/gameStore";
 import type { LevelTypes } from "@/types/game-types";
 
 export function GamePage() {
-  const { difficulty, setDifficulty, category } = useGameStore();
+  const { difficulty, setDifficulty, category, setPage } = useGameStore();
   const levels = ["Easy", "Medium", "Hard", "Executioner"];
   const filteredLevels = levels.filter((level) => level !== difficulty);
+
+  type PowerTypes = {
+    name: string;
+    description: string;
+    Icon: () => ReactNode;
+    active: boolean;
+    multiUse?: boolean;
+    uses?: number;
+  }[];
+
+  const powers: PowerTypes = [
+    {
+      name: "Clue",
+      description: "Provides a hint for the current word.",
+      Icon: () => <span>💡</span>,
+      multiUse: false,
+      active: true,
+    },
+    {
+      name: "Reveal",
+      description: "Reveals a letter in the current word.",
+      Icon: () => <span>🔍</span>,
+      multiUse: false,
+      active: true,
+    },
+    {
+      name: "Shield",
+      description: "Protects the player from one incorrect guess.",
+      Icon: () => <span>🛡️</span>,
+      multiUse: false,
+      active: true,
+    },
+    {
+      name: "Skip",
+      description: "Skips the current word.",
+      Icon: () => <span>⏩</span>,
+      multiUse: false,
+      active: true,
+    },
+    {
+      name: "Zap",
+      description: "Removes five incorrect letters from the current word.",
+      Icon: () => <span>⚡</span>,
+      multiUse: false,
+      active: false,
+    },
+    {
+      name: "Phone a Friend",
+      description: "Calls a random AI agent for help with the current word.",
+      Icon: () => <span>📞</span>,
+      multiUse: false,
+      active: true,
+    },
+  ];
 
   return (
     <div className="relative z-10 container mx-auto p-4 text-center">
@@ -32,7 +89,10 @@ export function GamePage() {
             </MenubarTrigger>
           </MenubarMenu>
           <MenubarMenu>
-            <MenubarTrigger className="hover:cursor-pointer">
+            <MenubarTrigger
+              className="hover:cursor-pointer"
+              onClick={() => setPage("home")}
+            >
               Home
             </MenubarTrigger>
           </MenubarMenu>
@@ -75,15 +135,29 @@ export function GamePage() {
         <div className="flex items-center justify-center gap-4">
           <h5>Powers</h5>
           <div>
-            <HoverCard>
-              <HoverCardTrigger>
-                <Button variant="outline">Power</Button>
-              </HoverCardTrigger>
-              <HoverCardContent>
-                <span>This is a power-up!</span>
-                <span>Only single use</span>
-              </HoverCardContent>
-            </HoverCard>
+            {powers.map((power) => (
+              <HoverCard>
+                <HoverCardTrigger>
+                  <Item
+                    className={cn(
+                      "flex items-center gap-2",
+                      !power.active && "opacity-50",
+                    )}
+                  >
+                    <ItemMedia>{power.Icon()}</ItemMedia>
+                    <ItemContent>
+                      <ItemTitle>{power.name}</ItemTitle>
+                    </ItemContent>
+                  </Item>
+                </HoverCardTrigger>
+                <HoverCardContent>
+                  <span>{power.description}</span>
+                  {power.multiUse && (
+                    <span>Uses before inactive: {power.uses}</span>
+                  )}
+                </HoverCardContent>
+              </HoverCard>
+            ))}
           </div>
         </div>
       </section>
