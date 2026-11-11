@@ -8,3 +8,8 @@ env = "BUN_PUBLIC_*"
 [lint.rules]
 # "no-console" = "warn"
 # "eqeqeq" = ["error", "smart"]
+
+[fmt]
+sortImports = true
+sortTailwindcss = true
+sortPackageJson = true
