@@ -129,9 +129,14 @@ function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
+function ItemDescription({
+  className,
+  asChild = false,
+  ...props
+}: React.ComponentProps<"p"> & { asChild?: boolean }) {
+  const Comp = asChild ? Slot.Root : "p";
   return (
-    <p
+    <Comp
       data-slot="item-description"
       className={cn(
         "text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-balance",
@@ -181,13 +186,13 @@ function ItemFooter({ className, ...props }: React.ComponentProps<"div">) {
 
 export {
   Item,
-  ItemMedia,
-  ItemContent,
   ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
   ItemGroup,
+  ItemHeader,
+  ItemMedia,
   ItemSeparator,
   ItemTitle,
-  ItemDescription,
-  ItemHeader,
-  ItemFooter,
 };

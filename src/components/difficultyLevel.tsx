@@ -1,5 +1,5 @@
 import { useGameStore } from "@/store/gameStore";
-import type { LevelTypes } from "@/types/level-types";
+import type { LevelTypes } from "@/types/game-types";
 
 import {
   Item,
@@ -39,7 +39,7 @@ export function DifficultyLevel({
                 <img></img>
                 {level}
               </ItemTitle>
-              <ItemDescription>
+              <ItemDescription asChild>
                 <ul>
                   <li>{tries} tries</li>
                   <li>{timer ? "With timer" : "No timer"}</li>
