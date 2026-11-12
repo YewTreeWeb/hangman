@@ -1,40 +1,13 @@
-import type { ReactNode } from "react";
-
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
-import { cn } from "@/lib/utils";
-import { useGameStore } from "@/store/gameStore";
-import type { LevelTypes } from "@/types/game-types";
+import { HeaderMenu } from "@/components/headerMenu";
+import { Powers } from "@/components/powers";
+import { useGameStore, useUserStore } from "@/store/gameStore";
+import type { PowerTypes } from "@/types/game-types";
 
 export function GamePage() {
-  const { difficulty, setDifficulty, category, setPage } = useGameStore();
-  const levels = ["Easy", "Medium", "Hard", "Executioner"];
-  const filteredLevels = levels.filter((level) => level !== difficulty);
+  const { category } = useGameStore();
+  const { score, lives, setScore, setLives, setSolved } = useUserStore();
 
-  type PowerTypes = {
-    name: string;
-    description: string;
-    Icon: () => ReactNode;
-    active: boolean;
-    multiUse?: boolean;
-    uses?: number;
-  }[];
-
-  const powers: PowerTypes = [
+  const powers: PowerTypes[] = [
     {
       name: "Clue",
       description: "Provides a hint for the current word.",
@@ -82,52 +55,31 @@ export function GamePage() {
   return (
     <div className="relative z-10 container mx-auto p-4 text-center">
       <div className="mb-8 flex items-center justify-center gap-8">
-        <Menubar className="w-full">
-          <MenubarMenu>
-            <MenubarTrigger className="hover:cursor-pointer">
-              Score
-            </MenubarTrigger>
-          </MenubarMenu>
-          <MenubarMenu>
-            <MenubarTrigger
-              className="hover:cursor-pointer"
-              onClick={() => setPage("home")}
-            >
-              Home
-            </MenubarTrigger>
-          </MenubarMenu>
-          <MenubarMenu>
-            <MenubarTrigger className="hover:cursor-pointer">
-              Difficulty
-            </MenubarTrigger>
-            <MenubarContent>
-              <MenubarSub>
-                <MenubarSubTrigger>{difficulty}</MenubarSubTrigger>
-                <MenubarSubContent>
-                  {filteredLevels.map((level) => (
-                    <MenubarItem
-                      key={level}
-                      onClick={() => setDifficulty(level as LevelTypes)}
-                    >
-                      {level}
-                    </MenubarItem>
-                  ))}
-                </MenubarSubContent>
-              </MenubarSub>
-            </MenubarContent>
-          </MenubarMenu>
-          <MenubarMenu>
-            <MenubarTrigger className="hover:cursor-pointer">
-              Lives
-            </MenubarTrigger>
-          </MenubarMenu>
-        </Menubar>
+        <HeaderMenu />
+        <div className="flex flex-col items-center gap-2">
+          <div>
+            <span>Score</span>
+            <span>{score}</span>
+          </div>
+          <div aria-label={`${lives} lives remaining`}>
+            <span>Lives</span>
+            {Array.from({ length: lives }, (_, i) => (
+              <span key={i}>❤️</span>
+            ))}
+          </div>
+        </div>
       </div>
       <section className="grid grid-cols-2 gap-4">
         <div></div>
         <div>
           <h6>{category}</h6>
-          <span>_</span>
+          <div>
+            <span>H</span>
+            <span>E</span>
+            <span>L</span>
+            <span>L</span>
+            <span>O</span>
+          </div>
           <span>Worth 50 points</span>
         </div>
       </section>
@@ -136,27 +88,7 @@ export function GamePage() {
           <h5>Powers</h5>
           <div>
             {powers.map((power) => (
-              <HoverCard>
-                <HoverCardTrigger>
-                  <Item
-                    className={cn(
-                      "flex items-center gap-2",
-                      !power.active && "opacity-50",
-                    )}
-                  >
-                    <ItemMedia>{power.Icon()}</ItemMedia>
-                    <ItemContent>
-                      <ItemTitle>{power.name}</ItemTitle>
-                    </ItemContent>
-                  </Item>
-                </HoverCardTrigger>
-                <HoverCardContent>
-                  <span>{power.description}</span>
-                  {power.multiUse && (
-                    <span>Uses before inactive: {power.uses}</span>
-                  )}
-                </HoverCardContent>
-              </HoverCard>
+              <Powers {...power} />
             ))}
           </div>
         </div>
