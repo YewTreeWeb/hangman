@@ -718,7 +718,7 @@
     },
     {
       "word": "SWORDFISH",
-      "hint": "Fish with a long bill"
+      "hint": "Ocean predator with a long pointed bill"
     },
     {
       "word": "BARRACUDA",
@@ -854,7 +854,7 @@
     },
     {
       "word": "BLUEJAY",
-      "hint": "Noisy blue bird"
+      "hint": "Noisy crested North American songbird"
     },
     {
       "word": "MAGPIE",
@@ -870,7 +870,7 @@
     },
     {
       "word": "KINGFISHER",
-      "hint": "Bright bird that dives for fish"
+      "hint": "Bright bird that plunges into rivers"
     },
     {
       "word": "ALBATROSS",
@@ -918,7 +918,7 @@
     },
     {
       "word": "NIGHTINGALE",
-      "hint": "Sings at night"
+      "hint": "Bird famed for singing after dark"
     },
     {
       "word": "MOCKINGBIRD",
@@ -1014,7 +1014,7 @@
     },
     {
       "word": "DUCKLING",
-      "hint": "Baby duck"
+      "hint": "Fluffy chick that follows its mother to the pond"
     },
     {
       "word": "GOSLING",
@@ -1026,7 +1026,7 @@
     },
     {
       "word": "EAGLET",
-      "hint": "Baby eagle"
+      "hint": "Chick in a raptor's eyrie"
     },
     {
       "word": "BUNNY",
@@ -1552,7 +1552,7 @@
     },
     {
       "word": "CITYSCAPE",
-      "hint": "Picture of a city"
+      "hint": "Painting of urban streets and skylines"
     },
     {
       "word": "NUDE",
@@ -1804,7 +1804,7 @@
     },
     {
       "word": "PAINTER",
-      "hint": "Uses paint"
+      "hint": "Artist who works at an easel"
     },
     {
       "word": "ILLUSTRATOR",
@@ -1928,7 +1928,7 @@
     },
     {
       "word": "GLASSWORK",
-      "hint": "Blown or shaped glass"
+      "hint": "Blown and shaped art made in a furnace"
     },
     {
       "word": "JEWELLERY",
@@ -1936,11 +1936,11 @@
     },
     {
       "word": "GOLDSMITH",
-      "hint": "Works with gold"
+      "hint": "Craftsperson who shapes the yellow precious metal"
     },
     {
       "word": "SILVERSMITH",
-      "hint": "Works with silver"
+      "hint": "Craftsperson who makes cutlery and tea sets by hand"
     },
     {
       "word": "FILIGREE",
@@ -1972,7 +1972,7 @@
     },
     {
       "word": "ALTARPIECE",
-      "hint": "Church altar painting"
+      "hint": "Religious picture behind a church table"
     },
     {
       "word": "TRIPTYCH",
@@ -2012,7 +2012,7 @@
     },
     {
       "word": "DARKROOM",
-      "hint": "Film developing room"
+      "hint": "Where film photos are developed under red light"
     },
     {
       "word": "DIGITAL",
@@ -2914,7 +2914,7 @@
     },
     {
       "word": "BEETROOT",
-      "hint": "Deep red root"
+      "hint": "Deep red vegetable that stains everything"
     },
     {
       "word": "ASPARAGUS",
@@ -2954,31 +2954,31 @@
     },
     {
       "word": "STRAWBERRY",
-      "hint": "Red berry with seeds outside"
+      "hint": "Red summer fruit with seeds on the outside"
     },
     {
       "word": "RASPBERRY",
-      "hint": "Red hollow berry"
+      "hint": "Soft red fruit that is hollow inside"
     },
     {
       "word": "BLUEBERRY",
-      "hint": "Small blue berry"
+      "hint": "Small dark fruit for muffins"
     },
     {
       "word": "BLACKBERRY",
-      "hint": "Dark bramble berry"
+      "hint": "Dark fruit picked from brambles"
     },
     {
       "word": "CRANBERRY",
-      "hint": "Tart red berry sauce"
+      "hint": "Tart red fruit served with turkey"
     },
     {
       "word": "GOOSEBERRY",
-      "hint": "Hairy green berry"
+      "hint": "Hairy green tart fruit"
     },
     {
       "word": "WATERMELON",
-      "hint": "Huge green melon with red flesh"
+      "hint": "Huge green fruit with red flesh and black seeds"
     },
     {
       "word": "GRAPEFRUIT",
@@ -3166,7 +3166,7 @@
     },
     {
       "word": "MEATBALL",
-      "hint": "Ball of minced meat"
+      "hint": "Round of minced beef in spaghetti sauce"
     },
     {
       "word": "KEBAB",
@@ -3214,7 +3214,7 @@
     },
     {
       "word": "CUPCAKE",
-      "hint": "Small iced cake"
+      "hint": "Small iced bake in a paper case"
     },
     {
       "word": "CHEESECAKE",
@@ -3298,7 +3298,7 @@
     },
     {
       "word": "DOUGHNUT",
-      "hint": "Fried ring of dough"
+      "hint": "Fried ring with a hole, often sugared"
     },
     {
       "word": "CINNAMON",
@@ -3712,7 +3712,7 @@
     },
     {
       "word": "TANZANITE",
-      "hint": "Blue-violet gem from Tanzania"
+      "hint": "Blue-violet gem found near Kilimanjaro"
     },
     {
       "word": "TOURMALINE",
@@ -3964,7 +3964,7 @@
     },
     {
       "word": "JADEITE",
-      "hint": "Prized jade mineral"
+      "hint": "Prized green mineral for carvings"
     },
     {
       "word": "NEPHRITE",
@@ -4044,7 +4044,7 @@
     },
     {
       "word": "FACET",
-      "hint": "Flat cut face"
+      "hint": "Flat polished surface on a cut gem"
     },
     {
       "word": "CARAT",
@@ -4188,11 +4188,11 @@
     },
     {
       "word": "GOLDSMITH",
-      "hint": "Works gold"
+      "hint": "Shapes the yellow precious metal"
     },
     {
       "word": "SILVERSMITH",
-      "hint": "Works silver"
+      "hint": "Shapes sterling into jewellery"
     },
     {
       "word": "APPRAISER",
@@ -4292,7 +4292,7 @@
     },
     {
       "word": "NECKLACE",
-      "hint": "Worn around the neck"
+      "hint": "Chain or string of beads worn at the throat"
     },
     {
       "word": "CHOKER",
@@ -4308,7 +4308,7 @@
     },
     {
       "word": "ANKLET",
-      "hint": "Worn on the ankle"
+      "hint": "Chain worn just above the foot"
     },
     {
       "word": "CUFFLINK",
@@ -4644,7 +4644,7 @@
     },
     {
       "word": "SANDSTONE",
-      "hint": "Rock made of sand grains"
+      "hint": "Rock made of cemented beach grains"
     },
     {
       "word": "PUMICE",
@@ -4700,7 +4700,7 @@
     },
     {
       "word": "MAGNETITE",
-      "hint": "Magnetic iron ore"
+      "hint": "Iron ore that attracts a compass needle"
     },
     {
       "word": "BAUXITE",
@@ -4716,7 +4716,7 @@
     },
     {
       "word": "SOAPSTONE",
-      "hint": "Soft carving stone"
+      "hint": "Soft talc rock used for carving"
     },
     {
       "word": "TRAVERTINE",
@@ -4748,7 +4748,7 @@
     },
     {
       "word": "CRYSTALLINE",
-      "hint": "Made of crystals"
+      "hint": "Clear and ordered like quartz"
     },
     {
       "word": "FACETED",
@@ -4796,7 +4796,7 @@
     },
     {
       "word": "GEMSTONE",
-      "hint": "Cut and polished stone"
+      "hint": "Cut and polished precious mineral"
     },
     {
       "word": "MINERAL",
@@ -5002,7 +5002,7 @@
     },
     {
       "word": "ISLAND",
-      "hint": "Land surrounded by water"
+      "hint": "Surrounded on all sides by sea"
     },
     {
       "word": "ATOLL",
@@ -5150,7 +5150,7 @@
     },
     {
       "word": "WATERFALL",
-      "hint": "Water dropping over a cliff"
+      "hint": "River dropping over a cliff"
     },
     {
       "word": "RAPIDS",
@@ -5198,7 +5198,7 @@
     },
     {
       "word": "EQUATORIAL",
-      "hint": "Near the equator"
+      "hint": "Near the line at zero latitude"
     },
     {
       "word": "POLAR",
@@ -5290,7 +5290,7 @@
     },
     {
       "word": "AMERICA",
-      "hint": "Named after Amerigo Vespucci"
+      "hint": "Named after the explorer Vespucci"
     },
     {
       "word": "OCEANIA",
@@ -5410,7 +5410,7 @@
     },
     {
       "word": "SCOTLAND",
-      "hint": "Land of kilts"
+      "hint": "Home of kilts and lochs"
     },
     {
       "word": "ENGLAND",
@@ -5430,7 +5430,7 @@
     },
     {
       "word": "FINLAND",
-      "hint": "Land of a thousand lakes"
+      "hint": "Country with tens of thousands of lakes"
     },
     {
       "word": "DENMARK",
@@ -5438,7 +5438,7 @@
     },
     {
       "word": "ICELAND",
-      "hint": "Land of fire and ice"
+      "hint": "Island nation of volcanoes and glaciers"
     },
     {
       "word": "POLAND",
@@ -5490,7 +5490,7 @@
     },
     {
       "word": "CHINA",
-      "hint": "Most populous country"
+      "hint": "Home of the Great Wall"
     },
     {
       "word": "JAPAN",
@@ -5926,7 +5926,7 @@
     },
     {
       "word": "HEADLAND",
-      "hint": "Point of high land"
+      "hint": "Point of high coast jutting into the sea"
     },
     {
       "word": "PROMONTORY",
@@ -5934,7 +5934,7 @@
     },
     {
       "word": "SANDBAR",
-      "hint": "Ridge of sand in water"
+      "hint": "Ridge of grains built up in shallow water"
     },
     {
       "word": "SHOAL",
@@ -5970,7 +5970,7 @@
     },
     {
       "word": "RAINFOREST",
-      "hint": "Tropical wet forest"
+      "hint": "Wet tropical jungle"
     },
     {
       "word": "WOODLAND",
@@ -5982,7 +5982,7 @@
     },
     {
       "word": "SCRUBLAND",
-      "hint": "Land of stunted bushes"
+      "hint": "Dry area of stunted bushes"
     },
     {
       "word": "BADLANDS",
@@ -6006,7 +6006,7 @@
     },
     {
       "word": "NETHERLANDS",
-      "hint": "Land of windmills and tulips"
+      "hint": "Country of windmills and tulips"
     }
   ],
   "History": [
@@ -6212,7 +6212,7 @@
     },
     {
       "word": "GEORGIAN",
-      "hint": "Era of four Georges"
+      "hint": "British era from 1714 to 1830"
     },
     {
       "word": "REGENCY",
@@ -6316,7 +6316,7 @@
     },
     {
       "word": "SUMER",
-      "hint": "First civilisation"
+      "hint": "Early civilisation of southern Mesopotamia"
     },
     {
       "word": "AZTEC",
@@ -6396,7 +6396,7 @@
     },
     {
       "word": "NERO",
-      "hint": "Fiddled while Rome burned"
+      "hint": "Emperor said to have fiddled as Rome burned"
     },
     {
       "word": "CLEOPATRA",
@@ -6548,7 +6548,7 @@
     },
     {
       "word": "WORKHOUSE",
-      "hint": "Victorian poor house"
+      "hint": "Victorian institution for the poor"
     },
     {
       "word": "CHIMNEY",
@@ -6952,7 +6952,7 @@
     },
     {
       "word": "FREEDOM",
-      "hint": "Being free"
+      "hint": "Not being enslaved or imprisoned"
     },
     {
       "word": "BRONZE",
@@ -6980,7 +6980,7 @@
     },
     {
       "word": "STONEHENGE",
-      "hint": "Ancient stone circle"
+      "hint": "Ancient circle on Salisbury Plain"
     },
     {
       "word": "DRUID",
@@ -7044,7 +7044,7 @@
     },
     {
       "word": "MAGELLAN",
-      "hint": "First circumnavigation"
+      "hint": "Led the first voyage around the world"
     },
     {
       "word": "DRAKE",
@@ -7064,7 +7064,7 @@
     },
     {
       "word": "LINCOLN",
-      "hint": "Freed the slaves"
+      "hint": "Issued the Emancipation Proclamation"
     },
     {
       "word": "WASHINGTON",
@@ -7386,7 +7386,7 @@
     },
     {
       "word": "KURDISH",
-      "hint": "Language of Kurdistan"
+      "hint": "Language spoken across Iraq, Iran and Turkey"
     },
     {
       "word": "ARMENIAN",
@@ -7742,15 +7742,15 @@
     },
     {
       "word": "ADVERB",
-      "hint": "Modifies a verb"
+      "hint": "Word like quickly or softly"
     },
     {
       "word": "PRONOUN",
-      "hint": "Replaces a noun"
+      "hint": "Word like he, she or they"
     },
     {
       "word": "PREPOSITION",
-      "hint": "Shows position"
+      "hint": "Word like on, under or between"
     },
     {
       "word": "CONJUNCTION",
@@ -8214,7 +8214,7 @@
     },
     {
       "word": "TOMATO",
-      "hint": "From Nahuatl tomatl"
+      "hint": "From the Nahuatl name for this red fruit"
     },
     {
       "word": "AVOCADO",
@@ -8286,7 +8286,7 @@
     },
     {
       "word": "CHECKMATE",
-      "hint": "Persian the king is dead"
+      "hint": "From Persian: the king is helpless"
     },
     {
       "word": "KIOSK",
@@ -8310,11 +8310,11 @@
     },
     {
       "word": "KOALA",
-      "hint": "Aboriginal word meaning no water"
+      "hint": "Borrowed from the Dharug language of Sydney"
     },
     {
       "word": "SKI",
-      "hint": "Norwegian snow shoe"
+      "hint": "Borrowed from Norwegian"
     },
     {
       "word": "SAUNA",
@@ -8374,7 +8374,7 @@
     },
     {
       "word": "GLITCH",
-      "hint": "Yiddish slip"
+      "hint": "Possibly from Yiddish for a slip"
     },
     {
       "word": "SCHMOOZE",
@@ -8672,7 +8672,7 @@
     },
     {
       "word": "CAMERAMAN",
-      "hint": "Operates the camera"
+      "hint": "Operates the film recorder on set"
     },
     {
       "word": "GAFFER",
@@ -8784,7 +8784,7 @@
     },
     {
       "word": "GLOBE",
-      "hint": "Golden award"
+      "hint": "Golden award for film and TV"
     },
     {
       "word": "FESTIVAL",
@@ -8892,7 +8892,7 @@
     },
     {
       "word": "SPOTLIGHT",
-      "hint": "Focused stage light"
+      "hint": "Focused stage beam on a performer"
     },
     {
       "word": "MICROPHONE",
@@ -9148,7 +9148,7 @@
     },
     {
       "word": "HEROINE",
-      "hint": "Female hero"
+      "hint": "Female lead who saves the day"
     },
     {
       "word": "ENSEMBLE",
@@ -9231,12 +9231,12 @@
       "hint": "Single still image"
     },
     {
-      "word": "ASPECT",
-      "hint": "Ratio of width to height"
+      "word": "LETTERBOX",
+      "hint": "Black bars above and below the picture"
     },
     {
       "word": "WIDESCREEN",
-      "hint": "Wide format"
+      "hint": "Cinema format broader than TV"
     },
     {
       "word": "FOCUS",
@@ -9368,7 +9368,7 @@
     },
     {
       "word": "OUTTAKE",
-      "hint": "Unused take"
+      "hint": "Unused shot, often a blooper"
     },
     {
       "word": "EXTENDED",
@@ -9392,7 +9392,7 @@
     },
     {
       "word": "NEWSREEL",
-      "hint": "Old cinema news"
+      "hint": "Old cinema bulletin before the feature"
     },
     {
       "word": "INTERMISSION",
@@ -9499,8 +9499,8 @@
       "hint": "Panel of judges"
     },
     {
-      "word": "PALME",
-      "hint": "Cannes top prize"
+      "word": "CINEMAGOER",
+      "hint": "Regular at the picture house"
     },
     {
       "word": "GENIE",
@@ -9568,7 +9568,7 @@
     },
     {
       "word": "KINGDOM",
-      "hint": "Realm of a king"
+      "hint": "Realm ruled by a monarch"
     },
     {
       "word": "EMPIRE",
@@ -10222,7 +10222,7 @@
     },
     {
       "word": "DRUMSTICK",
-      "hint": "Used to hit a drum"
+      "hint": "Wooden beater for a kit"
     },
     {
       "word": "MALLET",
@@ -10410,7 +10410,7 @@
     },
     {
       "word": "PLAYLIST",
-      "hint": "Curated list of songs"
+      "hint": "Curated order of songs"
     },
     {
       "word": "RADIO",
@@ -10534,11 +10534,11 @@
     },
     {
       "word": "GUITARIST",
-      "hint": "Plays guitar"
+      "hint": "Strums six strings in a band"
     },
     {
       "word": "BASSIST",
-      "hint": "Plays bass"
+      "hint": "Plays the low four-string in a band"
     },
     {
       "word": "PIANIST",
@@ -10546,7 +10546,7 @@
     },
     {
       "word": "VIOLINIST",
-      "hint": "Plays violin"
+      "hint": "Fiddle player in an orchestra"
     },
     {
       "word": "CELLIST",
@@ -10558,15 +10558,15 @@
     },
     {
       "word": "HARPIST",
-      "hint": "Plays harp"
+      "hint": "Plucks an angelic string instrument"
     },
     {
       "word": "ORGANIST",
-      "hint": "Plays organ"
+      "hint": "Church keyboard player"
     },
     {
       "word": "TRUMPETER",
-      "hint": "Plays trumpet"
+      "hint": "Brass player with three valves"
     },
     {
       "word": "COMPOSER",
@@ -10582,7 +10582,7 @@
     },
     {
       "word": "MUSICIAN",
-      "hint": "Plays music"
+      "hint": "Plays an instrument professionally"
     },
     {
       "word": "MAESTRO",
@@ -10762,7 +10762,7 @@
     },
     {
       "word": "DISBAND",
-      "hint": "Band splits up"
+      "hint": "What a group does when it splits up"
     },
     {
       "word": "ENSEMBLE",
@@ -11120,7 +11120,7 @@
     },
     {
       "word": "ARGONAUT",
-      "hint": "Sailed on the Argo"
+      "hint": "Crew member on Jason's ship"
     },
     {
       "word": "ACHILLES",
@@ -11452,7 +11452,7 @@
     },
     {
       "word": "VALHALLA",
-      "hint": "Hall of slain warriors"
+      "hint": "Odin's feasting place for slain warriors"
     },
     {
       "word": "VALKYRIE",
@@ -11588,7 +11588,7 @@
     },
     {
       "word": "AFTERLIFE",
-      "hint": "Life after death"
+      "hint": "Existence beyond death"
     },
     {
       "word": "UNDERWORLD",
@@ -11852,7 +11852,7 @@
     },
     {
       "word": "WEREWOLF",
-      "hint": "Wolf at full moon"
+      "hint": "Human who turns beast at full moon"
     },
     {
       "word": "VAMPIRE",
@@ -11904,7 +11904,7 @@
     },
     {
       "word": "THUNDERBIRD",
-      "hint": "Storm spirit bird"
+      "hint": "Storm spirit of Native American legend"
     },
     {
       "word": "WENDIGO",
@@ -12222,11 +12222,11 @@
     },
     {
       "word": "SUNFLOWER",
-      "hint": "Tall yellow flower that tracks light"
+      "hint": "Tall yellow bloom that turns to face the light"
     },
     {
       "word": "BLUEBELL",
-      "hint": "Woodland blue flower"
+      "hint": "Woodland spring bloom with drooping bells"
     },
     {
       "word": "BUTTERCUP",
@@ -12438,7 +12438,7 @@
     },
     {
       "word": "UNDERGROWTH",
-      "hint": "Plants under trees"
+      "hint": "Shrubs beneath the forest canopy"
     },
     {
       "word": "JUNGLE",
@@ -12446,7 +12446,7 @@
     },
     {
       "word": "RAINFOREST",
-      "hint": "Wet tropical forest"
+      "hint": "Wet tropical jungle"
     },
     {
       "word": "SWAMP",
@@ -12482,7 +12482,7 @@
     },
     {
       "word": "WATERFALL",
-      "hint": "Cascading water"
+      "hint": "River plunging over rocks"
     },
     {
       "word": "SPRING",
@@ -12586,7 +12586,7 @@
     },
     {
       "word": "ISLAND",
-      "hint": "Land in water"
+      "hint": "Surrounded on all sides by sea"
     },
     {
       "word": "REEF",
@@ -12674,7 +12674,7 @@
     },
     {
       "word": "TWILIGHT",
-      "hint": "Fading light"
+      "hint": "Fading glow after sunset"
     },
     {
       "word": "SUNSHINE",
@@ -12682,7 +12682,7 @@
     },
     {
       "word": "SUNLIGHT",
-      "hint": "Light from the sun"
+      "hint": "Daytime rays from our star"
     },
     {
       "word": "MOONLIGHT",
@@ -12690,7 +12690,7 @@
     },
     {
       "word": "STARLIGHT",
-      "hint": "Light from stars"
+      "hint": "Faint glow from distant suns"
     },
     {
       "word": "RAINBOW",
@@ -12814,7 +12814,7 @@
     },
     {
       "word": "WILDLIFE",
-      "hint": "Wild animals"
+      "hint": "Animals living untamed"
     },
     {
       "word": "FAUNA",
@@ -13508,7 +13508,7 @@
     },
     {
       "word": "BACKPACK",
-      "hint": "Bag on your back"
+      "hint": "Bag worn over both shoulders"
     },
     {
       "word": "WALLET",
@@ -13636,7 +13636,7 @@
     },
     {
       "word": "LIPSTICK",
-      "hint": "Colours lips"
+      "hint": "Colour applied to the mouth"
     },
     {
       "word": "WIG",
@@ -13728,7 +13728,7 @@
     },
     {
       "word": "NEWSPAPER",
-      "hint": "Daily news"
+      "hint": "Daily printed bulletin"
     },
     {
       "word": "POSTER",
@@ -13872,7 +13872,7 @@
     },
     {
       "word": "PADLOCK",
-      "hint": "Portable lock"
+      "hint": "Portable shackle with a key"
     },
     {
       "word": "SAFE",
@@ -14028,7 +14028,7 @@
     },
     {
       "word": "SKATEBOARD",
-      "hint": "Board on wheels"
+      "hint": "Deck on four wheels"
     },
     {
       "word": "SCOOTER",
@@ -14144,11 +14144,11 @@
     },
     {
       "word": "HAIRBRUSH",
-      "hint": "Brushes hair"
+      "hint": "Bristles for untangling your locks"
     },
     {
       "word": "HAIRDRYER",
-      "hint": "Blows hair dry"
+      "hint": "Blows warm air after a shower"
     },
     {
       "word": "PLASTER",
@@ -14172,7 +14172,7 @@
     },
     {
       "word": "WHEELCHAIR",
-      "hint": "Seat with wheels"
+      "hint": "Rolling seat for those who cannot walk"
     },
     {
       "word": "CRUTCH",
@@ -14200,7 +14200,7 @@
     },
     {
       "word": "NECKLACE",
-      "hint": "Worn around the neck"
+      "hint": "Chain or beads worn at the throat"
     },
     {
       "word": "BRACELET",
@@ -14252,7 +14252,7 @@
     },
     {
       "word": "SNOWGLOBE",
-      "hint": "Shake to see snow"
+      "hint": "Shake it to see a winter scene"
     },
     {
       "word": "HOURGLASS",
@@ -14284,7 +14284,7 @@
     },
     {
       "word": "CANDLESTICK",
-      "hint": "Holds a candle"
+      "hint": "Holder for a wax taper"
     },
     {
       "word": "FIREPLACE",
@@ -14300,7 +14300,7 @@
     },
     {
       "word": "DOORBELL",
-      "hint": "Rings at the door"
+      "hint": "Rings when visitors arrive"
     },
     {
       "word": "DOORMAT",
@@ -14376,7 +14376,7 @@
     },
     {
       "word": "PAPERWEIGHT",
-      "hint": "Holds papers down"
+      "hint": "Heavy ornament that holds documents down"
     },
     {
       "word": "SHARPENER",
@@ -14396,7 +14396,7 @@
     },
     {
       "word": "PAINTBRUSH",
-      "hint": "Applies paint"
+      "hint": "Bristles for applying colour"
     },
     {
       "word": "EASEL",
@@ -14666,7 +14666,7 @@
     },
     {
       "word": "FIREHOUSE",
-      "hint": "Fire engines kept here"
+      "hint": "Where engines and crews wait for a call"
     },
     {
       "word": "GARAGE",
@@ -14786,7 +14786,7 @@
     },
     {
       "word": "UPTOWN",
-      "hint": "Residential part of town"
+      "hint": "Residential area away from the centre"
     },
     {
       "word": "CENTRE",
@@ -15074,7 +15074,7 @@
     },
     {
       "word": "DOCKYARD",
-      "hint": "Ship repair yard"
+      "hint": "Where ships are repaired"
     },
     {
       "word": "SHIPYARD",
@@ -15110,15 +15110,15 @@
     },
     {
       "word": "RIVERBANK",
-      "hint": "Edge of a river"
+      "hint": "Grassy edge of a stream"
     },
     {
       "word": "WATERFRONT",
-      "hint": "By the water"
+      "hint": "Area beside a harbour or lake"
     },
     {
       "word": "DOCKSIDE",
-      "hint": "Next to the dock"
+      "hint": "Next to where ships moor"
     },
     {
       "word": "SKYSCRAPER",
@@ -15198,11 +15198,11 @@
     },
     {
       "word": "BOOKSHOP",
-      "hint": "Sells books"
+      "hint": "Sells novels and textbooks"
     },
     {
       "word": "TOYSHOP",
-      "hint": "Sells toys"
+      "hint": "Sells dolls and games"
     },
     {
       "word": "NEWSAGENT",
@@ -15222,7 +15222,7 @@
     },
     {
       "word": "LAUNDROMAT",
-      "hint": "American launderette"
+      "hint": "Coin-operated washing machines"
     },
     {
       "word": "KENNELS",
@@ -15290,7 +15290,7 @@
     },
     {
       "word": "CAVERN",
-      "hint": "Large cave"
+      "hint": "Huge underground hollow"
     },
     {
       "word": "GROTTO",
@@ -15378,7 +15378,7 @@
     },
     {
       "word": "SPACEPORT",
-      "hint": "Space launch site"
+      "hint": "Rocket launch site"
     },
     {
       "word": "HELIPAD",
@@ -15394,7 +15394,7 @@
     },
     {
       "word": "CROSSROADS",
-      "hint": "Where roads meet"
+      "hint": "Where two routes intersect"
     },
     {
       "word": "ROUNDABOUT",
@@ -15574,7 +15574,7 @@
     },
     {
       "word": "SUBURBIA",
-      "hint": "Suburban areas collectively"
+      "hint": "Commuter districts collectively"
     },
     {
       "word": "SLUM",
@@ -15618,7 +15618,7 @@
     },
     {
       "word": "KINGDOM",
-      "hint": "Ruled by a king"
+      "hint": "Realm ruled by a monarch"
     },
     {
       "word": "EMPIRE",
@@ -15768,7 +15768,7 @@
     },
     {
       "word": "NEUTRON",
-      "hint": "Neutral nuclear particle"
+      "hint": "Uncharged nuclear particle"
     },
     {
       "word": "ELECTRON",
@@ -16484,7 +16484,7 @@
     },
     {
       "word": "NUCLEAR",
-      "hint": "Relating to atomic nuclei"
+      "hint": "Relating to the atomic core"
     },
     {
       "word": "QUANTUM",
@@ -16580,7 +16580,7 @@
     },
     {
       "word": "HYDROCARBON",
-      "hint": "Hydrogen and carbon compound"
+      "hint": "Compound in oil and natural gas"
     },
     {
       "word": "METHANE",
@@ -16603,8 +16603,8 @@
       "hint": "Fat molecule"
     },
     {
-      "word": "AMINO",
-      "hint": "Protein building acid"
+      "word": "ALKALI",
+      "hint": "Soluble base, opposite of an acid"
     },
     {
       "word": "PEPTIDE",
@@ -16676,7 +16676,7 @@
     },
     {
       "word": "MAGNETISM",
-      "hint": "Attraction of magnets"
+      "hint": "Force that attracts iron"
     },
     {
       "word": "COMPASS",
@@ -16684,7 +16684,7 @@
     },
     {
       "word": "ELECTRICITY",
-      "hint": "Flow of electrons"
+      "hint": "Flow of charge through wires"
     },
     {
       "word": "STATIC",
@@ -16930,7 +16930,7 @@
     },
     {
       "word": "SOFTBALL",
-      "hint": "Larger-ball baseball"
+      "hint": "Baseball variant with underarm pitching"
     },
     {
       "word": "BASKETBALL",
@@ -17030,7 +17030,7 @@
     },
     {
       "word": "DISCUS",
-      "hint": "Disc throw"
+      "hint": "Flat plate thrown in athletics"
     },
     {
       "word": "HAMMER",
@@ -17098,7 +17098,7 @@
     },
     {
       "word": "GOALIE",
-      "hint": "Keeps goal"
+      "hint": "Player who guards the net"
     },
     {
       "word": "KEEPER",
@@ -17350,7 +17350,7 @@
     },
     {
       "word": "POOLSIDE",
-      "hint": "Edge of the pool"
+      "hint": "Edge of a swimming bath"
     },
     {
       "word": "LANE",
@@ -17418,7 +17418,7 @@
     },
     {
       "word": "FINALIST",
-      "hint": "Made the final"
+      "hint": "Reached the last match"
     },
     {
       "word": "SEMIFINAL",
@@ -17486,7 +17486,7 @@
     },
     {
       "word": "OVERTIME",
-      "hint": "Extra time"
+      "hint": "Extra period after a tie"
     },
     {
       "word": "SHOOTOUT",
@@ -17586,15 +17586,15 @@
     },
     {
       "word": "CANOEING",
-      "hint": "Paddling a canoe"
+      "hint": "Paddling an open boat with one blade"
     },
     {
       "word": "KAYAKING",
-      "hint": "Paddling a kayak"
+      "hint": "Paddling a closed boat with two blades"
     },
     {
       "word": "RAFTING",
-      "hint": "Whitewater on a raft"
+      "hint": "Whitewater on an inflatable"
     },
     {
       "word": "SNORKELING",
@@ -17606,7 +17606,7 @@
     },
     {
       "word": "SNOWBOARD",
-      "hint": "Board on snow"
+      "hint": "Single wide plank for slopes"
     },
     {
       "word": "SLALOM",
@@ -17634,7 +17634,7 @@
     },
     {
       "word": "SKATEBOARD",
-      "hint": "Board with wheels"
+      "hint": "Deck on four wheels"
     },
     {
       "word": "PARKOUR",
@@ -17794,7 +17794,7 @@
     },
     {
       "word": "GOALPOST",
-      "hint": "Side of the goal"
+      "hint": "Upright at the side of the net"
     },
     {
       "word": "SIDELINE",
@@ -17806,11 +17806,11 @@
     },
     {
       "word": "BASELINE",
-      "hint": "Back line of the court"
+      "hint": "Back boundary of a tennis court"
     },
     {
       "word": "SERVICE",
-      "hint": "Serve in tennis"
+      "hint": "Putting the ball in play in tennis"
     },
     {
       "word": "DEUCE",
@@ -17926,15 +17926,15 @@
     },
     {
       "word": "KITESURFING",
-      "hint": "Pulled by a kite on a board"
+      "hint": "Pulled across waves by a sail on strings"
     },
     {
       "word": "WAKEBOARD",
-      "hint": "Board towed by a boat"
+      "hint": "Ride towed behind a speedboat"
     },
     {
       "word": "BODYBOARD",
-      "hint": "Short foam surf board"
+      "hint": "Short foam surf ride, lying down"
     },
     {
       "word": "TRAMPOLINE",
@@ -17954,15 +17954,15 @@
     },
     {
       "word": "HANDSPRING",
-      "hint": "Flip off the hands"
+      "hint": "Gymnastic flip off the palms"
     },
     {
       "word": "CARTWHEEL",
-      "hint": "Sideways wheel move"
+      "hint": "Sideways rotation on hands and feet"
     },
     {
       "word": "BACKFLIP",
-      "hint": "Rearward flip"
+      "hint": "Rearward somersault"
     },
     {
       "word": "SPRINTER",
@@ -17978,7 +17978,7 @@
     },
     {
       "word": "DECATHLETE",
-      "hint": "Ten-event athlete"
+      "hint": "Competes in ten events"
     },
     {
       "word": "GYMNAST",
@@ -18236,7 +18236,7 @@
     },
     {
       "word": "TOWNHOUSE",
-      "hint": "Tall city house"
+      "hint": "Tall terraced city home"
     },
     {
       "word": "SKYSCRAPER",
@@ -18288,7 +18288,7 @@
     },
     {
       "word": "GREENHOUSE",
-      "hint": "Glass plant house"
+      "hint": "Glass building for plants"
     },
     {
       "word": "CONSERVATORY",
@@ -18468,11 +18468,11 @@
     },
     {
       "word": "WINDMILL",
-      "hint": "Wind-powered mill"
+      "hint": "Sails turn to grind grain"
     },
     {
       "word": "WATERMILL",
-      "hint": "River-powered mill"
+      "hint": "River-powered grinding building"
     },
     {
       "word": "BRIDGE",
@@ -18724,11 +18724,11 @@
     },
     {
       "word": "BEDROOM",
-      "hint": "Sleeping room"
+      "hint": "Where you sleep"
     },
     {
       "word": "BATHROOM",
-      "hint": "Washing room"
+      "hint": "Where you wash"
     },
     {
       "word": "NURSERY",
@@ -18752,11 +18752,11 @@
     },
     {
       "word": "STAIRCASE",
-      "hint": "Set of stairs"
+      "hint": "Flight of steps"
     },
     {
       "word": "STAIRWELL",
-      "hint": "Shaft for stairs"
+      "hint": "Shaft for a flight of steps"
     },
     {
       "word": "LANDING",
@@ -18768,7 +18768,7 @@
     },
     {
       "word": "RAILING",
-      "hint": "Barrier rail"
+      "hint": "Barrier of bars"
     },
     {
       "word": "LADDER",
@@ -18820,7 +18820,7 @@
     },
     {
       "word": "DRAINPIPE",
-      "hint": "Water down pipe"
+      "hint": "Carries roof water down the wall"
     },
     {
       "word": "GABLE",
@@ -18968,7 +18968,7 @@
     },
     {
       "word": "BUILDER",
-      "hint": "Constructs buildings"
+      "hint": "Constructs houses"
     },
     {
       "word": "MASON",
@@ -19064,7 +19064,7 @@
     },
     {
       "word": "STONEHENGE",
-      "hint": "Ancient stone circle"
+      "hint": "Ancient circle on Salisbury Plain"
     },
     {
       "word": "ALHAMBRA",
@@ -19096,7 +19096,7 @@
     },
     {
       "word": "DOCKYARD",
-      "hint": "Ship building yard"
+      "hint": "Where ships are repaired"
     },
     {
       "word": "SHIPYARD",
@@ -19212,11 +19212,11 @@
     },
     {
       "word": "BOATHOUSE",
-      "hint": "Boat shelter"
+      "hint": "Riverside shelter for rowing craft"
     },
     {
       "word": "TREEHOUSE",
-      "hint": "House in a tree"
+      "hint": "Den built among branches"
     },
     {
       "word": "DOVECOTE",
@@ -19434,11 +19434,11 @@
     },
     {
       "word": "JOYSTICK",
-      "hint": "Gaming stick controller"
+      "hint": "Gaming lever controller"
     },
     {
       "word": "GAMEPAD",
-      "hint": "Handheld game controller"
+      "hint": "Handheld console controller"
     },
     {
       "word": "CONSOLE",
@@ -19506,7 +19506,7 @@
     },
     {
       "word": "EMAIL",
-      "hint": "Electronic mail"
+      "hint": "Electronic letters"
     },
     {
       "word": "INBOX",
@@ -19718,7 +19718,7 @@
     },
     {
       "word": "PYTHON",
-      "hint": "Snake-named language"
+      "hint": "Language named after a comedy troupe"
     },
     {
       "word": "JAVA",
@@ -19738,7 +19738,7 @@
     },
     {
       "word": "DATABASE",
-      "hint": "Organised data store"
+      "hint": "Organised store of records"
     },
     {
       "word": "TABLE",
@@ -19810,7 +19810,7 @@
     },
     {
       "word": "MOTHERBOARD",
-      "hint": "Main circuit board"
+      "hint": "Main circuit card in a computer"
     },
     {
       "word": "GRAPHICS",
@@ -19866,7 +19866,7 @@
     },
     {
       "word": "ROBOTICS",
-      "hint": "Building robots"
+      "hint": "Building automated machines"
     },
     {
       "word": "MACHINE",
@@ -19894,7 +19894,7 @@
     },
     {
       "word": "WEARABLE",
-      "hint": "Tech you wear"
+      "hint": "Gadget worn on the body"
     },
     {
       "word": "GADGET",
@@ -19958,7 +19958,7 @@
     },
     {
       "word": "CODER",
-      "hint": "Writes code"
+      "hint": "Writes programs"
     },
     {
       "word": "DEVELOPER",
@@ -19978,7 +19978,7 @@
     },
     {
       "word": "INTERFACE",
-      "hint": "How you interact"
+      "hint": "Point where user and system meet"
     },
     {
       "word": "GRAPHIC",
@@ -20266,11 +20266,11 @@
     },
     {
       "word": "SUPERCOMPUTER",
-      "hint": "Extremely powerful computer"
+      "hint": "Extremely powerful number cruncher"
     },
     {
       "word": "TYPEWRITER",
-      "hint": "Mechanical writer"
+      "hint": "Mechanical keyboard printer"
     },
     {
       "word": "FLOPPY",
@@ -20326,7 +20326,7 @@
     },
     {
       "word": "SOLAR",
-      "hint": "Panels powered by the sun"
+      "hint": "Panels that run on sunshine"
     },
     {
       "word": "ELECTRIC",
@@ -20342,7 +20342,7 @@
     },
     {
       "word": "SPACECRAFT",
-      "hint": "Space vehicle"
+      "hint": "Vehicle for leaving Earth"
     },
     {
       "word": "ROVER",
@@ -20504,7 +20504,7 @@
     },
     {
       "word": "SLEDGEHAMMER",
-      "hint": "Heavy demolition hammer"
+      "hint": "Heavy two-handed demolition mallet"
     },
     {
       "word": "MATTOCK",
@@ -20580,7 +20580,7 @@
     },
     {
       "word": "SCREWDRIVER",
-      "hint": "Turns screws"
+      "hint": "Turns threaded fasteners"
     },
     {
       "word": "SPANNER",
@@ -20640,7 +20640,7 @@
     },
     {
       "word": "STEPLADDER",
-      "hint": "Folding ladder"
+      "hint": "Folding set of steps"
     },
     {
       "word": "SCAFFOLD",
@@ -20944,7 +20944,7 @@
     },
     {
       "word": "PADLOCK",
-      "hint": "Portable lock"
+      "hint": "Portable shackle with a key"
     },
     {
       "word": "KEY",
@@ -21040,7 +21040,7 @@
     },
     {
       "word": "PAINTBRUSH",
-      "hint": "Applies paint"
+      "hint": "Bristles for applying colour"
     },
     {
       "word": "ROLLER",
@@ -21056,7 +21056,7 @@
     },
     {
       "word": "SPRAYER",
-      "hint": "Sprays paint"
+      "hint": "Applies a fine mist of paint"
     },
     {
       "word": "TOOLBOX",
@@ -21064,11 +21064,11 @@
     },
     {
       "word": "TOOLBELT",
-      "hint": "Worn tool holder"
+      "hint": "Pouches worn at the waist"
     },
     {
       "word": "WORKBENCH",
-      "hint": "Work table"
+      "hint": "Sturdy table in a shed"
     },
     {
       "word": "SAWHORSE",
@@ -21112,7 +21112,7 @@
     },
     {
       "word": "HEADLAMP",
-      "hint": "Light on your head"
+      "hint": "Torch strapped to your forehead"
     },
     {
       "word": "GENERATOR",
@@ -21296,7 +21296,7 @@
     },
     {
       "word": "WHETSTONE",
-      "hint": "Sharpening stone"
+      "hint": "Block for sharpening blades"
     },
     {
       "word": "STROP",
@@ -21480,7 +21480,7 @@
     },
     {
       "word": "RIVETER",
-      "hint": "Sets rivets"
+      "hint": "Sets metal pins in place"
     },
     {
       "word": "GROMMET",
@@ -21496,7 +21496,7 @@
     },
     {
       "word": "PENKNIFE",
-      "hint": "Small folding knife"
+      "hint": "Small folding blade"
     },
     {
       "word": "SCOURER",
@@ -21544,7 +21544,7 @@
     },
     {
       "word": "SPEEDOMETER",
-      "hint": "Speed gauge"
+      "hint": "Dial showing how fast you go"
     },
     {
       "word": "PEDOMETER",
@@ -21596,7 +21596,7 @@
     },
     {
       "word": "TOOLSHED",
-      "hint": "Garden tool store"
+      "hint": "Garden hut for equipment"
     },
     {
       "word": "TURNTABLE",
@@ -21830,7 +21830,7 @@
     },
     {
       "word": "WATERSPOUT",
-      "hint": "Tornado over water"
+      "hint": "Tornado over a lake or sea"
     },
     {
       "word": "MONSOON",
@@ -21850,7 +21850,7 @@
     },
     {
       "word": "SNOWDRIFT",
-      "hint": "Piled snow"
+      "hint": "Bank of piled flakes"
     },
     {
       "word": "SNOWFLAKE",
@@ -21858,7 +21858,7 @@
     },
     {
       "word": "SNOWFALL",
-      "hint": "Amount of snow"
+      "hint": "Amount of flakes that land"
     },
     {
       "word": "AVALANCHE",
@@ -21982,11 +21982,11 @@
     },
     {
       "word": "RAINDROP",
-      "hint": "Single drop of rain"
+      "hint": "Single bead of falling water"
     },
     {
       "word": "RAINBOW",
-      "hint": "Coloured arc after rain"
+      "hint": "Coloured arc after a shower"
     },
     {
       "word": "SUNSHINE",
@@ -22094,15 +22094,15 @@
     },
     {
       "word": "CONTRAIL",
-      "hint": "Aircraft vapour trail"
+      "hint": "White line left by a jet"
     },
     {
       "word": "THUNDERCLOUD",
-      "hint": "Storm cloud"
+      "hint": "Dark towering mass before lightning"
     },
     {
       "word": "THUNDERSTORM",
-      "hint": "Storm with lightning"
+      "hint": "Tempest with lightning"
     },
     {
       "word": "FORECAST",
@@ -22142,7 +22142,7 @@
     },
     {
       "word": "WINDSOCK",
-      "hint": "Airport wind indicator"
+      "hint": "Airport cone showing the breeze"
     },
     {
       "word": "SATELLITE",
@@ -22302,19 +22302,19 @@
     },
     {
       "word": "SNOWMAN",
-      "hint": "Built from snow"
+      "hint": "Built in winter with a carrot nose"
     },
     {
       "word": "SNOWBALL",
-      "hint": "Thrown snow"
+      "hint": "Thrown in a winter fight"
     },
     {
       "word": "SLEDGE",
-      "hint": "Snow sled"
+      "hint": "Ride for snowy hills"
     },
     {
       "word": "DROPLET",
-      "hint": "Tiny drop"
+      "hint": "Tiny bead of water"
     },
     {
       "word": "SPRINKLE",
@@ -22362,7 +22362,7 @@
     },
     {
       "word": "SANDSTORM",
-      "hint": "Desert dust storm"
+      "hint": "Desert dust tempest"
     },
     {
       "word": "HABOOB",
@@ -22394,19 +22394,19 @@
     },
     {
       "word": "NORTHERLY",
-      "hint": "Wind from the north"
+      "hint": "Wind from the Arctic direction"
     },
     {
       "word": "SOUTHERLY",
-      "hint": "Wind from the south"
+      "hint": "Wind from the equator direction, in Britain"
     },
     {
       "word": "EASTERLY",
-      "hint": "Wind from the east"
+      "hint": "Wind from where the sun rises"
     },
     {
       "word": "WESTERLY",
-      "hint": "Wind from the west"
+      "hint": "Wind from where the sun sets"
     },
     {
       "word": "DRAUGHT",
@@ -22422,7 +22422,7 @@
     },
     {
       "word": "HOARFROST",
-      "hint": "Spiky white frost"
+      "hint": "Spiky white ice crystals on twigs"
     },
     {
       "word": "PERMAFROST",
@@ -22446,7 +22446,7 @@
     },
     {
       "word": "SNOWCAP",
-      "hint": "Snow on a mountain top"
+      "hint": "White top of a mountain"
     },
     {
       "word": "ATMOSPHERE",
@@ -22474,7 +22474,7 @@
     },
     {
       "word": "CARBON",
-      "hint": "Emissions of CO2"
+      "hint": "Element whose emissions warm the planet"
     },
     {
       "word": "EMISSIONS",
@@ -22498,15 +22498,15 @@
     },
     {
       "word": "TWILIGHT",
-      "hint": "Soft light at dusk"
+      "hint": "Soft glow at dusk"
     },
     {
       "word": "NIGHTFALL",
-      "hint": "Start of night"
+      "hint": "When darkness arrives"
     },
     {
       "word": "MOONLIGHT",
-      "hint": "Light at night"
+      "hint": "Silvery glow after dark"
     },
     {
       "word": "STARLIT",
@@ -22650,11 +22650,11 @@
     },
     {
       "word": "CLOUDLESS",
-      "hint": "Without a single cloud"
+      "hint": "Clear blue sky"
     },
     {
       "word": "RAINLESS",
-      "hint": "Without rain"
+      "hint": "Dry, without a shower"
     },
     {
       "word": "WINDLESS",
@@ -22662,7 +22662,7 @@
     },
     {
       "word": "SNOWBOUND",
-      "hint": "Trapped by heavy snow"
+      "hint": "Trapped by heavy drifts"
     },
     {
       "word": "WEATHERMAN",
