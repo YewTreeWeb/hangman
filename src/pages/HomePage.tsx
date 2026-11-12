@@ -2,25 +2,26 @@ import { DifficultyLevel } from "@/components/difficultyLevel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item";
 import "@/index.css";
-import { cn } from "@/lib/utils";
+import { cn, getWord, levelOptions } from "@/lib/utils";
 import { useGameStore } from "@/store/gameStore";
+import type { LevelKey } from "@/types/game-types";
 
 export function HomePage() {
-  const {
-    setCategory,
-    setVoice: toggleVoice,
-    voice,
-    setPage,
-    difficulty,
-  } = useGameStore();
+  const { setCategory, setPage, difficulty, category, setRound } =
+    useGameStore();
+
+  const startGame = () => {
+    if (!difficulty) return;
+    setRound({
+      ...getWord(category, difficulty),
+      guessedLetters: [],
+      wrongLetters: [],
+      wrongGuesses: 0,
+      status: "in-progress",
+    });
+    setPage("game");
+  };
   console.log("🚀 ~ HomePage ~ difficulty:", difficulty);
   const categories = [
     "Random",
@@ -46,29 +47,22 @@ export function HomePage() {
   ];
 
   return (
-    <div className="relative z-10 container mx-auto p-4 text-center">
-      <div className="mb-8 flex items-center justify-center gap-8">
+    <div className="container mx-auto flex flex-col items-center justify-center gap-8 p-10">
+      <div className="flex flex-1 items-center justify-center gap-8">
         <h1 className="text-4xl font-bold">Hangman</h1>
       </div>
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Difficulty Levels</CardTitle>
         </CardHeader>
         <CardContent>
-          <DifficultyLevel
-            level="Easy"
-            tries={14}
-            timer={false}
-            powers={true}
-          />
-          <DifficultyLevel level="Medium" tries={10} timer={true} powers={2} />
-          <DifficultyLevel level="Hard" tries={8} timer={true} powers={1} />
-          <DifficultyLevel
-            level="Executioner"
-            tries={5}
-            timer={true}
-            powers={false}
-          />
+          {(Object.keys(levelOptions) as LevelKey[]).map((level) => (
+            <DifficultyLevel
+              key={level}
+              level={level}
+              {...levelOptions[level]}
+            />
+          ))}
         </CardContent>
       </Card>
       <Card>
@@ -87,21 +81,10 @@ export function HomePage() {
           ))}
         </CardContent>
       </Card>
-      <Item variant="outline">
-        <ItemMedia></ItemMedia>
-        <ItemContent>
-          <ItemTitle className="font-bold">Voice</ItemTitle>
-        </ItemContent>
-        <ItemActions>
-          <Button variant="outline" onClick={() => toggleVoice(!voice)}>
-            {voice ? "Disable" : "Enable"}
-          </Button>
-        </ItemActions>
-      </Item>
       <Button
         className={cn("w-full", !difficulty && "hover:cursor-not-allowed")}
         disabled={!difficulty}
-        onClick={() => setPage("game")}
+        onClick={startGame}
       >
         Play
       </Button>

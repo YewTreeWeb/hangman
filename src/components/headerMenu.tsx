@@ -1,5 +1,6 @@
-import { useGameStore, useUserStore } from "@/store/gameStore";
-import type { LevelTypes } from "@/types/game-types";
+import { levelOptions } from "@/lib/utils";
+import { useGameStore } from "@/store/gameStore";
+import type { LevelKey } from "@/types/game-types";
 
 import { Button } from "./ui/button";
 import {
@@ -25,45 +26,38 @@ import {
 
 export function HeaderMenu() {
   const { difficulty, setDifficulty, setPage } = useGameStore();
-  const { setScore, setLives, setSolved } = useUserStore();
-  const levels = ["Easy", "Medium", "Hard", "Executioner"];
+  const levels = Object.keys(levelOptions) as LevelKey[];
   const filteredLevels = levels.filter((level) => level !== difficulty);
-
-  const restartGame = () => {
-    // Reset game state logic here
-    setScore(0);
-    setLives(3);
-    setSolved(0);
-  };
 
   return (
     <Menubar className="w-full">
       <MenubarMenu>
-        <MenubarTrigger className="hover:cursor-pointer" onClick={restartGame}>
+        <MenubarTrigger
+          className="hover:cursor-pointer"
+          onClick={() => console.log("")}
+        >
           Restart
         </MenubarTrigger>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger className="hover:cursor-pointer">
-          <Dialog>
-            <DialogTrigger>Home</DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                  If you go back to the home page, your current game progress
-                  will be lost. Are you sure you want to continue?
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose>
-                  <Button variant="outline">Cancel</Button>
-                </DialogClose>
-                <Button onClick={() => setPage("home")}>Continue</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </MenubarTrigger>
+        <Dialog>
+          <DialogTrigger>Home</DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Are you absolutely sure?</DialogTitle>
+              <DialogDescription>
+                If you go back to the home page, your current game progress will
+                be lost. Are you sure you want to continue?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button onClick={() => setPage("home")}>Continue</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </MenubarMenu>
       <MenubarMenu>
         <MenubarTrigger className="hover:cursor-pointer">
@@ -71,12 +65,15 @@ export function HeaderMenu() {
         </MenubarTrigger>
         <MenubarContent>
           <MenubarSub>
-            <MenubarSubTrigger>{difficulty}</MenubarSubTrigger>
+            <MenubarSubTrigger className="capitalize">
+              {difficulty}
+            </MenubarSubTrigger>
             <MenubarSubContent>
               {filteredLevels.map((level) => (
                 <MenubarItem
                   key={level}
-                  onClick={() => setDifficulty(level as LevelTypes)}
+                  className="capitalize"
+                  onClick={() => setDifficulty(level)}
                 >
                   {level}
                 </MenubarItem>

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import type { GamePageProps, LevelTypes } from "@/types/game-types";
+import type { GamePageProps, LevelKey } from "@/types/game-types";
 
 type MatchTypes = {
   mode: "single" | "multi";
@@ -13,7 +13,10 @@ type MatchTypes = {
 
 type RoundTypes = {
   word: string;
+  hint: string;
   guessedLetters: string[];
+  wrongLetters: string[];
+  correctLetters: string[];
   wrongGuesses: number;
   status: "in-progress" | "won" | "lost";
   timeLeft: number | null;
@@ -31,20 +34,16 @@ type RecordTypes = {
 
 type GameState = {
   page: GamePageProps;
-  difficulty: LevelTypes | null;
+  difficulty: LevelKey | null;
   category: string | "Random";
-  voice: boolean;
-  streak: number;
   match: MatchTypes | null;
   round: RoundTypes;
   record: RecordTypes | null;
   setPage: (page: GamePageProps) => void;
-  setDifficulty: (level: LevelTypes) => void;
+  setDifficulty: (level: LevelKey) => void;
   setCategory: (category: string) => void;
-  setVoice: (voice: boolean) => void;
-  setStreak: (streak: number) => void;
   setMatch: (match: MatchTypes | null) => void;
-  setRound: (round: RoundTypes) => void;
+  setRound: (round: Partial<RoundTypes>) => void;
   setRecord: (record: RecordTypes) => void;
 };
 
@@ -53,10 +52,12 @@ type UserState = {
   lives: number;
   solved: number;
   activePowers: string[];
+  streak: number;
   setScore: (score: number) => void;
   setLives: (lives: number) => void;
   setSolved: (solved: number) => void;
   setActivePowers: (powers: string[]) => void;
+  setStreak: (streak: number) => void;
 };
 
 export const useGameStore = create<GameState>()(
@@ -65,8 +66,6 @@ export const useGameStore = create<GameState>()(
       page: "home",
       difficulty: null,
       category: "Random",
-      voice: false,
-      streak: 0,
       match: {
         mode: "single",
         players: 1,
@@ -76,7 +75,10 @@ export const useGameStore = create<GameState>()(
       },
       round: {
         word: "hello",
+        hint: "",
         guessedLetters: [],
+        wrongLetters: [],
+        correctLetters: [],
         wrongGuesses: 0,
         status: "in-progress",
         timeLeft: null,
@@ -85,17 +87,17 @@ export const useGameStore = create<GameState>()(
       },
       record: null,
       setPage: (page: GamePageProps) => set((s) => ({ page })),
-      setDifficulty: (level: LevelTypes) => set((s) => ({ difficulty: level })),
+      setDifficulty: (level: LevelKey) => set((s) => ({ difficulty: level })),
       setCategory: (category: string) => set((s) => ({ category })),
-      setVoice: (voice: boolean) => set((s) => ({ voice })),
-      setStreak: (streak: number) => set((s) => ({ streak })),
       setMatch: (match: MatchTypes | null) => set((s) => ({ match })),
-      setRound: (round: RoundTypes) => set((s) => ({ round })),
+      setRound: (round) => set((s) => ({ round: { ...s.round, ...round } })),
       setRecord: (record: RecordTypes) => set((s) => ({ record })),
     }),
     {
       name: "hangman",
-      version: 1,
+      version: 2,
+      // v1 stored capitalised levels ("Easy"); drop it rather than migrate
+      migrate: () => ({}),
       partialize: (s) => ({
         difficulty: s.difficulty,
         record: s.record,
@@ -109,8 +111,10 @@ export const useUserStore = create<UserState>((set) => ({
   lives: 3,
   solved: 0,
   activePowers: [],
+  streak: 0,
   setActivePowers: (powers: string[]) => set((s) => ({ activePowers: powers })),
   setScore: (score: number) => set((s) => ({ score })),
   setLives: (lives: number) => set((s) => ({ lives })),
   setSolved: (solved: number) => set((s) => ({ solved })),
+  setStreak: (streak: number) => set((s) => ({ streak })),
 }));

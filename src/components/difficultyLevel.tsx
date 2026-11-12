@@ -1,5 +1,5 @@
 import { useGameStore } from "@/store/gameStore";
-import type { LevelTypes } from "@/types/game-types";
+import type { LevelKey } from "@/types/game-types";
 
 import {
   Item,
@@ -12,7 +12,7 @@ import {
 } from "./ui/item";
 
 type DifficultyLevelProps = {
-  level: LevelTypes;
+  level: LevelKey;
   tries: number;
   timer: boolean;
   powers: boolean | number;
@@ -26,7 +26,6 @@ export function DifficultyLevel({
 }: DifficultyLevelProps) {
   const numPowers = typeof powers === "number" ? powers : 0;
   const { setDifficulty, difficulty } = useGameStore();
-  console.log("🚀 ~ DifficultyLevel ~ difficulty:", difficulty);
 
   return (
     <ItemGroup>
@@ -35,7 +34,7 @@ export function DifficultyLevel({
           <button onClick={() => setDifficulty(level)}>
             <ItemMedia></ItemMedia>
             <ItemContent>
-              <ItemTitle className="font-bold">
+              <ItemTitle className="font-bold capitalize">
                 <img></img>
                 {level}
               </ItemTitle>
@@ -45,7 +44,7 @@ export function DifficultyLevel({
                   <li>{timer ? "With timer" : "No timer"}</li>
                   <li>
                     {powers
-                      ? `${level === "Easy" ? "All powers" : `${numPowers} powers`}`
+                      ? `${level === "easy" ? "All powers" : `${numPowers} powers`}`
                       : "No powers"}
                   </li>
                 </ul>
