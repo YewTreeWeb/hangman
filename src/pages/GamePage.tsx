@@ -79,6 +79,9 @@ export function GamePage() {
             ))}
           </div>
         </div>
+        <div>
+          <span>{hint}</span>
+        </div>
       </div>
       <section className="grid grid-cols-2 gap-4">
         <div></div>
@@ -87,8 +90,8 @@ export function GamePage() {
           <div className="flex items-center justify-center gap-x-3">
             <>
               {[...word].map((char, i) => (
-                <div key={i} className="w-4">
-                  <span className="opacity-0">{char}</span>
+                <div key={i} className="w-full min-w-4">
+                  <span className="opacity text-lg">{char}</span>
                   <hr className="border-b border-black/70" />
                 </div>
               ))}
