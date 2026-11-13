@@ -2,16 +2,33 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import words from "@/data/words.json";
+import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
 
 type WordsObjType = {
   word: string;
   hint: string;
 };
+const { setRound } = useGameStore.getState();
+const { setScore, setLives, setSolved, setStreak, setActivePowers } =
+  useUserStore.getState();
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const resetGame = () => {
+  setScore(0);
+  setLives(3);
+  setSolved(0);
+  setStreak(0);
+  setActivePowers([]);
+  setRound({
+    guessedLetters: [],
+    status: "in-progress",
+  });
+  localStorage.clear();
+};
 
 export const levelOptions: Record<
   LevelKey,

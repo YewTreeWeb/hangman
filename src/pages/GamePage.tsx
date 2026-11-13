@@ -1,3 +1,6 @@
+import { useCallback, useEffect } from "react";
+
+import { HangmanDrawing } from "@/components/HangmanDrawing";
 import { HeaderMenu } from "@/components/headerMenu";
 import { Powers } from "@/components/powers";
 import { Badge } from "@/components/ui/badge";
@@ -8,9 +11,10 @@ import type { PowerTypes } from "@/types/game-types";
 
 export function GamePage() {
   const { category, difficulty, round, setRound } = useGameStore();
-  const { score, lives, setScore, solved, streak } = useUserStore();
+  const { score, lives, setScore, streak, setStreak } = useUserStore();
 
-  const { word, hint } = round;
+  const { word, hint, guessedLetters } = round;
+  console.log("🚀 ~ GamePage ~ guessedLetters:", guessedLetters);
 
   const powers: PowerTypes[] = [
     {
@@ -63,8 +67,56 @@ export function GamePage() {
     setScore(score - 250);
   };
 
+  const wrongLetter = guessedLetters.filter(
+    (letter) => !word.includes(letter),
+  ).length;
+
+  const addTypedLetter = useCallback(
+    (letter: string) => {
+      if (guessedLetters.includes(letter) || gameLost || gameWon) return;
+      setRound({ guessedLetters: [...guessedLetters, letter] });
+    },
+    [guessedLetters],
+  );
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (!key.match(/^[a-z]$/)) return;
+
+      e.preventDefault();
+      addTypedLetter(key);
+    };
+
+    document.addEventListener("keypress", handler);
+
+    return () => {
+      document.removeEventListener("keypress", handler);
+    };
+  });
+
+  const updateStreak = () => {};
+
+  const hardMode = difficulty === "hard" || difficulty === "executioner";
+  const gameLost =
+    (hardMode && wrongLetter >= 6) || (!hardMode && wrongLetter >= 11);
+  const gameWon = [...word].every((letter) => guessedLetters.includes(letter));
+
+  const guess = (letter: string) => {
+    if (guessedLetters.includes(letter) || status !== "in-progress") return;
+
+    const next = [...guessedLetters, letter];
+    const won = [...word].every((l) => next.includes(l));
+
+    setRound({ guessedLetters: next, status: won ? "won" : "in-progress" });
+    if (won) {
+      setScore(score + wordPoints(word, difficulty));
+      setStreak(streak + 1);
+    }
+  };
+
   return (
-    <div className="relative z-10 container mx-auto p-4 text-center">
+    <div className="relative z-10 mx-auto w-dvh p-4 text-center">
       <div className="mb-8 flex items-center justify-center gap-8">
         <HeaderMenu />
         <div className="flex flex-col items-center gap-2">
@@ -83,15 +135,21 @@ export function GamePage() {
           <span>{hint}</span>
         </div>
       </div>
-      <section className="grid grid-cols-2 gap-4">
-        <div></div>
+      <section className="grid grid-cols-2 gap-14">
+        <div>
+          <HangmanDrawing wrongGuesses={wrongLetter} difficulty={difficulty} />
+        </div>
         <div>
           <h6>{category}</h6>
           <div className="flex items-center justify-center gap-x-3">
             <>
               {[...word].map((char, i) => (
-                <div key={i} className="w-full min-w-4">
-                  <span className="opacity text-lg">{char}</span>
+                <div key={i} className="w-6">
+                  <span
+                    className={`text-lg font-bold uppercase ${guessedLetters.includes(char) || gameLost || gameWon ? "visible" : "invisible"} ${!guessedLetters.includes(char) && gameLost ? "text-red-500" : "text-black"}`}
+                  >
+                    {char}
+                  </span>
                   <hr className="border-b border-black/70" />
                 </div>
               ))}
@@ -126,11 +184,12 @@ export function GamePage() {
                 variant="outline"
                 className="uppercase"
                 onClick={() =>
+                  !guessedLetters.includes(char) &&
                   setRound({
-                    guessedLetters: [...round.guessedLetters, char],
+                    guessedLetters: [...guessedLetters, char.toUpperCase()],
                   })
                 }
-                disabled={round.wrongLetters.includes(char)}
+                disabled={guessedLetters.includes(char) || gameLost || gameWon}
               >
                 {char}
               </Button>
@@ -139,10 +198,6 @@ export function GamePage() {
         ))}
       </section>
       <section>
-        <div>
-          <span>Solved</span>
-          <span>{solved}</span>
-        </div>
         <div>
           <span>Streak</span>
           <span>{streak}</span>

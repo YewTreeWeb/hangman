@@ -15,9 +15,6 @@ type RoundTypes = {
   word: string;
   hint: string;
   guessedLetters: string[];
-  wrongLetters: string[];
-  correctLetters: string[];
-  wrongGuesses: number;
   status: "in-progress" | "won" | "lost";
   timeLeft: number | null;
   timerSpeed: number | null;
@@ -40,9 +37,9 @@ type GameState = {
   round: RoundTypes;
   record: RecordTypes | null;
   setPage: (page: GamePageProps) => void;
-  setDifficulty: (level: LevelKey) => void;
+  setDifficulty: (level: LevelKey | null) => void;
   setCategory: (category: string) => void;
-  setMatch: (match: MatchTypes | null) => void;
+  setMatch: (match: Partial<MatchTypes> | null) => void;
   setRound: (round: Partial<RoundTypes>) => void;
   setRecord: (record: RecordTypes) => void;
 };
@@ -87,9 +84,10 @@ export const useGameStore = create<GameState>()(
       },
       record: null,
       setPage: (page: GamePageProps) => set((s) => ({ page })),
-      setDifficulty: (level: LevelKey) => set((s) => ({ difficulty: level })),
+      setDifficulty: (level: LevelKey | null) =>
+        set((s) => ({ difficulty: level })),
       setCategory: (category: string) => set((s) => ({ category })),
-      setMatch: (match: MatchTypes | null) => set((s) => ({ match })),
+      setMatch: (match) => set((s) => ({ match: { ...s.match, ...match } })),
       setRound: (round) => set((s) => ({ round: { ...s.round, ...round } })),
       setRecord: (record: RecordTypes) => set((s) => ({ record })),
     }),

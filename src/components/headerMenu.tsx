@@ -1,4 +1,4 @@
-import { levelOptions } from "@/lib/utils";
+import { levelOptions, resetGame } from "@/lib/utils";
 import { useGameStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
 
@@ -29,12 +29,17 @@ export function HeaderMenu() {
   const levels = Object.keys(levelOptions) as LevelKey[];
   const filteredLevels = levels.filter((level) => level !== difficulty);
 
+  const endGame = () => {
+    setDifficulty(null);
+    setPage("home");
+  };
+
   return (
     <Menubar className="w-full">
       <MenubarMenu>
         <MenubarTrigger
           className="hover:cursor-pointer"
-          onClick={() => console.log("")}
+          onClick={() => resetGame()}
         >
           Restart
         </MenubarTrigger>
@@ -54,7 +59,7 @@ export function HeaderMenu() {
               <DialogClose>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button onClick={() => setPage("home")}>Continue</Button>
+              <Button onClick={() => endGame()}>Continue</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import "@/index.css";
-import { cn, getWord, levelOptions } from "@/lib/utils";
+import { cn, getWord, levelOptions, resetGame } from "@/lib/utils";
 import { useGameStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
 
@@ -15,14 +15,10 @@ export function HomePage() {
     if (!difficulty) return;
     setRound({
       ...getWord(category, difficulty),
-      guessedLetters: [],
-      wrongLetters: [],
-      wrongGuesses: 0,
-      status: "in-progress",
     });
+    resetGame();
     setPage("game");
   };
-  console.log("🚀 ~ HomePage ~ difficulty:", difficulty);
   const categories = [
     "Random",
     "Animals",
