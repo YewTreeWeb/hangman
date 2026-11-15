@@ -35,7 +35,7 @@ export function HeaderMenu() {
   };
 
   return (
-    <Menubar className="w-full">
+    <Menubar className="flex w-full items-center justify-center">
       <MenubarMenu>
         <MenubarTrigger
           className="hover:cursor-pointer"

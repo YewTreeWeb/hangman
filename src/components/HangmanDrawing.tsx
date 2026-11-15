@@ -79,7 +79,7 @@ export function HangmanDrawing({ wrongGuesses, difficulty }: DrawingProps) {
 
   return (
     <div className="relative h-101 w-64">
-      <div className="flex w-full flex-col-reverse items-start justify-center">
+      <div className="flex h-full w-full flex-col-reverse items-start">
         <>
           {!hardMode
             ? PARTS.slice(0, wrongGuesses)

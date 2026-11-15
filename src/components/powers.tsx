@@ -1,9 +1,9 @@
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { PowerTypes } from "@/types/game-types";
 
@@ -11,8 +11,8 @@ export function Powers(props: PowerTypes) {
   const { name, description, Icon, active, multiUse, uses } = props;
 
   return (
-    <HoverCard>
-      <HoverCardTrigger>
+    <Tooltip>
+      <TooltipTrigger>
         <Item
           className={cn("flex items-center gap-2", !active && "opacity-50")}
         >
@@ -21,11 +21,11 @@ export function Powers(props: PowerTypes) {
             <ItemTitle>{name}</ItemTitle>
           </ItemContent>
         </Item>
-      </HoverCardTrigger>
-      <HoverCardContent>
+      </TooltipTrigger>
+      <TooltipContent>
         <span>{description}</span>
         {multiUse && <span>Uses before inactive: {uses}</span>}
-      </HoverCardContent>
-    </HoverCard>
+      </TooltipContent>
+    </Tooltip>
   );
 }

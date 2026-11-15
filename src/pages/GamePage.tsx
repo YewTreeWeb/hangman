@@ -116,46 +116,54 @@ export function GamePage() {
   };
 
   return (
-    <div className="relative z-10 mx-auto w-dvh p-4 text-center">
-      <div className="mb-8 flex items-center justify-center gap-8">
+    <div className="relative z-10 mx-auto flex w-dvh flex-col gap-4 p-4 text-center">
+      <div className="flex flex-col items-center justify-center gap-8">
         <HeaderMenu />
-        <div className="flex flex-col items-center gap-2">
-          <div>
+        <div className="flex w-full flex-row items-center justify-between gap-2">
+          <div className="flex flex-col gap-1 text-sm">
             <span>Score</span>
-            <span>{score}</span>
+            <span className="font-bold">{score}</span>
           </div>
-          <div aria-label={`${lives} lives remaining`}>
+          <div
+            className="flex flex-col gap-1 text-sm"
+            aria-label={`${lives} lives remaining`}
+          >
             <span>Lives</span>
-            {Array.from({ length: lives }, (_, i) => (
-              <span key={i}>❤️</span>
-            ))}
+            <div className="flex gap-x-2">
+              {Array.from({ length: lives }, (_, i) => (
+                <span key={i}>❤️</span>
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <span>{hint}</span>
         </div>
       </div>
-      <section className="grid grid-cols-2 gap-14">
+      <section className="grid grid-cols-2 items-center justify-center gap-14">
         <div>
           <HangmanDrawing wrongGuesses={wrongLetter} difficulty={difficulty} />
         </div>
-        <div>
-          <h6>{category}</h6>
+        <div className="flex flex-col items-start gap-2">
+          <div className="flex items-center justify-start">
+            <h6 className="text-left text-sm font-bold">{category}</h6>
+            <span className="ml-4 text-xs uppercase">hint:</span>
+            <span className="ml-1 text-xs">{hint}</span>
+          </div>
           <div className="flex items-center justify-center gap-x-3">
             <>
               {[...word].map((char, i) => (
                 <div key={i} className="w-6">
                   <span
-                    className={`text-lg font-bold uppercase ${guessedLetters.includes(char) || gameLost || gameWon ? "visible" : "invisible"} ${!guessedLetters.includes(char) && gameLost ? "text-red-500" : "text-black"}`}
+                    className={`text-4xl font-bold uppercase ${guessedLetters.includes(char) || gameLost || gameWon ? "visible" : "invisible"} ${!guessedLetters.includes(char) && gameLost ? "text-red-500" : "text-black"}`}
                   >
                     {char}
                   </span>
-                  <hr className="border-b border-black/70" />
+                  <hr
+                    className={`border-b ${!guessedLetters.includes(char) && gameLost ? "border-red-500/70" : "border-black/70"}`}
+                  />
                 </div>
               ))}
             </>
           </div>
-          <span>{`Worth ${wordPoints(word, difficulty)} points`}</span>
+          <span className="mt-2 text-xs">{`Worth ${wordPoints(word, difficulty)} points`}</span>
         </div>
       </section>
       <section>
@@ -175,9 +183,9 @@ export function GamePage() {
           </Button>
         </section>
       )}
-      <section>
+      <section className="flex flex-col items-center justify-center gap-1">
         {kbdKeys.map((kdb, i) => (
-          <div key={kdb[i]}>
+          <div key={kdb[i]} className="flex items-center justify-center gap-1">
             {kdb.map((char, i) => (
               <Button
                 key={i}
@@ -186,7 +194,7 @@ export function GamePage() {
                 onClick={() =>
                   !guessedLetters.includes(char) &&
                   setRound({
-                    guessedLetters: [...guessedLetters, char.toUpperCase()],
+                    guessedLetters: [...guessedLetters, char],
                   })
                 }
                 disabled={guessedLetters.includes(char) || gameLost || gameWon}
