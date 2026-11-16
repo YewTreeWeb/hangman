@@ -169,7 +169,7 @@ export function GamePage() {
       setStreak(0);
     }
 
-    if (lost && lives > 0 && (!activeShield || !activeSuperShield)) {
+    if (lost && lives > 0 && !activeShield && !activeSuperShield) {
       setLives(lives - 1);
     }
 
