@@ -74,8 +74,6 @@ export const useGameStore = create<GameState>()(
         word: "hello",
         hint: "",
         guessedLetters: [],
-        wrongLetters: [],
-        correctLetters: [],
         wrongGuesses: 0,
         status: "in-progress",
         timeLeft: null,
