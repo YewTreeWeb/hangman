@@ -1,6 +1,7 @@
 import { useGameStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
 
+import { Button } from "./ui/button";
 import {
   Item,
   ItemActions,
@@ -16,6 +17,7 @@ type DifficultyLevelProps = {
   tries: number;
   timer: boolean;
   powers: boolean | number;
+  active: boolean;
 };
 
 export function DifficultyLevel({
@@ -23,23 +25,31 @@ export function DifficultyLevel({
   tries,
   timer,
   powers,
+  active = false,
 }: DifficultyLevelProps) {
   const numPowers = typeof powers === "number" ? powers : 0;
   const { setDifficulty, difficulty } = useGameStore();
 
   return (
-    <ItemGroup>
-      <Item variant="outline">
-        <ItemActions>
-          <button onClick={() => setDifficulty(level)}>
+    <Button
+      variant="outline"
+      className={`h-full w-full p-0 shadow-none ${active ? "border-2 border-lime-600 bg-lime-600/30 hover:bg-lime-600/50" : "border-2 bg-transparent"}`}
+      onClick={() => setDifficulty(level)}
+    >
+      <ItemGroup className="w-full">
+        <Item
+          variant="outline"
+          className="flex w-full items-center justify-start border-none"
+        >
+          <ItemActions className="flex-1">
             <ItemMedia></ItemMedia>
-            <ItemContent>
+            <ItemContent className="flex flex-row items-center justify-start gap-5">
               <ItemTitle className="font-bold capitalize">
                 <img></img>
                 {level}
               </ItemTitle>
               <ItemDescription asChild>
-                <ul>
+                <ul className="flex w-full items-center justify-start gap-2.5 text-xs *:flex *:items-center *:gap-2.5 *:after:size-1 *:after:rounded-full *:after:bg-black/70 *:last:after:hidden">
                   <li>{tries} tries</li>
                   <li>{timer ? "With timer" : "No timer"}</li>
                   <li>
@@ -50,9 +60,9 @@ export function DifficultyLevel({
                 </ul>
               </ItemDescription>
             </ItemContent>
-          </button>
-        </ItemActions>
-      </Item>
-    </ItemGroup>
+          </ItemActions>
+        </Item>
+      </ItemGroup>
+    </Button>
   );
 }

@@ -5,6 +5,9 @@
     "": {
       "name": "bun-react-template",
       "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^7.3.1",
+        "@fortawesome/free-solid-svg-icons": "^7.3.1",
+        "@fortawesome/react-fontawesome": "^3.5.0",
         "@radix-ui/react-label": "^2.1.7",
         "@radix-ui/react-select": "^2.2.6",
         "@radix-ui/react-slot": "^1.2.3",
@@ -87,6 +90,14 @@
     "@floating-ui/react-dom": ["@floating-ui/react-dom@2.1.9", "https://verdaccio.teamteaguehomelab.uk/@floating-ui/react-dom/-/react-dom-2.1.9.tgz", { "dependencies": { "@floating-ui/dom": "^1.8.0" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-JDjEFGCpImxDCA7JJKviA0M9+RtmJdj0m/NVU5IMgBK+AmZouAQQ7/+2GLH0GXXY0YMw9oXPB8hKdbPYg5QLYg=="],
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.12", "https://verdaccio.teamteaguehomelab.uk/@floating-ui/utils/-/utils-0.2.12.tgz", {}, "sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww=="],
+
+    "@fortawesome/fontawesome-common-types": ["@fortawesome/fontawesome-common-types@7.3.1", "https://verdaccio.teamteaguehomelab.uk/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-7.3.1.tgz", {}, "sha512-k0C0sdHmZtAo6dRDtd1Z/qcpyHbL0CKsjV8seMY/21xGhY5Wsv0XRmiI/xEEH4y2c9b1+jvgNs/3EqhV27yUEA=="],
+
+    "@fortawesome/fontawesome-svg-core": ["@fortawesome/fontawesome-svg-core@7.3.1", "https://verdaccio.teamteaguehomelab.uk/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-7.3.1.tgz", { "dependencies": { "@fortawesome/fontawesome-common-types": "7.3.1" } }, "sha512-BoxVN3PKnMbgStHhjoaky/oWdxHomDqmBVA24IA3KEmssFGeI7u9YT/BJceOjIum/t6TpPa/vcMKaVYQeIQ/3Q=="],
+
+    "@fortawesome/free-solid-svg-icons": ["@fortawesome/free-solid-svg-icons@7.3.1", "https://verdaccio.teamteaguehomelab.uk/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-7.3.1.tgz", { "dependencies": { "@fortawesome/fontawesome-common-types": "7.3.1" } }, "sha512-v0BLa0eqg7ubvVWeNSHVBs8fWH/GJicERZoJaxJ3FE/lj67VSqzoMg9pzfZVOfLMX10y0pGwQAuxoRVVH2patg=="],
+
+    "@fortawesome/react-fontawesome": ["@fortawesome/react-fontawesome@3.5.0", "https://verdaccio.teamteaguehomelab.uk/@fortawesome/react-fontawesome/-/react-fontawesome-3.5.0.tgz", { "peerDependencies": { "@fortawesome/fontawesome-svg-core": "~6 || ~7", "react": "^18.0.0 || ^19.0.0" } }, "sha512-63mlRr6fiBbJ0wjr1Cf6dsDGtP2lNvk9lnatKgxs/fIkhslsZT291hIUzJkuUkI9yr69ZvWnWfgb2qXm4QyVaA=="],
 
     "@inquirer/external-editor": ["@inquirer/external-editor@1.0.3", "https://verdaccio.teamteaguehomelab.uk/@inquirer/external-editor/-/external-editor-1.0.3.tgz", { "dependencies": { "chardet": "^2.1.1", "iconv-lite": "^0.7.0" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-RWbSrDiYmO4LbejWY7ttpxczuwQyZLBUyygsA9Nsv95hpzUWwnNTVQmAq3xuh7vNwCp07UTmE5i11XAEExx4RA=="],
 

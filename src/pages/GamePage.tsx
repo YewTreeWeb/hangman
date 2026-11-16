@@ -1,3 +1,13 @@
+import {
+  faBolt,
+  faForward,
+  faHeart,
+  faLightbulb,
+  faMagnifyingGlass,
+  faPhone,
+  faShield,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect } from "react";
 
 import { HangmanDrawing } from "@/components/HangmanDrawing";
@@ -20,42 +30,42 @@ export function GamePage() {
     {
       name: "Clue",
       description: "Provides a hint for the current word.",
-      Icon: () => <span>💡</span>,
+      Icon: () => <FontAwesomeIcon icon={faLightbulb} size="lg" />,
       multiUse: false,
       active: true,
     },
     {
       name: "Reveal",
       description: "Reveals a letter in the current word.",
-      Icon: () => <span>🔍</span>,
+      Icon: () => <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />,
       multiUse: false,
       active: true,
     },
     {
       name: "Shield",
       description: "Protects the player from one incorrect guess.",
-      Icon: () => <span>🛡️</span>,
+      Icon: () => <FontAwesomeIcon icon={faShield} size="lg" />,
       multiUse: false,
       active: true,
     },
     {
       name: "Skip",
       description: "Skips the current word.",
-      Icon: () => <span>⏩</span>,
+      Icon: () => <FontAwesomeIcon icon={faForward} size="lg" />,
       multiUse: false,
       active: true,
     },
     {
       name: "Zap",
       description: "Removes five incorrect letters from the current word.",
-      Icon: () => <span>⚡</span>,
+      Icon: () => <FontAwesomeIcon icon={faBolt} size="lg" />,
       multiUse: false,
       active: false,
     },
     {
       name: "Phone a Friend",
       description: "Calls a random AI agent for help with the current word.",
-      Icon: () => <span>📞</span>,
+      Icon: () => <FontAwesomeIcon icon={faPhone} size="lg" />,
       multiUse: false,
       active: true,
     },
@@ -122,7 +132,7 @@ export function GamePage() {
         <div className="flex w-full flex-row items-center justify-between gap-2">
           <div className="flex flex-col gap-1 text-sm">
             <span>Score</span>
-            <span className="font-bold">{score}</span>
+            <span className="text-lg font-bold">{score}</span>
           </div>
           <div
             className="flex flex-col gap-1 text-sm"
@@ -131,7 +141,9 @@ export function GamePage() {
             <span>Lives</span>
             <div className="flex gap-x-2">
               {Array.from({ length: lives }, (_, i) => (
-                <span key={i}>❤️</span>
+                <span key={i}>
+                  <FontAwesomeIcon icon={faHeart} size="lg" />
+                </span>
               ))}
             </div>
           </div>
@@ -168,7 +180,7 @@ export function GamePage() {
       </section>
       <section>
         <div className="flex items-center justify-center gap-4">
-          <h5>Powers</h5>
+          <h5 className="text-xs uppercase">Powers</h5>
           <div>
             {powers.map((power) => (
               <Powers key={power.name} {...power} />
