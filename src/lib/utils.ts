@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import words from "@/data/words.json";
 import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
+const { setDifficulty, setPage } = useGameStore.getState();
 
 type WordsObjType = {
   word: string;
@@ -102,4 +103,18 @@ export const wordPoints = (word: string, level: LevelKey | null) => {
   if (!level) throw new Error("Level must not be null");
 
   return Math.round(new Set(word).size * 10 * wordScores[level]);
+};
+
+/**
+ * Ends the current game and returns the user to the home screen.
+ *
+ * Clears the selected difficulty, resets the game state, and navigates to the
+ * main menu.
+ *
+ * @returns {void}
+ */
+export const endGame = () => {
+  setDifficulty(null);
+  resetGame();
+  setPage("home");
 };

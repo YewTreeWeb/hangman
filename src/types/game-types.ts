@@ -11,5 +11,7 @@ export type PowerTypes = {
   active: boolean;
   multiUse?: boolean;
   uses?: number;
+  locked?: boolean;
+  toUnlock?: number;
   onUse: () => void;
 };

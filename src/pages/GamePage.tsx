@@ -1,13 +1,11 @@
 import {
-  faBolt,
+  faDice,
   faFaceGrinStars,
-  faForward,
   faHeart,
-  faLightbulb,
-  faMagnifyingGlass,
-  faPhone,
   faShield,
+  faShieldHeart,
   faSkull,
+  faSkullCrossbones,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -24,68 +22,76 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { cn, getWord, wordPoints } from "@/lib/utils";
+import { getPowers, getSpecialPowers } from "@/lib/powerList";
+import { cn, endGame, getWord, wordPoints } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
-import type { PowerTypes } from "@/types/game-types";
 
 export function GamePage() {
   const { category, difficulty, round, setRound, match, setMatch } =
     useGameStore();
-  const { score, lives, setScore, streak, setStreak, setLives } =
-    useUserStore();
+  const {
+    score,
+    lives,
+    setScore,
+    streak,
+    setStreak,
+    setLives,
+    activePowers,
+    setActivePowers,
+  } = useUserStore();
   const [showClue, setShowClue] = useState<boolean>();
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeShield, setActiveShield] = useState(false);
   const [activeSuperShield, setActiveSuperShield] = useState(false);
+  const [zapped, setZapped] = useState<string[]>([]);
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [showShield, setShowShield] = useState(false);
+  const [showFeelingLucky, setShowFeelingLucky] = useState(false);
+  const [extraLife, setExtraLife] = useState(false);
+  const [revivePower, setRevivePower] = useState(false);
+  const [rolling, setRolling] = useState(false);
+  const [usedPowers, setUsedPowers] = useState<string[]>([]);
+  // undefined = not rolled yet, null = rolled nothing
+  const [luckyResult, setLuckyResult] = useState<string | null>();
+  const [wonPowers, setWonPowers] = useState<Record<string, number>>({});
+  const [isPoisoned, setIsPoisoned] = useState(false);
 
   const { word, hint, guessedLetters, status } = round;
-  console.log("🚀 ~ GamePage ~ guessedLetters:", guessedLetters);
 
   const resetPowers = () => {
     setShowClue(false);
     setActiveShield(false);
-    setActiveSuperShield(false);
+    setExtraLife(false);
+    setRevivePower(false);
+    setZapped([]);
+    setActivePowers([]);
   };
 
-  const powers: PowerTypes[] = [
+  const zappedLetters = (amount: number) => {
+    const wrong = kbdKeys
+      .flat()
+      .filter((l) => !word.includes(l) && !guessedLetters.includes(l));
+    setZapped(wrong.sort(() => Math.random() - 0.5).slice(0, amount));
+  };
+
+  const kbdKeys = ["qwertyuiop", "asdfghjkl", "zxcvbnm"].map((row) => [...row]);
+  const hardMode = difficulty === "hard" || difficulty === "executioner";
+  const sideEffect = (chance: number) => hardMode && Math.random() < chance;
+
+  const powers = getPowers(
     {
-      name: "Clue",
-      description: "Provides a hint for the current word.",
-      Icon: () => <FontAwesomeIcon icon={faLightbulb} size="lg" />,
-      multiUse: false,
-      active: true,
-      onUse: () => {
-        setShowClue(true);
-      },
-    },
-    {
-      name: "Reveal",
-      description: "Reveals a letter in the current word.",
-      Icon: () => <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />,
-      multiUse: false,
-      active: true,
-    },
-    {
-      name: "Shield",
-      description: "Protects the player from one incorrect guess.",
-      Icon: () => <FontAwesomeIcon icon={faShield} size="lg" />,
-      multiUse: false,
-      active: true,
-      onUse: () => {
+      clue: () => setShowClue(true),
+      reveal: () => setIsRevealed(true),
+      shield: () => {
         setActiveShield(true);
+        setShowShield(true);
       },
-    },
-    {
-      name: "Skip",
-      description: "Skips the current word.",
-      Icon: () => <FontAwesomeIcon icon={faForward} size="lg" />,
-      multiUse: false,
-      active: true,
-      onUse: () => {
+      skip: () => {
         setRound({
           ...getWord(category, difficulty),
           guessedLetters: [],
@@ -93,27 +99,77 @@ export function GamePage() {
         });
         resetPowers();
       },
+      zap: () => zappedLetters(5),
     },
-    {
-      name: "Zap",
-      description: "Removes five incorrect letters from the current word.",
-      Icon: () => <FontAwesomeIcon icon={faBolt} size="lg" />,
-      multiUse: false,
-      active: false,
-    },
-    {
-      name: "Phone a Friend",
-      description: "Calls a random AI agent for help with the current word.",
-      Icon: () => <FontAwesomeIcon icon={faPhone} size="lg" />,
-      multiUse: false,
-      active: true,
-    },
-  ];
+    difficulty,
+  );
 
-  const kbdKeys = ["qwertyuiop", "asdfghjkl", "zxcvbnm"].map((row) => [...row]);
+  const specialPowers = getSpecialPowers(
+    {
+      potion: () => {
+        if (sideEffect(0.1)) {
+          return;
+        }
+        if (lives > 0 && lives < 3) setLives(lives + 1);
+      },
+      redPotion: () => {
+        if (sideEffect(0.1)) {
+          setIsPoisoned(true);
+          setTimeout(() => {
+            setLives(lives - 1);
+            setIsPoisoned(false);
+          }, 1000);
+          return;
+        }
+        if (lives > 0 && lives < 3) setLives(lives + 2);
+        setExtraLife(true);
+      },
+      revival: () => {
+        if (sideEffect(0.2)) {
+          return;
+        }
+        setRevivePower(true);
+      },
+      superZap: () => zappedLetters(10),
+      superShield: () => {
+        setActiveSuperShield(true);
+        setShowShield(true);
+      },
+      bernardsWatch: () => {},
+    },
+    difficulty,
+  );
+
+  const executioner = difficulty === "executioner";
+  const rollCost = executioner ? 1000 : 500;
+
+  // executioner can only hold one special power at a time
+  const rollBlocked =
+    executioner && Object.values(wonPowers).some((count) => count > 0);
 
   const feelingLucky = () => {
-    setScore(score - 250);
+    setScore(score - rollCost);
+    setRolling(true);
+    setTimeout(() => {
+      // one extra slot past the end of the list is the "nothing" outcome,
+      // except on executioner where a roll always wins
+      const slots = specialPowers.length + (executioner ? 0 : 1);
+      const pick = Math.floor(Math.random() * slots);
+      const name = specialPowers[pick]?.name ?? null;
+      if (name) {
+        setWonPowers((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
+      }
+      setLuckyResult(name);
+      setRolling(false);
+    }, 1500);
+  };
+
+  const closeFeelingLucky = () => {
+    setShowFeelingLucky(false);
+    const luckyResult = setTimeout(() => {
+      setLuckyResult(undefined);
+    }, 1000);
+    return () => clearTimeout(luckyResult);
   };
 
   const wrongLetter = guessedLetters.filter(
@@ -136,15 +192,17 @@ export function GamePage() {
     };
   });
 
-  const updateStreak = () => {};
-
-  const hardMode = difficulty === "hard" || difficulty === "executioner";
   const gameLost =
     (hardMode && wrongLetter >= 6) || (!hardMode && wrongLetter >= 11);
   const gameWon = [...word].every((letter) => guessedLetters.includes(letter));
 
   const guessedLetter = (letter: string) => {
-    if (guessedLetters.includes(letter) || status !== "in-progress") return;
+    if (
+      guessedLetters.includes(letter) ||
+      zapped.includes(letter) ||
+      status !== "in-progress"
+    )
+      return;
 
     const next = [...guessedLetters, letter];
     const won = [...word].every((l) => next.includes(l));
@@ -165,16 +223,17 @@ export function GamePage() {
       setSuccess(true);
     }
 
+    if (lost) {
+      setFailed(true);
+      setExtraLife(false);
+    }
+
     if (lost && !activeSuperShield) {
       setStreak(0);
     }
 
     if (lost && lives > 0 && !activeShield && !activeSuperShield) {
       setLives(lives - 1);
-    }
-
-    if (lost && lives === 0) {
-      setFailed(true);
     }
 
     if (won || lost) {
@@ -186,8 +245,16 @@ export function GamePage() {
 
   const roundOver = gameLost || gameWon;
 
+  const shielded = activeShield || activeSuperShield;
+  const dead = lives === 0;
+  const failIcon = dead
+    ? faSkullCrossbones
+    : shielded
+      ? faShieldHeart
+      : faSkull;
+
   useEffect(() => {
-    if (status === "in-progress") return;
+    if (status === "in-progress" || lives === 0) return;
     const showLoading = setTimeout(() => {
       setLoading(true);
     }, 2000);
@@ -197,8 +264,8 @@ export function GamePage() {
         guessedLetters: [],
         status: "in-progress",
       });
+      if (failed) setActiveSuperShield(false);
       resetPowers();
-      setActiveSuperShield(false);
       setLoading(false);
       setFailed(false);
       setSuccess(false);
@@ -208,7 +275,23 @@ export function GamePage() {
       clearTimeout(showLoading);
       clearTimeout(nextWord);
     };
-  }, [status, category, difficulty]);
+  }, [status, category, difficulty, lives]);
+
+  const cancelPower = (power: string) => {
+    const index = activePowers.indexOf(power);
+    return activePowers.splice(index, 1);
+  };
+
+  useEffect(() => {
+    if (!showShield) return;
+    const hideShieldModal = setTimeout(() => {
+      setShowShield(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(hideShieldModal);
+    };
+  }, [showShield]);
 
   return (
     <div className="relative z-10 mx-auto flex w-dvh flex-col gap-4 p-4 text-center">
@@ -236,7 +319,17 @@ export function GamePage() {
             >
               {Array.from({ length: lives }, (_, i) => (
                 <span key={i}>
-                  <FontAwesomeIcon icon={faHeart} size="lg" />
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    size="lg"
+                    className={cn(
+                      extraLife && i === 0
+                        ? "text-yellow-400! drop-shadow-[0_0_0.25rem_var(--color-yellow-300)] dark:text-yellow-300!"
+                        : isPoisoned && i === 0
+                          ? "text-green-700! dark:text-green-600!"
+                          : "",
+                    )}
+                  />
                 </span>
               ))}
             </div>
@@ -290,22 +383,101 @@ export function GamePage() {
         </div>
       </section>
       <section>
-        <div className="flex items-center justify-center gap-4">
-          <h5 className="text-xs uppercase">Powers</h5>
-          <div>
+        <div className="flex flex-col gap-4">
+          <h5 className="text-left text-xs uppercase">Powers</h5>
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-5">
             {powers.map((power) => (
               <Powers key={power.name} {...power} />
             ))}
+            {specialPowers
+              .filter((power) => (wonPowers[power.name] ?? 0) > 0)
+              .map((power) => (
+                <Powers
+                  key={power.name}
+                  {...power}
+                  multiUse={(wonPowers[power.name] ?? 0) > 1}
+                  uses={wonPowers[power.name]}
+                  onUse={() => {
+                    setWonPowers((prev) => ({
+                      ...prev,
+                      [power.name]: (prev[power.name] ?? 0) - 1,
+                    }));
+                    power.onUse();
+                  }}
+                />
+              ))}
           </div>
         </div>
       </section>
-      {difficulty !== "hard" && difficulty !== "executioner" && (
-        <section>
-          <Button onClick={feelingLucky} disabled={score < 250}>
-            Feeling Lucky <Badge>250 pts</Badge>
-          </Button>
-        </section>
-      )}
+
+      <Dialog open={showFeelingLucky}>
+        <DialogTrigger
+          disabled={score < rollCost}
+          onClick={() => setShowFeelingLucky(true)}
+          className="focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium whitespace-nowrap transition-all outline-none hover:cursor-pointer focus-visible:ring-[3px] disabled:opacity-50 disabled:hover:cursor-not-allowed!"
+        >
+          Feeling Lucky <Badge>{rollCost} pts</Badge>
+        </DialogTrigger>
+        <DialogContent className="border-2 border-amber-400 px-8">
+          <DialogHeader>
+            <DialogTitle className="uppercase">Feeling Lucky?</DialogTitle>
+            <DialogDescription className="py-2">
+              Roll the dice to see what you get.
+              {!executioner && " But you might get nothing at all."}
+            </DialogDescription>
+          </DialogHeader>
+          {rolling ? (
+            <div className="flex justify-center py-4 text-amber-400">
+              <FontAwesomeIcon icon={faDice} size="5x" shake />
+            </div>
+          ) : luckyResult !== undefined ? (
+            <div className="flex flex-col items-center justify-center gap-1.5 rounded-md border-2 border-amber-400 bg-amber-50 px-4 py-2">
+              <p className="text-sm font-bold text-amber-400 uppercase">
+                {luckyResult ? "You won" : "No luck"}
+              </p>
+              <p className="text-lg font-bold text-amber-500 uppercase">
+                {luckyResult ?? "Better luck next time"}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-1.5 rounded-md border-2 border-amber-400 bg-amber-50 px-4 py-2 text-white">
+              <p className="text-sm font-bold text-amber-400 uppercase">
+                Cost to roll
+              </p>
+              <p className="text-lg font-bold text-amber-300 uppercase">
+                {rollCost} pts
+              </p>
+              <span className="text-xs text-amber-400 uppercase">
+                You have {score} to spend
+              </span>
+              {rollBlocked && (
+                <span className="text-xs text-red-500">
+                  Use your special power before rolling again
+                </span>
+              )}
+            </div>
+          )}
+          <DialogFooter className="mt-2">
+            <Button
+              className="uppercase"
+              variant="outline"
+              onClick={closeFeelingLucky}
+              disabled={rolling}
+            >
+              {luckyResult !== undefined ? "Close" : "Cancel"}
+            </Button>
+            {luckyResult === undefined && (
+              <Button
+                className="bg-amber-400 uppercase hover:bg-amber-500"
+                onClick={feelingLucky}
+                disabled={rolling || score < rollCost || rollBlocked}
+              >
+                Roll the dice
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <section className="flex flex-col items-center justify-center gap-1">
         {kbdKeys.map((kdb, i) => (
           <div key={kdb[i]} className="flex items-center justify-center gap-1">
@@ -313,14 +485,19 @@ export function GamePage() {
               <Button
                 key={i}
                 variant="outline"
-                className="uppercase"
-                onClick={() => {
-                  setRound({
-                    guessedLetters: [...guessedLetters, char],
-                  });
-                  guessedLetter(char);
-                }}
-                disabled={guessedLetters.includes(char) || gameLost || gameWon}
+                className={cn(
+                  "uppercase",
+                  zapped.includes(char)
+                    ? "border border-orange-300 text-orange-300 hover:bg-yellow-100 hover:text-orange-300"
+                    : "text-black",
+                )}
+                onClick={() => guessedLetter(char)}
+                disabled={
+                  guessedLetters.includes(char) ||
+                  gameLost ||
+                  gameWon ||
+                  zapped.includes(char)
+                }
               >
                 {char}
               </Button>
@@ -341,12 +518,19 @@ export function GamePage() {
       </section>
       <Dialog open={failed}>
         <DialogContent
-          className="flex flex-col items-center justify-center gap-6 text-center"
+          className="flex flex-col items-center justify-center gap-6 border-2 border-red-600 text-center"
           showCloseButton={false}
         >
-          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-red-600">
-            <FontAwesomeIcon icon={faSkull} size="5x" />
-            <DialogTitle className="uppercase">Hanged!</DialogTitle>
+          <DialogHeader
+            className={cn(
+              "flex flex-col items-center justify-center gap-4",
+              shielded && !dead ? "text-blue-500" : "text-red-600",
+            )}
+          >
+            <FontAwesomeIcon icon={failIcon} size="5x" />
+            <DialogTitle className="uppercase">
+              {shielded ? "Shield Activated" : "Hanged!"}
+            </DialogTitle>
           </DialogHeader>
           <DialogDescription className="text-black">
             The word was:{" "}
@@ -354,17 +538,34 @@ export function GamePage() {
               {word}
             </span>
           </DialogDescription>
-          {loading && (
-            <DialogFooter className="flex flex-row items-center justify-center text-center text-xs">
-              <Spinner />
-              <span>... Loading next word</span>
-            </DialogFooter>
+          {(dead || shielded) && (
+            <p className="text-sm">
+              {dead
+                ? "You have died! Better luck next time."
+                : shielded
+                  ? "You were saved!"
+                  : ""}
+            </p>
           )}
+          <DialogFooter className="flex flex-row items-center justify-center text-center text-xs">
+            {dead ? (
+              <Button size="lg" className="uppercase" onClick={endGame}>
+                Main Menu
+              </Button>
+            ) : (
+              loading && (
+                <>
+                  <Spinner />
+                  <p>... Loading next word</p>
+                </>
+              )
+            )}
+          </DialogFooter>
         </DialogContent>
       </Dialog>
       <Dialog open={success}>
         <DialogContent
-          className="flex flex-col items-center justify-center gap-6 text-center"
+          className="flex flex-col items-center justify-center gap-6 border-2 border-lime-600 text-center"
           showCloseButton={false}
         >
           <DialogHeader className="flex flex-col items-center justify-center gap-4 text-lime-600">
@@ -384,6 +585,70 @@ export function GamePage() {
               <span>... Loading next word</span>
             </DialogFooter>
           )}
+        </DialogContent>
+      </Dialog>
+      <Dialog open={isRevealed}>
+        <DialogContent
+          className="flex flex-col items-center justify-center gap-6 border-2 border-purple-600 text-center"
+          showCloseButton={false}
+        >
+          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-purple-600">
+            <DialogTitle className="uppercase">Reveal a letter</DialogTitle>
+            <p>Choose a position — that letter will be uncovered.</p>
+          </DialogHeader>
+          <DialogDescription>
+            {[...word].map((char, i) => (
+              <>
+                {!guessedLetters.includes(char) && (
+                  <div key={i} className="w-6">
+                    <hr className={cn("border-b border-black")} />
+                  </div>
+                )}
+              </>
+            ))}
+            <p className="uppercase">hidden positions</p>
+            {[...word].map((char, i) => (
+              <>
+                {!guessedLetters.includes(char) && (
+                  <Button
+                    key={i}
+                    className="w-6"
+                    variant="outline"
+                    onClick={() => {
+                      setRound({ guessedLetters: [...guessedLetters, char] });
+                      setIsRevealed(false);
+                    }}
+                  >
+                    {i + 1}
+                    {i === 0 ? "st" : "th"}
+                  </Button>
+                )}
+              </>
+            ))}
+            <Button
+              variant="outline"
+              onClick={() => {
+                cancelPower("Reveal");
+                setIsRevealed(false);
+              }}
+            >
+              Cancel Power
+            </Button>
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={showShield}>
+        <DialogContent
+          className="flex flex-col items-center justify-center gap-6 border-2 border-blue-400 text-center"
+          showCloseButton={false}
+        >
+          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-blue-400">
+            <FontAwesomeIcon icon={faShield} size="5x" />
+            <DialogTitle className="uppercase">Shield Activated</DialogTitle>
+          </DialogHeader>
+          <DialogDescription>
+            You have activated your shield. Protection awaits you.
+          </DialogDescription>
         </DialogContent>
       </Dialog>
     </div>
