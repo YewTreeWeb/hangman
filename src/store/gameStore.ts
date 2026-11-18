@@ -43,7 +43,7 @@ type GameState = {
   setMatch: (match: Partial<MatchTypes> | null) => void;
   setRound: (round: Partial<RoundTypes>) => void;
   setRecord: (record: RecordTypes) => void;
-  setUnlockPowers?: (powers: boolean) => void;
+  setUnlockPowers: (powers: boolean) => void;
 };
 
 type UserState = {
@@ -91,6 +91,7 @@ export const useGameStore = create<GameState>()(
       setMatch: (match) => set((s) => ({ match: { ...s.match, ...match } })),
       setRound: (round) => set((s) => ({ round: { ...s.round, ...round } })),
       setRecord: (record: RecordTypes) => set((s) => ({ record })),
+      setUnlockPowers: (unlockPowers) => set({ unlockPowers }),
     }),
     {
       name: "hangman",

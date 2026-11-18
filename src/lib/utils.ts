@@ -115,7 +115,7 @@ export const wordPoints = (word: string, level: LevelKey | null) => {
  */
 export const endGame = () => {
   setDifficulty(null);
-  setUnlockPowers?.(false);
+  setUnlockPowers(false);
   resetGame();
   setPage("home");
 };

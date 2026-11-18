@@ -145,7 +145,7 @@ export function GamePage() {
       bernardsWatch: () => {},
       magicStar: () => {
         setStreak(streak + 50);
-        if (!unlockPowers) setUnlockPowers?.(true);
+        if (!unlockPowers) setUnlockPowers(true);
         if (unlockPowers && !alwaysShowClue) {
           setAlwaysShowClue(true);
           setShowClue(true);
