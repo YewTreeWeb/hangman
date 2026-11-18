@@ -42,16 +42,8 @@ export function GamePage() {
     setUnlockPowers,
     unlockPowers,
   } = useGameStore();
-  const {
-    score,
-    lives,
-    setScore,
-    streak,
-    setStreak,
-    setLives,
-    activePowers,
-    setActivePowers,
-  } = useUserStore();
+  const { score, lives, setScore, streak, setStreak, setLives, activePowers } =
+    useUserStore();
   const [showClue, setShowClue] = useState<boolean>();
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -65,7 +57,6 @@ export function GamePage() {
   const [extraLife, setExtraLife] = useState(false);
   const [revivePower, setRevivePower] = useState(false);
   const [rolling, setRolling] = useState(false);
-  // undefined = not rolled yet, null = rolled nothing
   const [luckyResult, setLuckyResult] = useState<string | null>();
   const [wonPowers, setWonPowers] = useState<Record<string, number>>({});
   const [isPoisoned, setIsPoisoned] = useState(false);

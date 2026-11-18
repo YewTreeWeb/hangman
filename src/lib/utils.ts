@@ -4,13 +4,13 @@ import { twMerge } from "tailwind-merge";
 import words from "@/data/words.json";
 import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
-const { setDifficulty, setPage } = useGameStore.getState();
+const { setDifficulty, setPage, setUnlockPowers, setRound } =
+  useGameStore.getState();
 
 type WordsObjType = {
   word: string;
   hint: string;
 };
-const { setRound } = useGameStore.getState();
 const { setScore, setLives, setSolved, setStreak, setActivePowers } =
   useUserStore.getState();
 
@@ -115,6 +115,7 @@ export const wordPoints = (word: string, level: LevelKey | null) => {
  */
 export const endGame = () => {
   setDifficulty(null);
+  setUnlockPowers?.(false);
   resetGame();
   setPage("home");
 };
