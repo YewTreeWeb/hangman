@@ -29,7 +29,10 @@ export function Powers(props: PowerTypes) {
   } = props;
   const { activePowers, setActivePowers, score, setScore } = useUserStore();
   const [unlock, setUnlock] = useState(false);
-  const used = (activePowers.includes(name) && !multiUse) || locked || !active;
+  const used =
+    (activePowers.includes(name) && !multiUse) ||
+    (locked && !unlock) ||
+    !active;
   const ptsNeeded = toUnlock ?? 250;
 
   return (
@@ -42,6 +45,7 @@ export function Powers(props: PowerTypes) {
             className="relative flex h-full w-fit flex-nowrap items-center justify-center rounded-full p-3 md:rounded-md"
             onClick={() => {
               setActivePowers([...activePowers, name]);
+              console.log("clicked");
               onUse?.();
             }}
             disabled={used}

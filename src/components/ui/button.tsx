@@ -4,6 +4,10 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+interface BtnProps extends React.ComponentProps<"button"> {
+  activeBtn?: boolean;
+}
+
 const buttonVariants = cva(
   "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none hover:cursor-pointer focus-visible:ring-[3px] disabled:opacity-50 disabled:hover:cursor-not-allowed! [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -36,13 +40,26 @@ const buttonVariants = cva(
   },
 );
 
+const activeClasses: Record<
+  NonNullable<VariantProps<typeof buttonVariants>["variant"]>,
+  string
+> = {
+  default: "bg-primary/90",
+  destructive: "bg-destructive/90",
+  outline: "bg-accent text-accent-foreground",
+  secondary: "bg-secondary/80",
+  ghost: "bg-accent text-accent-foreground",
+  link: "underline",
+};
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
+  activeBtn = false,
   ...props
-}: React.ComponentProps<"button"> &
+}: BtnProps &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
   }) {
@@ -51,10 +68,13 @@ function Button({
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        activeBtn && activeClasses[variant ?? "default"],
+      )}
       {...props}
     />
   );
 }
 
-export { Button, buttonVariants };
+export { Button };

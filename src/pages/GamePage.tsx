@@ -1,7 +1,9 @@
 import {
+  faCircleXmark,
   faDice,
   faFaceGrinStars,
   faHeart,
+  faRepeat,
   faShield,
   faShieldHeart,
   faSkull,
@@ -55,11 +57,12 @@ export function GamePage() {
   const [extraLife, setExtraLife] = useState(false);
   const [revivePower, setRevivePower] = useState(false);
   const [rolling, setRolling] = useState(false);
-  const [usedPowers, setUsedPowers] = useState<string[]>([]);
   // undefined = not rolled yet, null = rolled nothing
   const [luckyResult, setLuckyResult] = useState<string | null>();
   const [wonPowers, setWonPowers] = useState<Record<string, number>>({});
   const [isPoisoned, setIsPoisoned] = useState(false);
+  const [restorePower, setRestorePower] = useState("");
+  const [failedPower, setFailedPower] = useState(false);
 
   const { word, hint, guessedLetters, status } = round;
 
@@ -69,7 +72,6 @@ export function GamePage() {
     setExtraLife(false);
     setRevivePower(false);
     setZapped([]);
-    setActivePowers([]);
   };
 
   const zappedLetters = (amount: number) => {
@@ -92,12 +94,14 @@ export function GamePage() {
         setShowShield(true);
       },
       skip: () => {
-        setRound({
-          ...getWord(category, difficulty),
-          guessedLetters: [],
-          status: "in-progress",
-        });
-        resetPowers();
+        setTimeout(() => {
+          setRound({
+            ...getWord(category, difficulty),
+            guessedLetters: [],
+            status: "in-progress",
+          });
+          resetPowers();
+        }, 1000);
       },
       zap: () => zappedLetters(5),
     },
@@ -108,6 +112,7 @@ export function GamePage() {
     {
       potion: () => {
         if (sideEffect(0.1)) {
+          setFailedPower(true);
           return;
         }
         if (lives > 0 && lives < 3) setLives(lives + 1);
@@ -115,6 +120,7 @@ export function GamePage() {
       redPotion: () => {
         if (sideEffect(0.1)) {
           setIsPoisoned(true);
+          setFailedPower(true);
           setTimeout(() => {
             setLives(lives - 1);
             setIsPoisoned(false);
@@ -126,6 +132,7 @@ export function GamePage() {
       },
       revival: () => {
         if (sideEffect(0.2)) {
+          setFailedPower(true);
           return;
         }
         setRevivePower(true);
@@ -293,14 +300,29 @@ export function GamePage() {
     };
   }, [showShield]);
 
+  console.log("active powers", activePowers);
+
   return (
     <div className="relative z-10 mx-auto flex w-dvh flex-col gap-4 p-4 text-center">
       <div className="flex flex-col items-center justify-center gap-8">
         <HeaderMenu />
         <div className="flex w-full flex-row items-center justify-between gap-2">
-          <div className="flex flex-col gap-1 text-sm">
-            <span>Score</span>
-            <span className="text-lg font-bold">{score}</span>
+          <div className="flex items-center justify-start gap-6">
+            <div className="flex flex-col gap-1 text-sm">
+              <span>Score</span>
+              <span className="text-lg font-bold">{score}</span>
+            </div>
+            <div className={"flex flex-col gap-1 text-sm"}>
+              <span>Streak</span>
+              <span
+                className={cn(
+                  "text-lg font-bold",
+                  activeSuperShield ? "text-teal-400" : "text-black",
+                )}
+              >
+                {streak}
+              </span>
+            </div>
           </div>
           <div
             className="flex flex-col gap-1 text-sm"
@@ -313,7 +335,7 @@ export function GamePage() {
                 activeShield
                   ? "text-blue-400"
                   : activeSuperShield
-                    ? "text-amber-400"
+                    ? "text-teal-400"
                     : "text-red-400",
               )}
             >
@@ -336,7 +358,7 @@ export function GamePage() {
           </div>
         </div>
       </div>
-      <section className="grid grid-cols-2 items-center justify-center gap-14">
+      <section className="my-3 grid grid-cols-2 items-center justify-center gap-14">
         <div>
           <HangmanDrawing wrongGuesses={wrongLetter} difficulty={difficulty} />
         </div>
@@ -488,7 +510,7 @@ export function GamePage() {
                 className={cn(
                   "uppercase",
                   zapped.includes(char)
-                    ? "border border-orange-300 text-orange-300 hover:bg-yellow-100 hover:text-orange-300"
+                    ? "hidden border border-orange-300 text-orange-300 hover:bg-yellow-100 hover:text-orange-300"
                     : "text-black",
                 )}
                 onClick={() => guessedLetter(char)}
@@ -504,17 +526,6 @@ export function GamePage() {
             ))}
           </div>
         ))}
-      </section>
-      <section>
-        <div
-          className={cn(
-            "flex gap-x-2",
-            activeSuperShield ? "text-amber-400" : "text-black",
-          )}
-        >
-          <span>Streak</span>
-          <span>{streak}</span>
-        </div>
       </section>
       <Dialog open={failed}>
         <DialogContent
@@ -649,6 +660,110 @@ export function GamePage() {
           <DialogDescription>
             You have activated your shield. Protection awaits you.
           </DialogDescription>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={revivePower}>
+        <DialogContent
+          className="flex flex-col items-center justify-center gap-6 border-2 border-indigo-400 text-center"
+          showCloseButton={false}
+        >
+          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-indigo-400">
+            <FontAwesomeIcon icon={faRepeat} size="5x" />
+            <DialogTitle className="uppercase">
+              Restore a used power
+            </DialogTitle>
+            <p className="text-center text-sm">
+              You can only restore normal powers and not special ones you win
+            </p>
+          </DialogHeader>
+          <DialogDescription>
+            <div className="flex items-center justify-center gap-4">
+              {activePowers.map((power) => (
+                <Button
+                  key={power}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setRestorePower(power)}
+                  activeBtn={restorePower === power}
+                  className="uppercase"
+                >
+                  {power}
+                </Button>
+              ))}
+            </div>
+            <div className="mt-6 flex flex-col items-center justify-center gap-4">
+              {restorePower && (
+                <>
+                  <p className="text-xs">
+                    Are you sure you want to restore the power{" "}
+                    <span className="font-bold uppercase">{restorePower}</span>?
+                  </p>
+                  <div className="flex items-center justify-center gap-4">
+                    <Button
+                      variant="secondary"
+                      onClick={() => setRestorePower("")}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setRevivePower(false);
+                        setRestorePower("");
+                        cancelPower(restorePower);
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={failedPower}>
+        <DialogContent
+          className={cn(
+            "flex flex-col items-center justify-center gap-6 border-2 text-center",
+            isPoisoned
+              ? "border-green-700 dark:border-green-600"
+              : "border-red-400",
+          )}
+          showCloseButton={false}
+        >
+          <DialogHeader
+            className={cn(
+              "flex flex-col items-center justify-center gap-4",
+              isPoisoned
+                ? "text-green-700 dark:text-green-600"
+                : "text-red-400",
+            )}
+          >
+            {isPoisoned ? (
+              <FontAwesomeIcon icon={faSkull} size="5x" />
+            ) : (
+              <FontAwesomeIcon icon={faCircleXmark} size="5x" />
+            )}
+            <DialogTitle className="uppercase">
+              {isPoisoned
+                ? "Oh no! You've been poisoned!"
+                : "Oh no! Your power failed"}
+            </DialogTitle>
+          </DialogHeader>
+          <DialogDescription>
+            {isPoisoned
+              ? "You will now loose a life due to the effects of being poisoned."
+              : "Your power failed to activate. It's affects have not been applied. Hopefully it will work next time."}
+          </DialogDescription>
+          <DialogFooter>
+            <Button
+              onClick={() => setFailedPower(false)}
+              variant="destructive"
+              className={cn(isPoisoned && "bg-green-700!")}
+            >
+              Close
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
