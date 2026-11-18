@@ -32,8 +32,16 @@ import { cn, endGame, getWord, wordPoints } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
 
 export function GamePage() {
-  const { category, difficulty, round, setRound, match, setMatch } =
-    useGameStore();
+  const {
+    category,
+    difficulty,
+    round,
+    setRound,
+    match,
+    setMatch,
+    setUnlockPowers,
+    unlockPowers,
+  } = useGameStore();
   const {
     score,
     lives,
@@ -63,11 +71,12 @@ export function GamePage() {
   const [isPoisoned, setIsPoisoned] = useState(false);
   const [restorePower, setRestorePower] = useState("");
   const [failedPower, setFailedPower] = useState(false);
+  const [alwaysShowClue, setAlwaysShowClue] = useState(false);
 
   const { word, hint, guessedLetters, status } = round;
 
   const resetPowers = () => {
-    setShowClue(false);
+    if (!alwaysShowClue) setShowClue(false);
     setActiveShield(false);
     setExtraLife(false);
     setRevivePower(false);
@@ -143,12 +152,26 @@ export function GamePage() {
         setShowShield(true);
       },
       bernardsWatch: () => {},
+      magicStar: () => {
+        setStreak(streak + 50);
+        if (!unlockPowers) setUnlockPowers?.(true);
+        if (unlockPowers && !alwaysShowClue) {
+          setAlwaysShowClue(true);
+          setShowClue(true);
+        }
+        setRound({
+          guessedLetters: [...new Set([...guessedLetters, ...word])],
+          status: "won",
+        });
+        setSuccess(true);
+      },
     },
     difficulty,
   );
 
   const executioner = difficulty === "executioner";
-  const rollCost = executioner ? 1000 : 500;
+  const easy = difficulty === "easy";
+  const rollCost = executioner ? 1000 : easy ? 250 : 500;
 
   // executioner can only hold one special power at a time
   const rollBlocked =
@@ -160,9 +183,13 @@ export function GamePage() {
     setTimeout(() => {
       // one extra slot past the end of the list is the "nothing" outcome,
       // except on executioner where a roll always wins
-      const slots = specialPowers.length + (executioner ? 0 : 1);
-      const pick = Math.floor(Math.random() * slots);
-      const name = specialPowers[pick]?.name ?? null;
+      const nothingWeight = executioner ? 0 : 10;
+      const total =
+        specialPowers.reduce((sum, p) => sum + (p.weight ?? 10), 0) +
+        nothingWeight;
+      let roll = Math.random() * total;
+      const won = specialPowers.find((p) => (roll -= p.weight ?? 10) < 0);
+      const name = won?.name ?? null;
       if (name) {
         setWonPowers((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
       }
@@ -300,8 +327,6 @@ export function GamePage() {
     };
   }, [showShield]);
 
-  console.log("active powers", activePowers);
-
   return (
     <div className="relative z-10 mx-auto flex w-dvh flex-col gap-4 p-4 text-center">
       <div className="flex flex-col items-center justify-center gap-8">
@@ -409,7 +434,13 @@ export function GamePage() {
           <h5 className="text-left text-xs uppercase">Powers</h5>
           <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-5">
             {powers.map((power) => (
-              <Powers key={power.name} {...power} />
+              <Powers
+                key={power.name}
+                {...power}
+                className={cn(
+                  alwaysShowClue && power.name === "Clue" ? "hidden" : "",
+                )}
+              />
             ))}
             {specialPowers
               .filter((power) => (wonPowers[power.name] ?? 0) > 0)

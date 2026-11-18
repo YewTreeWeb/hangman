@@ -36,12 +36,14 @@ type GameState = {
   match: MatchTypes | null;
   round: RoundTypes;
   record: RecordTypes | null;
+  unlockPowers?: boolean;
   setPage: (page: GamePageProps) => void;
   setDifficulty: (level: LevelKey | null) => void;
   setCategory: (category: string) => void;
   setMatch: (match: Partial<MatchTypes> | null) => void;
   setRound: (round: Partial<RoundTypes>) => void;
   setRecord: (record: RecordTypes) => void;
+  setUnlockPowers?: (powers: boolean) => void;
 };
 
 type UserState = {
@@ -63,6 +65,7 @@ export const useGameStore = create<GameState>()(
       page: "home",
       difficulty: null,
       category: "Random",
+      unlockPowers: false,
       match: {
         mode: "single",
         players: 1,

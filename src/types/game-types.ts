@@ -14,4 +14,6 @@ export type PowerTypes = {
   locked?: boolean;
   toUnlock?: number;
   onUse: () => void;
+  weight?: number;
+  className?: string;
 };

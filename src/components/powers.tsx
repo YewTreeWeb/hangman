@@ -26,6 +26,7 @@ export function Powers(props: PowerTypes) {
     onUse,
     locked,
     toUnlock,
+    className,
   } = props;
   const { activePowers, setActivePowers, score, setScore } = useUserStore();
   const [unlock, setUnlock] = useState(false);
@@ -36,7 +37,7 @@ export function Powers(props: PowerTypes) {
   const ptsNeeded = toUnlock ?? 250;
 
   return (
-    <div className="relative w-fit">
+    <div className={cn("relative w-fit", className ?? "")}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button

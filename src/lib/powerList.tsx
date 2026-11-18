@@ -10,12 +10,14 @@ import {
   faRepeat,
   faShield,
   faShieldHeart,
+  faStar,
   faVial,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const { lives, activePowers } = useUserStore.getState();
+const { unlockPowers } = useGameStore.getState();
 
-import { useUserStore } from "@/store/gameStore";
+import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey, PowerTypes } from "@/types/game-types";
 
 type PowerActions = {
@@ -33,6 +35,7 @@ type SpecialPowerActions = {
   superZap: () => void;
   superShield: () => void;
   bernardsWatch: () => void;
+  magicStar: () => void;
 };
 
 export const getPowers = (
@@ -56,7 +59,7 @@ export const getPowers = (
     Icon: () => <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />,
     multiUse: false,
     active: true,
-    locked: true,
+    locked: unlockPowers ? false : true,
     toUnlock:
       difficulty === "hard" ? 600 : difficulty === "executioner" ? 700 : 300,
     onUse: actions.reveal,
@@ -91,7 +94,7 @@ export const getPowers = (
     Icon: () => <FontAwesomeIcon icon={faBolt} size="lg" />,
     multiUse: false,
     active: true,
-    locked: true,
+    locked: unlockPowers ? false : true,
     toUnlock: difficulty === "hard" || difficulty === "executioner" ? 500 : 250,
     onUse: actions.zap,
   },
@@ -157,6 +160,22 @@ export const getSpecialPowers = (
       active: true,
       onUse: actions.superShield,
     },
+    ...(difficulty === "easy"
+      ? [
+          {
+            name: "Magic Star",
+            description:
+              "Unlocks all powers, increases streak and reveals a word.",
+            Icon: () => <FontAwesomeIcon icon={faStar} size="lg" />,
+            multiUse: false,
+            active: true,
+            locked: unlockPowers ? true : false,
+            toUnlock: 2000,
+            onUse: actions.magicStar,
+            weight: 2,
+          },
+        ]
+      : []),
     ...(difficulty !== "easy"
       ? [
           {
@@ -166,6 +185,7 @@ export const getSpecialPowers = (
             multiUse: false,
             active: true,
             onUse: actions.bernardsWatch,
+            weight: 3,
           },
         ]
       : []),
