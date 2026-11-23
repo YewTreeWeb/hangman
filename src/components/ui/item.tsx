@@ -60,6 +60,7 @@ function Item({
 }: React.ComponentProps<"div"> &
   VariantProps<typeof itemVariants> & { asChild?: boolean }) {
   const Comp = asChild ? Slot.Root : "div";
+
   return (
     <Comp
       data-slot="item"
@@ -135,6 +136,7 @@ function ItemDescription({
   ...props
 }: React.ComponentProps<"p"> & { asChild?: boolean }) {
   const Comp = asChild ? Slot.Root : "p";
+
   return (
     <Comp
       data-slot="item-description"

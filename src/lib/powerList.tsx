@@ -14,6 +14,7 @@ import {
   faVial,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const { lives, activePowers } = useUserStore.getState();
 const { unlockPowers } = useGameStore.getState();
 

@@ -42,8 +42,10 @@ export function GamePage() {
     setUnlockPowers,
     unlockPowers,
   } = useGameStore();
+
   const { score, lives, setScore, streak, setStreak, setLives, activePowers } =
     useUserStore();
+
   const [showClue, setShowClue] = useState<boolean>();
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -78,6 +80,7 @@ export function GamePage() {
     const wrong = kbdKeys
       .flat()
       .filter((l) => !word.includes(l) && !guessedLetters.includes(l));
+
     setZapped(wrong.sort(() => Math.random() - 0.5).slice(0, amount));
   };
 
@@ -113,8 +116,10 @@ export function GamePage() {
       potion: () => {
         if (sideEffect(0.1)) {
           setFailedPower(true);
+
           return;
         }
+
         if (lives > 0 && lives < 3) setLives(lives + 1);
       },
       redPotion: () => {
@@ -125,16 +130,20 @@ export function GamePage() {
             setLives(lives - 1);
             setIsPoisoned(false);
           }, 1000);
+
           return;
         }
+
         if (lives > 0 && lives < 3) setLives(lives + 2);
         setExtraLife(true);
       },
       revival: () => {
         if (sideEffect(0.2)) {
           setFailedPower(true);
+
           return;
         }
+
         setRevivePower(true);
       },
       superZap: () => zappedLetters(10),
@@ -145,11 +154,14 @@ export function GamePage() {
       bernardsWatch: () => {},
       magicStar: () => {
         setStreak(streak + 50);
+
         if (!unlockPowers) setUnlockPowers(true);
+
         if (unlockPowers && !alwaysShowClue) {
           setAlwaysShowClue(true);
           setShowClue(true);
         }
+
         setRound({
           guessedLetters: [...new Set([...guessedLetters, ...word])],
           status: "won",
@@ -175,15 +187,19 @@ export function GamePage() {
       // one extra slot past the end of the list is the "nothing" outcome,
       // except on executioner where a roll always wins
       const nothingWeight = executioner ? 0 : 10;
+
       const total =
         specialPowers.reduce((sum, p) => sum + (p.weight ?? 10), 0) +
         nothingWeight;
+
       let roll = Math.random() * total;
       const won = specialPowers.find((p) => (roll -= p.weight ?? 10) < 0);
       const name = won?.name ?? null;
+
       if (name) {
         setWonPowers((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
       }
+
       setLuckyResult(name);
       setRolling(false);
     }, 1500);
@@ -191,9 +207,11 @@ export function GamePage() {
 
   const closeFeelingLucky = () => {
     setShowFeelingLucky(false);
+
     const luckyResult = setTimeout(() => {
       setLuckyResult(undefined);
     }, 1000);
+
     return () => clearTimeout(luckyResult);
   };
 
@@ -204,6 +222,7 @@ export function GamePage() {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       const key = e.key;
+
       if (!key.match(/^[a-z]$/)) return;
 
       e.preventDefault();
@@ -219,6 +238,7 @@ export function GamePage() {
 
   const gameLost =
     (hardMode && wrongLetter >= 6) || (!hardMode && wrongLetter >= 11);
+
   const gameWon = [...word].every((letter) => guessedLetters.includes(letter));
 
   const guessedLetter = (letter: string) => {
@@ -238,11 +258,13 @@ export function GamePage() {
       guessedLetters: next,
       status: won ? "won" : lost ? "lost" : "in-progress",
     });
+
     if (won) {
       const scoreMultiplier =
         streak > 1
           ? (score + wordPoints(word, difficulty)) * streak
           : score + wordPoints(word, difficulty);
+
       setScore(scoreMultiplier);
       setStreak(streak + 1);
       setSuccess(true);
@@ -272,6 +294,7 @@ export function GamePage() {
 
   const shielded = activeShield || activeSuperShield;
   const dead = lives === 0;
+
   const failIcon = dead
     ? faSkullCrossbones
     : shielded
@@ -280,15 +303,18 @@ export function GamePage() {
 
   useEffect(() => {
     if (status === "in-progress" || lives === 0) return;
+
     const showLoading = setTimeout(() => {
       setLoading(true);
     }, 2000);
+
     const nextWord = setTimeout(() => {
       setRound({
         ...getWord(category, difficulty),
         guessedLetters: [],
         status: "in-progress",
       });
+
       if (failed) setActiveSuperShield(false);
       resetPowers();
       setLoading(false);
@@ -304,11 +330,13 @@ export function GamePage() {
 
   const cancelPower = (power: string) => {
     const index = activePowers.indexOf(power);
+
     return activePowers.splice(index, 1);
   };
 
   useEffect(() => {
     if (!showShield) return;
+
     const hideShieldModal = setTimeout(() => {
       setShowShield(false);
     }, 3000);

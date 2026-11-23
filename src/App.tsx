@@ -6,6 +6,7 @@ import { useGameStore } from "./store/gameStore";
 
 export function App() {
   const { page } = useGameStore();
+
   return (
     <TooltipProvider>
       {page === "home" ? <HomePage /> : <GamePage />}

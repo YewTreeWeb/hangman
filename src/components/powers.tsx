@@ -28,12 +28,15 @@ export function Powers(props: PowerTypes) {
     toUnlock,
     className,
   } = props;
+
   const { activePowers, setActivePowers, score, setScore } = useUserStore();
   const [unlock, setUnlock] = useState(false);
+
   const used =
     (activePowers.includes(name) && !multiUse) ||
     (locked && !unlock) ||
     !active;
+
   const ptsNeeded = toUnlock ?? 250;
 
   return (

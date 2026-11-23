@@ -12,30 +12,35 @@ export function HangmanDrawing({ wrongGuesses, difficulty }: DrawingProps) {
       className="absolute top-52 right-5.5 h-18 w-1.5 rotate-38 self-end bg-black dark:bg-white"
     ></span>
   );
+
   const RIGHT_LEG = (
     <span
       data-id="right-arm"
       className="absolute top-52 -right-5.5 h-18 w-1.5 -rotate-38 self-end bg-black dark:bg-white"
     ></span>
   );
+
   const LEFT_ARM = (
     <span
       data-id="left-arm"
       className="absolute top-25 right-5 h-15 w-1.5 -rotate-38 self-end bg-black dark:bg-white"
     ></span>
   );
+
   const RIGHT_ARM = (
     <span
       data-id="right-arm"
       className="absolute top-25 -right-5 h-15 w-1.5 rotate-38 self-end bg-black dark:bg-white"
     ></span>
   );
+
   const BODY = (
     <span
       data-id="body"
       className="absolute top-29 right-0 h-25 w-1.5 self-end bg-black dark:bg-white"
     ></span>
   );
+
   const HEAD = (
     <span
       data-id="head"
@@ -49,24 +54,28 @@ export function HangmanDrawing({ wrongGuesses, difficulty }: DrawingProps) {
       className="absolute top-0 right-0 h-18 w-2 self-end bg-black dark:bg-white"
     ></span>
   );
+
   const SUPPORT_BEAM = (
     <span
       data-id="support-beam"
       className="absolute top-10 right-26 h-2.5 w-30 -rotate-40 bg-black dark:bg-white"
     ></span>
   );
+
   const TOP_BEAM = (
     <span
       data-id="top-beam"
       className="mr-2 inline-flex h-2.5 w-52 self-end bg-black dark:bg-white"
     ></span>
   );
+
   const POLE = (
     <span
       data-id="pole"
       className="ml-10 h-96 w-2.5 bg-black dark:bg-white"
     ></span>
   );
+
   const BASE = (
     <span data-id="base" className="h-2.5 w-64 bg-black dark:bg-white"></span>
   );
