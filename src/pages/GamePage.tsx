@@ -43,8 +43,16 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
     unlockPowers,
   } = useGameStore();
 
-  const { score, lives, setScore, streak, setStreak, setLives, activePowers } =
-    useUserStore();
+  const {
+    score,
+    lives,
+    setScore,
+    streak,
+    setStreak,
+    setLives,
+    activePowers,
+    setActivePowers,
+  } = useUserStore();
 
   const [showClue, setShowClue] = useState<boolean>();
   const [success, setSuccess] = useState(false);
@@ -328,10 +336,11 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
     };
   }, [status, category, difficulty, lives]);
 
+  // Frees one use so the power button enables again
   const cancelPower = (power: string) => {
     const index = activePowers.indexOf(power);
 
-    return activePowers.splice(index, 1);
+    if (index !== -1) setActivePowers(activePowers.toSpliced(index, 1));
   };
 
   useEffect(() => {
