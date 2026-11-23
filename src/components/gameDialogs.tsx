@@ -150,9 +150,11 @@ export function RevealDialog({
       >
         <DialogHeader className="flex flex-col items-center justify-center gap-4 text-purple-600">
           <DialogTitle className="uppercase">Reveal a letter</DialogTitle>
-          <p>Choose a position — that letter will be uncovered.</p>
+          <DialogDescription>
+            Choose a position — that letter will be uncovered.
+          </DialogDescription>
         </DialogHeader>
-        <DialogDescription>
+        <div className="flex flex-col items-center gap-2">
           {hidden.map(({ position }) => (
             <div key={position} className="w-6">
               <hr className="border-b border-black" />
@@ -172,7 +174,7 @@ export function RevealDialog({
           <Button variant="outline" onClick={onCancel}>
             Cancel Power
           </Button>
-        </DialogDescription>
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -219,11 +221,11 @@ export function RevivalDialog({
         <DialogHeader className="flex flex-col items-center justify-center gap-4 text-indigo-400">
           <FontAwesomeIcon icon={faRepeat} size="5x" />
           <DialogTitle className="uppercase">Restore a used power</DialogTitle>
-          <p className="text-center text-sm">
+          <DialogDescription className="text-center text-sm">
             You can only restore normal powers and not special ones you win
-          </p>
+          </DialogDescription>
         </DialogHeader>
-        <DialogDescription>
+        <div>
           <div className="flex items-center justify-center gap-4">
             {usedPowers.map((power) => (
               <Button
@@ -261,7 +263,7 @@ export function RevivalDialog({
               </>
             )}
           </div>
-        </DialogDescription>
+        </div>
       </DialogContent>
     </Dialog>
   );

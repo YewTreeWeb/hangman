@@ -15,3 +15,6 @@ ignorePatterns = ["tools/oxlint/anti-slop/", ".claude/skills/"]
 sortImports = true
 sortTailwindcss = true
 sortPackageJson = true
+
+[test]
+preload = ["./happydom.ts"]
