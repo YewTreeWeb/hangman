@@ -179,7 +179,7 @@ export function PowerBar({
   hideClue,
   onUseSpecial,
 }: PowerBarProps) {
-  const held = specialPowers.filter(
+  const ownedSpecialPowers = specialPowers.filter(
     (power) => (wonPowers[power.name] ?? 0) > 0,
   );
 
@@ -195,7 +195,7 @@ export function PowerBar({
               className={hideClue && power.name === "Clue" ? "hidden" : ""}
             />
           ))}
-          {held.map((power) => (
+          {ownedSpecialPowers.map((power) => (
             <Powers
               key={power.name}
               {...power}
