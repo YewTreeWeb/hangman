@@ -27,6 +27,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
+import { useAutoAdvance, useAutoClose } from "@/hooks/useRoundTimers";
 import { getPowers, getSpecialPowers } from "@/lib/powerList";
 import { cn, endGame, getWord, wordPoints } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
@@ -57,7 +58,6 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   const [showClue, setShowClue] = useState<boolean>();
   const [success, setSuccess] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [activeShield, setActiveShield] = useState(false);
   const [activeSuperShield, setActiveSuperShield] = useState(false);
   const [zapped, setZapped] = useState<string[]>([]);
@@ -309,32 +309,18 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
       ? faShieldHeart
       : faSkull;
 
-  useEffect(() => {
-    if (status === "in-progress" || lives === 0) return;
+  const loading = useAutoAdvance(status !== "in-progress", lives, () => {
+    setRound({
+      ...getWord(category, difficulty),
+      guessedLetters: [],
+      status: "in-progress",
+    });
 
-    const showLoading = setTimeout(() => {
-      setLoading(true);
-    }, 2000);
-
-    const nextWord = setTimeout(() => {
-      setRound({
-        ...getWord(category, difficulty),
-        guessedLetters: [],
-        status: "in-progress",
-      });
-
-      if (failed) setActiveSuperShield(false);
-      resetPowers();
-      setLoading(false);
-      setFailed(false);
-      setSuccess(false);
-    }, 4000);
-
-    return () => {
-      clearTimeout(showLoading);
-      clearTimeout(nextWord);
-    };
-  }, [status, category, difficulty, lives]);
+    if (failed) setActiveSuperShield(false);
+    resetPowers();
+    setFailed(false);
+    setSuccess(false);
+  });
 
   // Frees one use so the power button enables again
   const cancelPower = (power: string) => {
@@ -343,17 +329,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
     if (index !== -1) setActivePowers(activePowers.toSpliced(index, 1));
   };
 
-  useEffect(() => {
-    if (!showShield) return;
-
-    const hideShieldModal = setTimeout(() => {
-      setShowShield(false);
-    }, 3000);
-
-    return () => {
-      clearTimeout(hideShieldModal);
-    };
-  }, [showShield]);
+  useAutoClose(showShield, () => setShowShield(false), 3000);
 
   return (
     <div className="relative z-10 mx-auto flex w-dvh flex-col gap-4 p-4 text-center">
