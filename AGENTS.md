@@ -20,7 +20,7 @@ This file gives coding agents project-specific context. Keep it short and update
 
 - Install: `bun install`
 - Build: `bun run build`
-- Test: none yet
+- Test: `bun test`
 - Typecheck: `bun check`
 - Lint: `bunx oxlint`
 

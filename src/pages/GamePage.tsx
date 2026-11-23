@@ -1,6 +1,5 @@
 import {
   faCircleXmark,
-  faDice,
   faFaceGrinStars,
   faHeart,
   faRepeat,
@@ -12,10 +11,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 
+import { FeelingLucky } from "@/components/feelingLucky";
 import { HangmanDrawing } from "@/components/HangmanDrawing";
 import { HeaderMenu } from "@/components/headerMenu";
 import { Powers } from "@/components/powers";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,7 +23,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { useAutoAdvance, useAutoClose } from "@/hooks/useRoundTimers";
@@ -63,11 +61,8 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   const [zapped, setZapped] = useState<string[]>([]);
   const [isRevealed, setIsRevealed] = useState(false);
   const [showShield, setShowShield] = useState(false);
-  const [showFeelingLucky, setShowFeelingLucky] = useState(false);
   const [extraLife, setExtraLife] = useState(false);
   const [revivePower, setRevivePower] = useState(false);
-  const [rolling, setRolling] = useState(false);
-  const [luckyResult, setLuckyResult] = useState<string | null>();
   const [wonPowers, setWonPowers] = useState<Record<string, number>>({});
   const [isPoisoned, setIsPoisoned] = useState(false);
   const [restorePower, setRestorePower] = useState("");
@@ -180,48 +175,10 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
     difficulty,
   );
 
-  const executioner = difficulty === "executioner";
-  const easy = difficulty === "easy";
-  const rollCost = executioner ? 1000 : easy ? 250 : 500;
-
   // executioner can only hold one special power at a time
   const rollBlocked =
-    executioner && Object.values(wonPowers).some((count) => count > 0);
-
-  const feelingLucky = () => {
-    setScore(score - rollCost);
-    setRolling(true);
-    setTimeout(() => {
-      // one extra slot past the end of the list is the "nothing" outcome,
-      // except on executioner where a roll always wins
-      const nothingWeight = executioner ? 0 : 10;
-
-      const total =
-        specialPowers.reduce((sum, p) => sum + (p.weight ?? 10), 0) +
-        nothingWeight;
-
-      let roll = Math.random() * total;
-      const won = specialPowers.find((p) => (roll -= p.weight ?? 10) < 0);
-      const name = won?.name ?? null;
-
-      if (name) {
-        setWonPowers((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }));
-      }
-
-      setLuckyResult(name);
-      setRolling(false);
-    }, 1500);
-  };
-
-  const closeFeelingLucky = () => {
-    setShowFeelingLucky(false);
-
-    const luckyResult = setTimeout(() => {
-      setLuckyResult(undefined);
-    }, 1000);
-
-    return () => clearTimeout(luckyResult);
-  };
+    difficulty === "executioner" &&
+    Object.values(wonPowers).some((count) => count > 0);
 
   const wrongLetter = guessedLetters.filter(
     (letter) => !word.includes(letter),
@@ -467,74 +424,14 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
         </div>
       </section>
 
-      <Dialog open={showFeelingLucky}>
-        <DialogTrigger
-          disabled={score < rollCost}
-          onClick={() => setShowFeelingLucky(true)}
-          className="focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-md px-6 text-sm font-medium whitespace-nowrap transition-all outline-none hover:cursor-pointer focus-visible:ring-[3px] disabled:opacity-50 disabled:hover:cursor-not-allowed!"
-        >
-          Feeling Lucky <Badge>{rollCost} pts</Badge>
-        </DialogTrigger>
-        <DialogContent className="border-2 border-amber-400 px-8">
-          <DialogHeader>
-            <DialogTitle className="uppercase">Feeling Lucky?</DialogTitle>
-            <DialogDescription className="py-2">
-              Roll the dice to see what you get.
-              {!executioner && " But you might get nothing at all."}
-            </DialogDescription>
-          </DialogHeader>
-          {rolling ? (
-            <div className="flex justify-center py-4 text-amber-400">
-              <FontAwesomeIcon icon={faDice} size="5x" shake />
-            </div>
-          ) : luckyResult !== undefined ? (
-            <div className="flex flex-col items-center justify-center gap-1.5 rounded-md border-2 border-amber-400 bg-amber-50 px-4 py-2">
-              <p className="text-sm font-bold text-amber-400 uppercase">
-                {luckyResult ? "You won" : "No luck"}
-              </p>
-              <p className="text-lg font-bold text-amber-500 uppercase">
-                {luckyResult ?? "Better luck next time"}
-              </p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-1.5 rounded-md border-2 border-amber-400 bg-amber-50 px-4 py-2 text-white">
-              <p className="text-sm font-bold text-amber-400 uppercase">
-                Cost to roll
-              </p>
-              <p className="text-lg font-bold text-amber-300 uppercase">
-                {rollCost} pts
-              </p>
-              <span className="text-xs text-amber-400 uppercase">
-                You have {score} to spend
-              </span>
-              {rollBlocked && (
-                <span className="text-xs text-red-500">
-                  Use your special power before rolling again
-                </span>
-              )}
-            </div>
-          )}
-          <DialogFooter className="mt-2">
-            <Button
-              className="uppercase"
-              variant="outline"
-              onClick={closeFeelingLucky}
-              disabled={rolling}
-            >
-              {luckyResult !== undefined ? "Close" : "Cancel"}
-            </Button>
-            {luckyResult === undefined && (
-              <Button
-                className="bg-amber-400 uppercase hover:bg-amber-500"
-                onClick={feelingLucky}
-                disabled={rolling || score < rollCost || rollBlocked}
-              >
-                Roll the dice
-              </Button>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <FeelingLucky
+        difficulty={difficulty}
+        specialPowers={specialPowers}
+        rollBlocked={rollBlocked}
+        onWin={(name) =>
+          setWonPowers((prev) => ({ ...prev, [name]: (prev[name] ?? 0) + 1 }))
+        }
+      />
       <section className="flex flex-col items-center justify-center gap-1">
         {kbdKeys.map((kdb, i) => (
           <div key={kdb[i]} className="flex items-center justify-center gap-1">
