@@ -1,6 +1,11 @@
 import { expect, test } from "bun:test";
 
-import { maxWrongGuesses, roundStatus, wrongGuesses } from "./guess";
+import {
+  maxWrongGuesses,
+  pickZapped,
+  roundStatus,
+  wrongGuesses,
+} from "./guess";
 
 test("hard levels allow fewer wrong guesses", () => {
   expect(maxWrongGuesses("easy")).toBe(11);
@@ -23,4 +28,12 @@ test("a round is lost at the level's wrong-guess limit", () => {
 
   expect(roundStatus("cat", sixWrong, "hard")).toBe("lost");
   expect(roundStatus("cat", sixWrong, "easy")).toBe("in-progress");
+});
+
+test("zapped letters are wrong, unguessed and capped at the amount", () => {
+  const zapped = pickZapped("cat", ["b"], 5);
+
+  expect(zapped).toHaveLength(5);
+  expect(zapped.some((l) => "catb".includes(l))).toBe(false);
+  expect(new Set(zapped).size).toBe(5);
 });

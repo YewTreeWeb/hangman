@@ -24,13 +24,30 @@ export function useGuess(
   const [earned, setEarned] = useState(0);
   const { word, guessedLetters, status } = round;
 
+  const settleWin = () => {
+    const points = roundPoints(word, difficulty, streak);
+
+    setEarned(points);
+    setScore(score + points);
+    setStreak(streak + 1);
+  };
+
+  // A shield saves the life, a super shield saves the life and the streak
+  const settleLoss = () => {
+    if (!shields.superShield) setStreak(0);
+
+    if (lives > 0 && !shields.shield && !shields.superShield) {
+      setLives(lives - 1);
+    }
+  };
+
+  const canGuess = (letter: string) =>
+    status === "in-progress" &&
+    !guessedLetters.includes(letter) &&
+    !zapped.includes(letter);
+
   const guess = (letter: string) => {
-    if (
-      status !== "in-progress" ||
-      guessedLetters.includes(letter) ||
-      zapped.includes(letter)
-    )
-      return;
+    if (!canGuess(letter)) return;
 
     const next = [...guessedLetters, letter];
     const outcome = roundStatus(word, next, difficulty);
@@ -41,21 +58,8 @@ export function useGuess(
 
     setMatch({ roundNumber: match.roundNumber + 1 });
 
-    if (outcome === "won") {
-      const points = roundPoints(word, difficulty, streak);
-
-      setEarned(points);
-      setScore(score + points);
-      setStreak(streak + 1);
-
-      return;
-    }
-
-    if (!shields.superShield) setStreak(0);
-
-    if (lives > 0 && !shields.shield && !shields.superShield) {
-      setLives(lives - 1);
-    }
+    if (outcome === "won") settleWin();
+    else settleLoss();
   };
 
   // Wins the round without points, for powers that reveal the word
