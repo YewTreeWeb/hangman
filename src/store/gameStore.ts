@@ -33,14 +33,14 @@ type GameState = {
   page: GamePageProps;
   difficulty: LevelKey | null;
   category: string | "Random";
-  match: MatchTypes | null;
+  match: MatchTypes;
   round: RoundTypes;
   record: RecordTypes | null;
   unlockPowers?: boolean;
   setPage: (page: GamePageProps) => void;
   setDifficulty: (level: LevelKey | null) => void;
   setCategory: (category: string) => void;
-  setMatch: (match: Partial<MatchTypes> | null) => void;
+  setMatch: (match: Partial<MatchTypes>) => void;
   setRound: (round: Partial<RoundTypes>) => void;
   setRecord: (record: RecordTypes) => void;
   setUnlockPowers: (powers: boolean) => void;

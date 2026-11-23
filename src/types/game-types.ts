@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 export type LevelTypes = "Easy" | "Medium" | "Hard" | "Executioner";
 
-export type LevelKey = Lowercase<LevelTypes> | null;
+export type LevelKey = Lowercase<LevelTypes>;
 
 export type GamePageProps = "home" | "game" | "result";
 

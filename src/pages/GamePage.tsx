@@ -30,11 +30,11 @@ import { Spinner } from "@/components/ui/spinner";
 import { getPowers, getSpecialPowers } from "@/lib/powerList";
 import { cn, endGame, getWord, wordPoints } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
+import type { LevelKey } from "@/types/game-types";
 
-export function GamePage() {
+export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   const {
     category,
-    difficulty,
     round,
     setRound,
     match,

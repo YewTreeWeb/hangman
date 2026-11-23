@@ -5,11 +5,15 @@ import { HomePage } from "./pages/HomePage";
 import { useGameStore } from "./store/gameStore";
 
 export function App() {
-  const { page } = useGameStore();
+  const { page, difficulty } = useGameStore();
 
   return (
     <TooltipProvider>
-      {page === "home" ? <HomePage /> : <GamePage />}
+      {page !== "home" && difficulty ? (
+        <GamePage difficulty={difficulty} />
+      ) : (
+        <HomePage />
+      )}
     </TooltipProvider>
   );
 }
