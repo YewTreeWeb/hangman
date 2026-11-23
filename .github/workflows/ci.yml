@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      - name: Oxlint
+        run: bunx oxlint
+
+      - name: Type check
+        run: bun check
+
+      - name: Build
+        run: bun run build
+
+  fallow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # without node_modules fallow can't resolve the JSX runtime and flags react as unused
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+
+      # PRs gate only on findings they introduce; pushes to main run the full analysis against the saved backlog
+      - uses: fallow-rs/fallow@v3
+        with:
+          command: ${{ github.event_name == 'pull_request' && 'audit' || '' }}
+          baseline: fallow-baselines/dead-code.json
+          health-baseline: fallow-baselines/health.json
+          dupes-baseline: fallow-baselines/dupes.json
