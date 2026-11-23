@@ -333,6 +333,11 @@ feat: imported shadcn components ([`ffc1295`](https://github.com/YewTreeWeb/hang
 
 ### CI
 
+- pass fallow baselines only to full runs ([`090433f`](https://github.com/YewTreeWeb/hangman/commit/090433f3724cd8a1de06ac87fdce9836904bf39b)) by Mathew Teague
+
+  fallow audit rejects the generic baseline inputs and already reads its
+  baselines from .fallowrc.json, so the pull request job failed.
+
 - update the changelog on every push ([`27877d0`](https://github.com/YewTreeWeb/hangman/commit/27877d08632d7af10ef9a0cd9804698463a36148)) by Mathew Teague
 - run checks on pushes to every branch ([`6b2c86d`](https://github.com/YewTreeWeb/hangman/commit/6b2c86d43a1324a1ed775fb3944501e99469f749)) by Mathew Teague
 - fetch lockfile tarballs from npm instead of the LAN mirror ([`46b281f`](https://github.com/YewTreeWeb/hangman/commit/46b281f4ff4ebd707d7e10cac9c449f2748dcecf)) by Mathew Teague
