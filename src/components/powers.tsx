@@ -29,7 +29,7 @@ export function Powers(props: PowerTypes) {
     className,
   } = props;
 
-  const { activePowers, setActivePowers, score, setScore } = useUserStore();
+  const { activePowers, setActivePowers } = useUserStore();
   const [unlock, setUnlock] = useState(false);
 
   const used =
@@ -40,7 +40,7 @@ export function Powers(props: PowerTypes) {
   const ptsNeeded = toUnlock ?? 250;
 
   return (
-    <div className={cn("relative w-fit", className ?? "")}>
+    <div className={cn("relative w-fit", className)}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -49,7 +49,6 @@ export function Powers(props: PowerTypes) {
             className="relative flex h-full w-fit flex-nowrap items-center justify-center rounded-full p-3 md:rounded-md"
             onClick={() => {
               setActivePowers([...activePowers, name]);
-              console.log("clicked");
               onUse?.();
             }}
             disabled={used}
@@ -78,28 +77,44 @@ export function Powers(props: PowerTypes) {
         <Badge className="absolute -top-2 -right-2 h-5.5 w-5.5">{uses}</Badge>
       )}
       {locked && !unlock && (
-        <Badge
-          className={cn(
-            "absolute -top-2 -right-2 h-5.5 w-5.5",
-            score >= ptsNeeded ? "hover:cursor-pointer" : "",
-          )}
-          asChild={score >= ptsNeeded}
-        >
-          {score >= ptsNeeded ? (
-            <button
-              aria-label={locked ? `Unlock ${name}` : `Lock ${name}`}
-              onClick={() => {
-                setUnlock(true);
-                setScore(score - ptsNeeded);
-              }}
-            >
-              <FontAwesomeIcon icon={faLock} size="sm" />
-            </button>
-          ) : (
-            <FontAwesomeIcon icon={faLock} size="sm" />
-          )}
-        </Badge>
+        <UnlockBadge
+          name={name}
+          cost={ptsNeeded}
+          onUnlock={() => setUnlock(true)}
+        />
       )}
     </div>
+  );
+}
+
+type UnlockBadgeProps = { name: string; cost: number; onUnlock: () => void };
+
+// Lock icon that becomes an unlock button once the player can afford it
+function UnlockBadge({ name, cost, onUnlock }: UnlockBadgeProps) {
+  const { score, setScore } = useUserStore();
+  const affordable = score >= cost;
+
+  return (
+    <Badge
+      className={cn(
+        "absolute -top-2 -right-2 h-5.5 w-5.5",
+        affordable && "hover:cursor-pointer",
+      )}
+      asChild={affordable}
+    >
+      {affordable ? (
+        <button
+          aria-label={`Unlock ${name}`}
+          onClick={() => {
+            onUnlock();
+            setScore(score - cost);
+          }}
+        >
+          <FontAwesomeIcon icon={faLock} size="sm" />
+        </button>
+      ) : (
+        <FontAwesomeIcon icon={faLock} size="sm" />
+      )}
+    </Badge>
   );
 }
