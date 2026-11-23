@@ -29,7 +29,7 @@ beforeEach(() => startRound("cat"));
 test("guessing every letter wins and scores the word", () => {
   const { result } = renderHook(() => useGuess("easy", [], noShields));
 
-  for (const letter of "cat") act(() => result.current.guess(letter));
+  for (const letter of "cat") act(() => result.current.guessedLetter(letter));
 
   expect(round().status).toBe("won");
   expect(user().score).toBe(30);
@@ -41,9 +41,9 @@ test("guessing every letter wins and scores the word", () => {
 test("repeat, zapped and post-round guesses are ignored", () => {
   const { result } = renderHook(() => useGuess("easy", ["z"], noShields));
 
-  act(() => result.current.guess("c"));
-  act(() => result.current.guess("c"));
-  act(() => result.current.guess("z"));
+  act(() => result.current.guessedLetter("c"));
+  act(() => result.current.guessedLetter("c"));
+  act(() => result.current.guessedLetter("z"));
 
   expect(round().guessedLetters).toEqual(["c"]);
 });
@@ -52,7 +52,8 @@ test("losing costs a life and resets the streak", () => {
   useUserStore.setState({ streak: 4 });
   const { result } = renderHook(() => useGuess("hard", [], noShields));
 
-  for (const letter of "bdefgh") act(() => result.current.guess(letter));
+  for (const letter of "bdefgh")
+    act(() => result.current.guessedLetter(letter));
 
   expect(round().status).toBe("lost");
   expect(user().lives).toBe(2);
@@ -66,7 +67,8 @@ test("a shield keeps the life but not the streak", () => {
     useGuess("hard", [], { shield: true, superShield: false }),
   );
 
-  for (const letter of "bdefgh") act(() => result.current.guess(letter));
+  for (const letter of "bdefgh")
+    act(() => result.current.guessedLetter(letter));
 
   expect(user().lives).toBe(3);
   expect(user().streak).toBe(0);
@@ -79,7 +81,8 @@ test("a super shield keeps both the life and the streak", () => {
     useGuess("hard", [], { shield: false, superShield: true }),
   );
 
-  for (const letter of "bdefgh") act(() => result.current.guess(letter));
+  for (const letter of "bdefgh")
+    act(() => result.current.guessedLetter(letter));
 
   expect(user().lives).toBe(3);
   expect(user().streak).toBe(4);

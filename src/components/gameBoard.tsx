@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Powers } from "@/components/powers";
 import { Button } from "@/components/ui/button";
-import { KEYBOARD_ROWS, type RoundStatus } from "@/lib/guess";
+import { kbdKeys, type RoundStatus } from "@/lib/guess";
 import { cn } from "@/lib/utils";
 import type { PowerTypes } from "@/types/game-types";
 
@@ -137,7 +137,7 @@ export function Keyboard({
 }: KeyboardProps) {
   return (
     <section className="flex flex-col items-center justify-center gap-1">
-      {KEYBOARD_ROWS.map((row) => (
+      {kbdKeys.map((row) => (
         <div key={row} className="flex items-center justify-center gap-1">
           {[...row].map((char) => (
             <Button

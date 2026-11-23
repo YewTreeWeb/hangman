@@ -46,7 +46,7 @@ export function useGuess(
     !guessedLetters.includes(letter) &&
     !zapped.includes(letter);
 
-  const guess = (letter: string) => {
+  const guessedLetter = (letter: string) => {
     if (!canGuess(letter)) return;
 
     const next = [...guessedLetters, letter];
@@ -75,7 +75,7 @@ export function useGuess(
     if (!/^[a-z]$/.test(e.key)) return;
 
     e.preventDefault();
-    guess(e.key);
+    guessedLetter(e.key);
   });
 
   useEffect(() => {
@@ -84,5 +84,5 @@ export function useGuess(
     return () => document.removeEventListener("keypress", onKeyPress);
   }, []);
 
-  return { guess, revealWord, earned };
+  return { guessedLetter, revealWord, earned };
 }

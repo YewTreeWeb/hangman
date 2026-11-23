@@ -1,6 +1,6 @@
 import type { LevelKey } from "@/types/game-types";
 
-export const KEYBOARD_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
+export const kbdKeys = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
 
 export type RoundStatus = "in-progress" | "won" | "lost";
 
@@ -24,7 +24,7 @@ export const roundStatus = (
 
 // Random letters not in the word and not yet guessed, for the Zap powers
 export const pickZapped = (word: string, guessed: string[], amount: number) =>
-  [...KEYBOARD_ROWS.join("")]
+  [...kbdKeys.join("")]
     .filter((l) => !word.includes(l) && !guessed.includes(l))
     .sort(() => Math.random() - 0.5)
     .slice(0, amount);

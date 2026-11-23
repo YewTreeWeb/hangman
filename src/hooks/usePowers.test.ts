@@ -98,10 +98,10 @@ test("a super shield survives a won round but not a lost one", () => {
   act(() => special(result, "Super Shield").onUse());
   expect(result.current.shieldKind).toBe("super");
 
-  act(() => result.current.endRound(false));
+  act(() => result.current.resetPowers(false));
   expect(result.current.shieldKind).toBe("super");
 
-  act(() => result.current.endRound(true));
+  act(() => result.current.resetPowers(true));
   expect(result.current.shieldKind).toBe("none");
 });
 

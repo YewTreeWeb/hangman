@@ -25,7 +25,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
   const { category, round, setRound, unlockPowers, setUnlockPowers } =
     useGameStore();
 
-  const { lives, streak, setStreak, activePowers, releasePower } =
+  const { lives, streak, setStreak, activePowers, cancelPower } =
     useUserStore();
 
   const [showClue, setShowClue] = useState(false);
@@ -43,7 +43,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
     difficulty === "hard" || difficulty === "executioner",
   );
 
-  const zap = (amount: number) =>
+  const zappedLetters = (amount: number) =>
     setZapped(pickZapped(round.word, round.guessedLetters, amount));
 
   const raiseShield = (activate: (on: boolean) => void) => {
@@ -52,7 +52,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
   };
 
   // Clears per-round effects; a super shield survives a won round
-  const endRound = (lost: boolean) => {
+  const resetPowers = (lost: boolean) => {
     setShowClue(alwaysShowClue);
     setSuperShield(superShield && !lost);
     setShield(false);
@@ -67,7 +67,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
         guessedLetters: [],
         status: "in-progress",
       });
-      endRound(false);
+      resetPowers(false);
     }, 1000);
 
   // The first star unlocks powers; later stars keep the hint on screen
@@ -91,7 +91,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
       reveal: () => setRevealing(true),
       shield: () => raiseShield(setShield),
       skip,
-      zap: () => zap(5),
+      zap: () => zappedLetters(5),
     },
     difficulty,
     state,
@@ -102,7 +102,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
       potion: risky.bluePotion,
       redPotion: risky.redPotion,
       revival: risky.revival,
-      superZap: () => zap(10),
+      superZap: () => zappedLetters(10),
       superShield: () => raiseShield(setSuperShield),
       bernardsWatch: () => {},
       magicStar,
@@ -140,15 +140,15 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
     revealing,
     finishReveal: () => setRevealing(false),
     cancelReveal: () => {
-      releasePower("Reveal");
+      cancelPower("Reveal");
       setRevealing(false);
     },
     reviving: risky.reviving,
     restorePower: (power: string) => {
       risky.stopReviving();
-      releasePower(power);
+      cancelPower(power);
     },
-    endRound,
+    resetPowers,
   };
 }
 
@@ -164,7 +164,7 @@ function useRiskyPowers(hardMode: boolean) {
   const [poisoned, setPoisoned] = useState(false);
   const [failedPower, setFailedPower] = useState(false);
 
-  const misfires = (chance: number) => hardMode && Math.random() < chance;
+  const sideEffect = (chance: number) => hardMode && Math.random() < chance;
   const canHeal = lives > 0 && lives < MAX_LIVES;
 
   const poison = () => {
@@ -188,17 +188,17 @@ function useRiskyPowers(hardMode: boolean) {
       setReviving(false);
     },
     bluePotion: () => {
-      if (misfires(0.1)) return setFailedPower(true);
+      if (sideEffect(0.1)) return setFailedPower(true);
 
       if (canHeal) setLives(lives + 1);
     },
     redPotion: () => {
-      if (misfires(0.1)) return poison();
+      if (sideEffect(0.1)) return poison();
 
       if (canHeal) setLives(lives + 2);
 
       setExtraLife(true);
     },
-    revival: () => (misfires(0.2) ? setFailedPower(true) : setReviving(true)),
+    revival: () => (sideEffect(0.2) ? setFailedPower(true) : setReviving(true)),
   };
 }

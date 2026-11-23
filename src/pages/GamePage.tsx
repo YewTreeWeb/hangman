@@ -26,7 +26,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   // Called on click, after useGuess below has run
   const power = usePowers(difficulty, () => revealWord());
 
-  const { guess, revealWord, earned } = useGuess(
+  const { guessedLetter, revealWord, earned } = useGuess(
     difficulty,
     power.zapped,
     power.shields,
@@ -42,7 +42,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
       guessedLetters: [],
       status: "in-progress",
     });
-    power.endRound(gameLost);
+    power.resetPowers(gameLost);
   });
 
   return (
@@ -100,7 +100,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
         guessedLetters={guessedLetters}
         zapped={power.zapped}
         disabled={roundOver}
-        onGuess={guess}
+        onGuess={guessedLetter}
       />
       <RoundLostDialog
         open={gameLost}
@@ -115,7 +115,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
         word={word}
         guessedLetters={guessedLetters}
         onReveal={(letter) => {
-          guess(letter);
+          guessedLetter(letter);
           power.finishReveal();
         }}
         onCancel={power.cancelReveal}

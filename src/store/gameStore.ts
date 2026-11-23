@@ -57,7 +57,7 @@ type UserState = {
   setLives: (lives: number) => void;
   setSolved: (solved: number) => void;
   setActivePowers: (powers: string[]) => void;
-  releasePower: (power: string) => void;
+  cancelPower: (power: string) => void;
   setStreak: (streak: number) => void;
 };
 
@@ -115,7 +115,7 @@ export const useUserStore = create<UserState>((set) => ({
   streak: 0,
   setActivePowers: (powers: string[]) => set({ activePowers: powers }),
   // Frees one use of a power so its button enables again
-  releasePower: (power: string) =>
+  cancelPower: (power: string) =>
     set((s) => {
       const index = s.activePowers.indexOf(power);
 
