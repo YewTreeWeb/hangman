@@ -77,6 +77,12 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   const hardMode = difficulty === "hard" || difficulty === "executioner";
   const sideEffect = (chance: number) => hardMode && Math.random() < chance;
 
+  const powerState = {
+    lives,
+    usedPowers: activePowers,
+    unlockPowers: !!unlockPowers,
+  };
+
   const powers = getPowers(
     {
       clue: () => setShowClue(true),
@@ -98,6 +104,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
       zap: () => zappedLetters(5),
     },
     difficulty,
+    powerState,
   );
 
   const specialPowers = getSpecialPowers(
@@ -155,6 +162,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
       },
     },
     difficulty,
+    powerState,
   );
 
   // executioner can only hold one special power at a time

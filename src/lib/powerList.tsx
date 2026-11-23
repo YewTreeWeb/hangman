@@ -12,13 +12,10 @@ import {
   faShieldHeart,
   faStar,
   faVial,
+  type IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const { lives, activePowers } = useUserStore.getState();
-const { unlockPowers } = useGameStore.getState();
-
-import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey, PowerTypes } from "@/types/game-types";
 
 type PowerActions = {
@@ -39,156 +36,183 @@ type SpecialPowerActions = {
   magicStar: () => void;
 };
 
+export type PowerState = {
+  lives: number;
+  usedPowers: string[];
+  unlockPowers: boolean;
+};
+
+// Points to unlock each normal power; 0 means it starts unlocked
+const unlockCost = {
+  Clue: { easy: 0, medium: 0, hard: 300, executioner: 300 },
+  Reveal: { easy: 300, medium: 300, hard: 600, executioner: 700 },
+  Shield: { easy: 0, medium: 0, hard: 300, executioner: 900 },
+  Skip: { easy: 0, medium: 0, hard: 500, executioner: 900 },
+  Zap: { easy: 250, medium: 250, hard: 500, executioner: 500 },
+} satisfies Record<string, Record<LevelKey, number>>;
+
+const power = (
+  name: string,
+  description: string,
+  icon: IconDefinition,
+  onUse: () => void,
+): PowerTypes => ({
+  name,
+  description,
+  Icon: () => <FontAwesomeIcon icon={icon} size="lg" />,
+  multiUse: false,
+  active: true,
+  onUse,
+});
+
+// Locked by default when the level charges to unlock it
+const lockable = (
+  base: PowerTypes,
+  difficulty: LevelKey,
+  locked?: boolean,
+): PowerTypes => {
+  // SAFETY: lockable is only called with the names listed in unlockCost
+  const cost = unlockCost[base.name as keyof typeof unlockCost][difficulty];
+
+  return { ...base, locked: locked ?? cost > 0, toUnlock: cost };
+};
+
 export const getPowers = (
   actions: PowerActions,
   difficulty: LevelKey,
-): PowerTypes[] => [
-  {
-    name: "Clue",
-    description: "Provides a hint for the current word.",
-    Icon: () => <FontAwesomeIcon icon={faLightbulb} size="lg" />,
-    multiUse: false,
-    active: true,
-    locked:
-      difficulty === "hard" || difficulty === "executioner" ? true : false,
-    toUnlock: difficulty === "executioner" || difficulty === "hard" ? 300 : 0,
-    onUse: actions.clue,
-  },
-  {
-    name: "Reveal",
-    description: "Reveals a letter in the current word.",
-    Icon: () => <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />,
-    multiUse: false,
-    active: true,
-    locked: unlockPowers ? false : true,
-    toUnlock:
-      difficulty === "hard" ? 600 : difficulty === "executioner" ? 700 : 300,
-    onUse: actions.reveal,
-  },
-  {
-    name: "Shield",
-    description: "Protects the player from one incorrect guess.",
-    Icon: () => <FontAwesomeIcon icon={faShield} size="lg" />,
-    multiUse: false,
-    active: true,
-    locked:
-      difficulty === "hard" || difficulty === "executioner" ? true : false,
-    toUnlock:
-      difficulty === "executioner" ? 900 : difficulty === "hard" ? 300 : 0,
-    onUse: actions.shield,
-  },
-  {
-    name: "Skip",
-    description: "Skips the current word.",
-    Icon: () => <FontAwesomeIcon icon={faForward} size="lg" />,
-    multiUse: false,
-    active: true,
-    locked:
-      difficulty === "hard" || difficulty === "executioner" ? true : false,
-    toUnlock:
-      difficulty === "hard" ? 500 : difficulty === "executioner" ? 900 : 0,
-    onUse: actions.skip,
-  },
-  {
-    name: "Zap",
-    description: "Removes five incorrect letters from the current word.",
-    Icon: () => <FontAwesomeIcon icon={faBolt} size="lg" />,
-    multiUse: false,
-    active: true,
-    locked: unlockPowers ? false : true,
-    toUnlock: difficulty === "hard" || difficulty === "executioner" ? 500 : 250,
-    onUse: actions.zap,
-  },
-  ...(difficulty === "easy" || difficulty === "medium"
-    ? [
-        {
-          name: "Phone a Friend",
-          description:
+  state: PowerState,
+): PowerTypes[] => {
+  // Reveal and Zap stay locked until a Magic Star unlocks them
+  const starLocked = !state.unlockPowers;
+
+  return [
+    lockable(
+      power(
+        "Clue",
+        "Provides a hint for the current word.",
+        faLightbulb,
+        actions.clue,
+      ),
+      difficulty,
+    ),
+    lockable(
+      power(
+        "Reveal",
+        "Reveals a letter in the current word.",
+        faMagnifyingGlass,
+        actions.reveal,
+      ),
+      difficulty,
+      starLocked,
+    ),
+    lockable(
+      power(
+        "Shield",
+        "Protects the player from one incorrect guess.",
+        faShield,
+        actions.shield,
+      ),
+      difficulty,
+    ),
+    lockable(
+      power("Skip", "Skips the current word.", faForward, actions.skip),
+      difficulty,
+    ),
+    lockable(
+      power(
+        "Zap",
+        "Removes five incorrect letters from the current word.",
+        faBolt,
+        actions.zap,
+      ),
+      difficulty,
+      starLocked,
+    ),
+    ...(difficulty === "easy" || difficulty === "medium"
+      ? [
+          power(
+            "Phone a Friend",
             "Calls a random AI agent for help with the current word.",
-          Icon: () => <FontAwesomeIcon icon={faPhone} size="lg" />,
-          multiUse: false,
-          active: true,
-          onUse: () => {},
-        },
-      ]
-    : []),
-];
+            faPhone,
+            () => {},
+          ),
+        ]
+      : []),
+  ];
+};
 
 export const getSpecialPowers = (
   actions: SpecialPowerActions,
   difficulty: LevelKey,
+  state: PowerState,
 ): PowerTypes[] => {
   const hardMode = difficulty === "hard" || difficulty === "executioner";
 
+  const chance = (percent: number, effect: string) =>
+    hardMode ? ` (${percent}% chance of ${effect})` : "";
+
+  const canHeal = state.lives < 3;
+
   return [
     {
-      name: "Blue Potion",
-      description: `Restores one health. ${hardMode ? "(10% chance of not working)" : ""}`,
-      Icon: () => <FontAwesomeIcon icon={faFlask} size="lg" />,
-      multiUse: false,
-      active: lives < 3 ? true : false,
-      onUse: actions.potion,
+      ...power(
+        "Blue Potion",
+        `Restores one health.${chance(10, "not working")}`,
+        faFlask,
+        actions.potion,
+      ),
+      active: canHeal,
     },
     {
-      name: "Red Potion",
-      description: `Restores one health and gives an extra life. ${hardMode ? "(10% chance of poisoning)" : ""}`,
-      Icon: () => <FontAwesomeIcon icon={faVial} size="lg" />,
-      multiUse: false,
-      active: lives < 3 ? true : false,
-      onUse: actions.redPotion,
+      ...power(
+        "Red Potion",
+        `Restores one health and gives an extra life.${chance(10, "poisoning")}`,
+        faVial,
+        actions.redPotion,
+      ),
+      active: canHeal,
     },
     {
-      name: "Revival",
-      description: `Restores one normal power. ${hardMode ? "(20% chance of not working)" : ""}`,
-      Icon: () => <FontAwesomeIcon icon={faRepeat} size="lg" />,
-      multiUse: false,
-      active: activePowers.length > 0 ? true : false,
-      onUse: actions.revival,
+      ...power(
+        "Revival",
+        `Restores one normal power.${chance(20, "not working")}`,
+        faRepeat,
+        actions.revival,
+      ),
+      active: state.usedPowers.length > 0,
     },
-    {
-      name: "Super Zap",
-      description: "Removes ten incorrect letters from the current word.",
-      Icon: () => <FontAwesomeIcon icon={faCloudBolt} size="lg" />,
-      multiUse: false,
-      active: true,
-      onUse: actions.superZap,
-    },
-    {
-      name: "Super Shield",
-      description: "Protects against loosing one health and streak",
-      Icon: () => <FontAwesomeIcon icon={faShieldHeart} size="lg" />,
-      multiUse: false,
-      active: true,
-      onUse: actions.superShield,
-    },
-    ...(difficulty === "easy"
-      ? [
-          {
-            name: "Magic Star",
-            description:
-              "Unlocks all powers, increases streak and reveals a word.",
-            Icon: () => <FontAwesomeIcon icon={faStar} size="lg" />,
-            multiUse: false,
-            active: true,
-            locked: unlockPowers ? true : false,
-            toUnlock: 2000,
-            onUse: actions.magicStar,
-            weight: 2,
-          },
-        ]
-      : []),
-    ...(difficulty !== "easy"
-      ? [
-          {
-            name: "Bernard's Watch",
-            description: "Pause the timer for two rounds",
-            Icon: () => <FontAwesomeIcon icon={faClock} size="lg" />,
-            multiUse: false,
-            active: true,
-            onUse: actions.bernardsWatch,
-            weight: 3,
-          },
-        ]
-      : []),
+    power(
+      "Super Zap",
+      "Removes ten incorrect letters from the current word.",
+      faCloudBolt,
+      actions.superZap,
+    ),
+    power(
+      "Super Shield",
+      "Protects against losing one health and streak",
+      faShieldHeart,
+      actions.superShield,
+    ),
+    difficulty === "easy"
+      ? {
+          ...power(
+            "Magic Star",
+            "Unlocks all powers, increases streak and reveals a word.",
+            faStar,
+            actions.magicStar,
+          ),
+          locked: state.unlockPowers,
+          toUnlock: 2000,
+          weight: 2,
+        }
+      : {
+          ...power(
+            "Bernard's Watch",
+            "Pause the timer for two rounds",
+            faClock,
+            actions.bernardsWatch,
+          ),
+          weight: 3,
+        },
   ];
 };
