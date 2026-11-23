@@ -59,7 +59,12 @@ export function FeelingLucky({
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!next && !rolling) close();
+      }}
+    >
       <DialogTrigger
         disabled={score < cost}
         onClick={() => setOpen(true)}
