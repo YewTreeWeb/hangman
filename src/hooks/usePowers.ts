@@ -144,7 +144,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
       setRevealing(false);
     },
     reviving: risky.reviving,
-    restorePower: (power: string) => {
+    reviveUsedPower: (power: string) => {
       risky.stopReviving();
       cancelPower(power);
     },

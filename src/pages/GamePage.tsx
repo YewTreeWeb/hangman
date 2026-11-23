@@ -124,7 +124,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
       <RevivalDialog
         open={power.reviving}
         usedPowers={activePowers}
-        onRestore={power.restorePower}
+        onRestore={power.reviveUsedPower}
       />
       <FailedPowerDialog
         open={power.failedPower}

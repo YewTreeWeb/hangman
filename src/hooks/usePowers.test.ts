@@ -72,7 +72,7 @@ test("revival opens the restore dialog and frees the chosen power", () => {
   act(() => special(result, "Revival").onUse());
   expect(result.current.reviving).toBe(true);
 
-  act(() => result.current.restorePower("Clue"));
+  act(() => result.current.reviveUsedPower("Clue"));
   expect(result.current.reviving).toBe(false);
   expect(useUserStore.getState().activePowers).toEqual(["Skip"]);
 });
