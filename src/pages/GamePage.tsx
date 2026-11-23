@@ -27,7 +27,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { useAutoAdvance, useAutoClose } from "@/hooks/useRoundTimers";
 import { getPowers, getSpecialPowers } from "@/lib/powerList";
-import { cn, endGame, getWord, wordPoints } from "@/lib/utils";
+import { cn, endGame, getWord, roundPoints, wordPoints } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
 
@@ -55,6 +55,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
 
   const [showClue, setShowClue] = useState<boolean>();
   const [success, setSuccess] = useState(false);
+  const [earned, setEarned] = useState(0);
   const [failed, setFailed] = useState(false);
   const [activeShield, setActiveShield] = useState(false);
   const [activeSuperShield, setActiveSuperShield] = useState(false);
@@ -169,6 +170,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
           guessedLetters: [...new Set([...guessedLetters, ...word])],
           status: "won",
         });
+        setEarned(0);
         setSuccess(true);
       },
     },
@@ -225,12 +227,10 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
     });
 
     if (won) {
-      const scoreMultiplier =
-        streak > 1
-          ? (score + wordPoints(word, difficulty)) * streak
-          : score + wordPoints(word, difficulty);
+      const points = roundPoints(word, difficulty, streak);
 
-      setScore(scoreMultiplier);
+      setEarned(points);
+      setScore(score + points);
       setStreak(streak + 1);
       setSuccess(true);
     }
@@ -515,13 +515,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
             <FontAwesomeIcon icon={faFaceGrinStars} size="5x" />
             <DialogTitle className="uppercase">You won!</DialogTitle>
           </DialogHeader>
-          <DialogDescription>
-            You earned{" "}
-            {streak > 1
-              ? wordPoints(word, difficulty) * streak
-              : wordPoints(word, difficulty)}{" "}
-            points.
-          </DialogDescription>
+          <DialogDescription>You earned {earned} points.</DialogDescription>
           {loading && (
             <DialogFooter className="flex flex-row items-center justify-center text-center text-xs">
               <Spinner />

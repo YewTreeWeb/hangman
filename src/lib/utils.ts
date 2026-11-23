@@ -96,16 +96,13 @@ export const getWord = (cat: string, lvl: LevelKey) => {
   return randomWord(wordLvlSize.length ? wordLvlSize : wordPool);
 };
 
-/**
- * Scores 10 points per unique letter, multiplied by the level's word score.
- *
- * @throws {Error} If the level is null.
- */
-export const wordPoints = (word: string, level: LevelKey | null) => {
-  if (!level) throw new Error("Level must not be null");
+// 10 points per unique letter, multiplied by the level's word score
+export const wordPoints = (word: string, level: LevelKey) =>
+  Math.round(new Set(word).size * 10 * wordScores[level]);
 
-  return Math.round(new Set(word).size * 10 * wordScores[level]);
-};
+// A streak above 1 multiplies the word's points
+export const roundPoints = (word: string, level: LevelKey, streak: number) =>
+  wordPoints(word, level) * Math.max(streak, 1);
 
 export const endGame = () => {
   setDifficulty(null);
