@@ -189,10 +189,7 @@ export {
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemFooter,
   ItemGroup,
-  ItemHeader,
   ItemMedia,
-  ItemSeparator,
   ItemTitle,
 };

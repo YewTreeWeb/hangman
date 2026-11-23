@@ -10,6 +10,8 @@ env = "BUN_PUBLIC_*"
 # "eqeqeq" = ["error", "smart"]
 
 [fmt]
+# Vendored and generated files stay byte-identical to their source
+ignorePatterns = ["tools/oxlint/anti-slop/", ".claude/skills/"]
 sortImports = true
 sortTailwindcss = true
 sortPackageJson = true
