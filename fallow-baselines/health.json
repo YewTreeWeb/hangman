@@ -35,10 +35,5 @@
     }
   },
   "runtime_coverage_findings": [],
-  "target_keys": [
-    "src/components/ui/hover-card.tsx:dead code",
-    "src/pages/GamePage.tsx:complexity",
-    "src/components/ui/select.tsx:dead code",
-    "src/components/ui/menubar.tsx:dead code"
-  ]
+  "target_keys": ["src/pages/GamePage.tsx:complexity"]
 }

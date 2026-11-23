@@ -3,28 +3,12 @@ import { cn } from "cn";
 import { Slot } from "radix-ui";
 import * as React from "react";
 
-import { Separator } from "@/components/ui/separator";
-
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       role="list"
       data-slot="item-group"
       className={cn("group/item-group flex flex-col", className)}
-      {...props}
-    />
-  );
-}
-
-function ItemSeparator({
-  className,
-  ...props
-}: React.ComponentProps<typeof Separator>) {
-  return (
-    <Separator
-      data-slot="item-separator"
-      orientation="horizontal"
-      className={cn("my-0", className)}
       {...props}
     />
   );
@@ -155,32 +139,6 @@ function ItemActions({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="item-actions"
       className={cn("flex items-center gap-2", className)}
-      {...props}
-    />
-  );
-}
-
-function ItemHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="item-header"
-      className={cn(
-        "flex basis-full items-center justify-between gap-2",
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-function ItemFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="item-footer"
-      className={cn(
-        "flex basis-full items-center justify-between gap-2",
-        className,
-      )}
       {...props}
     />
   );

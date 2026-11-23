@@ -27,7 +27,7 @@ export function DifficultyLevel({
   powers,
   active = false,
 }: DifficultyLevelProps) {
-  const { setDifficulty, difficulty } = useGameStore();
+  const { setDifficulty } = useGameStore();
 
   return (
     <Button
