@@ -2,6 +2,10 @@
 
 ### Features
 
+- add words.json with 500 words per category ([`93688ff`](https://github.com/YewTreeWeb/hangman/commit/93688ff64aded516a8f13bbbf925da8dc3e77a26)) by Mathew Teague
+
+  19 categories, each with 500 lowercase single-word entries and a hint.
+
 - add a confirm, countdown and result dialog for the Bomb power ([`27877d0`](https://github.com/YewTreeWeb/hangman/commit/27877d08632d7af10ef9a0cd9804698463a36148)) by Mathew Teague
 
   - Clicking Bomb opens a dialog explaining the 50/50 chance, with the win
