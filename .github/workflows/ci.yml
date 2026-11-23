@@ -51,6 +51,7 @@ jobs:
       - uses: fallow-rs/fallow@v3
         with:
           command: ${{ github.event_name == 'pull_request' && 'audit' || '' }}
-          baseline: fallow-baselines/dead-code.json
-          health-baseline: fallow-baselines/health.json
-          dupes-baseline: fallow-baselines/dupes.json
+          # audit reads its baselines from .fallowrc.json and rejects these inputs
+          baseline: ${{ github.event_name != 'pull_request' && 'fallow-baselines/dead-code.json' || '' }}
+          health-baseline: ${{ github.event_name != 'pull_request' && 'fallow-baselines/health.json' || '' }}
+          dupes-baseline: ${{ github.event_name != 'pull_request' && 'fallow-baselines/dupes.json' || '' }}
