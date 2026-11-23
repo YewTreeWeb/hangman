@@ -197,7 +197,7 @@ export const getSpecialPowers = (
     ),
     power(
       "Bomb",
-      "50/50 chance of loosing game or winning round and gaining big points",
+      "A 50/50 chance of losing the game or winning the round with 1,000 bonus points.",
       faBomb,
       actions.bomb,
     ),

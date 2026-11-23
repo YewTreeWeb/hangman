@@ -126,3 +126,70 @@ test("special powers won are spent on use", () => {
   expect(result.current.zapped).toHaveLength(10);
   expect(result.current.rollBlocked).toBe(false);
 });
+
+const startBombRound = () => {
+  useGameStore.setState({
+    difficulty: "easy",
+    round: {
+      ...useGameStore.getState().round,
+      word: "cat",
+      guessedLetters: [],
+      status: "in-progress",
+    },
+  });
+  useUserStore.setState({
+    score: 0,
+    streak: 2,
+    lives: 3,
+    activePowers: ["Bomb"],
+  });
+};
+
+test("cancelling the bomb gives it back", () => {
+  startBombRound();
+  const { result } = renderHook(() => usePowers("easy"));
+
+  act(() => special(result, "Bomb").onUse());
+  expect(result.current.bombArmed).toBe(true);
+
+  act(() => result.current.cancelBomb());
+
+  expect(result.current.bombArmed).toBe(false);
+  expect(result.current.wonPowers.Bomb).toBe(1);
+  expect(useUserStore.getState().activePowers).toEqual([]);
+});
+
+test("a winning bomb reveals the word with 1,000 bonus points", () => {
+  startBombRound();
+  const { result } = renderHook(() => usePowers("easy"));
+
+  act(() => result.current.detonateBomb(true));
+
+  expect(useGameStore.getState().round.status).toBe("won");
+  expect(useUserStore.getState().score).toBe(1060);
+  expect(useUserStore.getState().streak).toBe(2);
+});
+
+test("a losing bomb takes every life and loses the round", () => {
+  startBombRound();
+  const { result } = renderHook(() => usePowers("easy"));
+
+  act(() => result.current.detonateBomb(false));
+
+  expect(useUserStore.getState().lives).toBe(0);
+  expect(useGameStore.getState().round.status).toBe("lost");
+  expect(result.current.bombed).toBe(true);
+});
+
+test("a super shield survives a losing bomb", () => {
+  startBombRound();
+  useGameStore.setState({ page: "game" });
+  const { result } = renderHook(() => usePowers("easy"));
+
+  act(() => special(result, "Super Shield").onUse());
+  act(() => result.current.detonateBomb(false));
+
+  expect(useUserStore.getState().lives).toBe(3);
+  expect(useGameStore.getState().round.status).toBe("in-progress");
+  expect(result.current.bombed).toBe(false);
+});

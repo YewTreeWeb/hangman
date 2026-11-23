@@ -2,10 +2,9 @@ name: Changelog
 
 on:
   push:
-    branches: [main]
 
 concurrency:
-  group: ${{ github.workflow }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -27,8 +26,10 @@ jobs:
       # pushes made with GITHUB_TOKEN don't trigger workflows, so this can't loop
       - name: Commit changelog
         run: |
-          git diff --quiet CHANGELOG.md && exit 0
+          # add first: git diff ignores untracked files, so the first CHANGELOG.md was never committed
+          git add CHANGELOG.md
+          git diff --cached --quiet && exit 0
           git config user.name "github-actions[bot]"
           git config user.email "41898319+github-actions[bot]@users.noreply.github.com"
-          git commit -am "docs: update changelog"
+          git commit -m "docs: update changelog"
           git push

@@ -1,8 +1,9 @@
-import { expect, test } from "bun:test";
+import { afterEach, describe, expect, jest, mock, spyOn, test } from "bun:test";
 
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 
 import {
+  BombDialog,
   FailedPowerDialog,
   RevealDialog,
   RevivalDialog,
@@ -38,6 +39,19 @@ test("dying offers the main menu", () => {
   ).toBeDefined();
   expect(screen.getByRole("button", { name: "Main Menu" })).toBeDefined();
   expect(screen.queryByText("... Loading next word")).toBeNull();
+});
+
+test("a bomb loss shows Game Over with the main menu", () => {
+  render(
+    <RoundLostDialog open word="cat" dead bombed shielded={false} loading />,
+  );
+
+  expect(screen.getByText("Game Over")).toBeDefined();
+  expect(screen.queryByText("Hanged!")).toBeNull();
+  expect(
+    screen.getByText("The bomb went off. Better luck next time."),
+  ).toBeDefined();
+  expect(screen.getByRole("button", { name: "Main Menu" })).toBeDefined();
 });
 
 test("won dialog shows the points earned", () => {
@@ -107,4 +121,104 @@ test("shield dialog", () => {
   render(<ShieldDialog open />);
 
   expect(screen.getByText("Shield Activated")).toBeDefined();
+});
+
+describe("bomb dialog", () => {
+  afterEach(() => {
+    mock.restore();
+    jest.useRealTimers();
+  });
+
+  const press = (name: string) =>
+    fireEvent.click(screen.getByRole("button", { name }));
+
+  const renderBomb = (superShield: boolean, results: boolean[] = []) =>
+    render(
+      <BombDialog
+        open
+        superShield={superShield}
+        onCancel={() => results.push(false)}
+        onDetonate={(won) => results.push(won)}
+      />,
+    );
+
+  const countDown = () => {
+    for (let tick = 0; tick < 3; tick++)
+      act(() => jest.advanceTimersByTime(1000));
+  };
+
+  test("explains both outcomes side by side", () => {
+    renderBomb(false);
+
+    expect(screen.getByText(/50\/50 chance/)).toBeDefined();
+    expect(screen.getByText("If you win")).toBeDefined();
+    expect(screen.getByText("If you lose")).toBeDefined();
+    expect(screen.getByText("Only a super shield can save you.")).toBeDefined();
+  });
+
+  test("cancel reports back without counting down", () => {
+    let cancelled = false;
+
+    render(
+      <BombDialog
+        open
+        superShield={false}
+        onCancel={() => (cancelled = true)}
+        onDetonate={() => {}}
+      />,
+    );
+    press("Cancel");
+
+    expect(cancelled).toBe(true);
+  });
+
+  test("accepting counts down 3, 2, 1 then explodes", () => {
+    jest.useFakeTimers();
+    spyOn(Math, "random").mockReturnValue(0.2);
+    const results: boolean[] = [];
+
+    renderBomb(false, results);
+    press("Accept");
+
+    expect(screen.getByText("3...")).toBeDefined();
+    act(() => jest.advanceTimersByTime(1000));
+    expect(screen.getByText("2...")).toBeDefined();
+    act(() => jest.advanceTimersByTime(1000));
+    expect(screen.getByText("1...")).toBeDefined();
+    act(() => jest.advanceTimersByTime(1000));
+
+    expect(screen.getByText("Boom! You won")).toBeDefined();
+    expect(results).toEqual([]);
+
+    press("Continue");
+    expect(results).toEqual([true]);
+  });
+
+  test("a high roll loses and ends the game", () => {
+    jest.useFakeTimers();
+    spyOn(Math, "random").mockReturnValue(0.7);
+    const results: boolean[] = [];
+
+    renderBomb(false, results);
+    press("Accept");
+    countDown();
+
+    expect(screen.getByText("Boom! You lost")).toBeDefined();
+    expect(screen.getByText("The blast caught you. Game over.")).toBeDefined();
+    press("Continue");
+    expect(results).toEqual([false]);
+  });
+
+  test("a super shield survives a lost bomb", () => {
+    jest.useFakeTimers();
+    spyOn(Math, "random").mockReturnValue(0.7);
+
+    renderBomb(true);
+    press("Accept");
+    countDown();
+
+    expect(
+      screen.getByText("Your super shield saved you from the blast."),
+    ).toBeDefined();
+  });
 });

@@ -95,6 +95,8 @@ export function usePowers(difficulty: LevelKey) {
     state,
   );
 
+  const bomb = useBomb({ shield, superShield }, () => addWonPower("Bomb", 1));
+
   const specialPowers = getSpecialPowers(
     {
       potion: risky.bluePotion,
@@ -104,7 +106,7 @@ export function usePowers(difficulty: LevelKey) {
       superShield: () => raiseShield(setSuperShield),
       bernardsWatch: () => {},
       magicStar,
-      bomb: () => risky.bomb({ shield, superShield }),
+      bomb: bomb.armBomb,
     },
     difficulty,
     state,
@@ -147,6 +149,7 @@ export function usePowers(difficulty: LevelKey) {
       risky.stopReviving();
       cancelPower(power);
     },
+    ...bomb,
     resetPowers,
   };
 }
@@ -199,10 +202,41 @@ function useRiskyPowers(hardMode: boolean) {
       setExtraLife(true);
     },
     revival: () => (sideEffect(0.2) ? setFailedPower(true) : setReviving(true)),
-    bomb: (shields: Shields) => {
-      if (sideEffect(0.5)) return settleLoss(shields, true);
+  };
+}
 
-      revealWord(1000);
+/**
+ * The bomb's dialog state. A lost bomb sets lives to 0 and loses the round,
+ * which shows the Game Over screen; only a super shield saves the player.
+ */
+function useBomb(shields: Shields, returnBomb: () => void) {
+  const { setRound } = useGameStore();
+  const { cancelPower } = useUserStore();
+
+  const [bombArmed, setBombArmed] = useState(false);
+  const [bombed, setBombed] = useState(false);
+
+  return {
+    bombArmed,
+    bombed,
+    armBomb: () => setBombArmed(true),
+    // Gives the bomb back: frees its use and returns it to the held powers
+    cancelBomb: () => {
+      setBombArmed(false);
+      cancelPower("Bomb");
+      returnBomb();
+    },
+    detonateBomb: (won: boolean) => {
+      setBombArmed(false);
+
+      if (won) return revealWord(1000);
+
+      settleLoss(shields, true);
+
+      if (shields.superShield) return;
+
+      setBombed(true);
+      setRound({ status: "lost" });
     },
   };
 }

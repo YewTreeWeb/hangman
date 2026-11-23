@@ -1,6 +1,7 @@
 import { FeelingLucky } from "@/components/feelingLucky";
 import { Keyboard, PowerBar, Stats, WordDisplay } from "@/components/gameBoard";
 import {
+  BombDialog,
   FailedPowerDialog,
   RevealDialog,
   RevivalDialog,
@@ -101,6 +102,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
         open={gameLost}
         word={word}
         dead={lives === 0}
+        bombed={power.bombed}
         shielded={power.shieldKind !== "none"}
         loading={loading}
       />
@@ -116,6 +118,12 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
         onCancel={power.cancelReveal}
       />
       <ShieldDialog open={power.showShield} />
+      <BombDialog
+        open={power.bombArmed}
+        superShield={power.shields.superShield}
+        onCancel={power.cancelBomb}
+        onDetonate={power.detonateBomb}
+      />
       <RevivalDialog
         open={power.reviving}
         usedPowers={activePowers}

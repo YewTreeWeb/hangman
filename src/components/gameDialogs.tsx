@@ -1,4 +1,5 @@
 import {
+  faBomb,
   faCircleXmark,
   faFaceGrinStars,
   faRepeat,
@@ -8,7 +9,7 @@ import {
   faSkullCrossbones,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,18 +36,50 @@ type RoundLostDialogProps = {
   open: boolean;
   word: string;
   dead: boolean;
+  // Lost to the bomb power rather than by guessing
+  bombed?: boolean;
   shielded: boolean;
   loading: boolean;
+};
+
+// Death by the bomb shows Game Over; a shield that saved the player says so
+const lostText = (dead: boolean, bombed: boolean, shielded: boolean) => {
+  if (dead && bombed)
+    return {
+      saved: false,
+      icon: faSkullCrossbones,
+      title: "Game Over",
+      message: "The bomb went off. Better luck next time.",
+    };
+
+  if (dead)
+    return {
+      saved: false,
+      icon: faSkullCrossbones,
+      title: "Hanged!",
+      message: "You have died! Better luck next time.",
+    };
+
+  if (shielded)
+    return {
+      saved: true,
+      icon: faShieldHeart,
+      title: "Shield Activated",
+      message: "You were saved!",
+    };
+
+  return { saved: false, icon: faSkull, title: "Hanged!", message: "" };
 };
 
 export function RoundLostDialog({
   open,
   word,
   dead,
+  bombed = false,
   shielded,
   loading,
 }: RoundLostDialogProps) {
-  const icon = dead ? faSkullCrossbones : shielded ? faShieldHeart : faSkull;
+  const text = lostText(dead, bombed, shielded);
 
   return (
     <Dialog open={open}>
@@ -57,23 +90,17 @@ export function RoundLostDialog({
         <DialogHeader
           className={cn(
             "flex flex-col items-center justify-center gap-4",
-            shielded && !dead ? "text-blue-500" : "text-red-600",
+            text.saved ? "text-blue-500" : "text-red-600",
           )}
         >
-          <FontAwesomeIcon icon={icon} size="5x" />
-          <DialogTitle className="uppercase">
-            {shielded ? "Shield Activated" : "Hanged!"}
-          </DialogTitle>
+          <FontAwesomeIcon icon={text.icon} size="5x" />
+          <DialogTitle className="uppercase">{text.title}</DialogTitle>
         </DialogHeader>
         <DialogDescription className="text-black">
           The word was:{" "}
           <span className="uppercase underline underline-offset-3">{word}</span>
         </DialogDescription>
-        {(dead || shielded) && (
-          <p className="text-sm">
-            {dead ? "You have died! Better luck next time." : "You were saved!"}
-          </p>
-        )}
+        {text.message && <p className="text-sm">{text.message}</p>}
         <DialogFooter className="flex flex-row items-center justify-center text-center text-xs">
           {dead ? (
             <Button size="lg" className="uppercase" onClick={endGame}>
@@ -326,5 +353,166 @@ export function FailedPowerDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+const COUNTDOWN_FROM = 3;
+
+type BombStage = "confirm" | "countdown" | "result";
+
+type BombDialogProps = {
+  open: boolean;
+  superShield: boolean;
+  onCancel: () => void;
+  onDetonate: (won: boolean) => void;
+};
+
+/**
+ * Confirms the 50/50 risk, counts down 3... 2... 1... and explodes at 0.
+ * The outcome is applied when the player continues from the result.
+ */
+export function BombDialog({
+  open,
+  superShield,
+  onCancel,
+  onDetonate,
+}: BombDialogProps) {
+  const [stage, setStage] = useState<BombStage>("confirm");
+  const [count, setCount] = useState(COUNTDOWN_FROM);
+  const [won, setWon] = useState(false);
+
+  useEffect(() => {
+    if (stage !== "countdown") return;
+
+    const tick = setTimeout(() => {
+      if (count > 1) return setCount(count - 1);
+
+      setWon(Math.random() < 0.5);
+      setStage("result");
+    }, 1000);
+
+    return () => clearTimeout(tick);
+  }, [stage, count]);
+
+  const reset = () => {
+    setStage("confirm");
+    setCount(COUNTDOWN_FROM);
+  };
+
+  return (
+    <Dialog open={open}>
+      <DialogContent
+        className="flex flex-col items-center justify-center gap-6 border-2 border-orange-500 text-center"
+        showCloseButton={false}
+      >
+        {stage === "confirm" && (
+          <BombConfirm
+            onCancel={() => {
+              reset();
+              onCancel();
+            }}
+            onAccept={() => setStage("countdown")}
+          />
+        )}
+        {stage === "countdown" && <BombCountdown count={count} />}
+        {stage === "result" && (
+          <BombResult
+            won={won}
+            superShield={superShield}
+            onContinue={() => {
+              reset();
+              onDetonate(won);
+            }}
+          />
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+type BombConfirmProps = { onCancel: () => void; onAccept: () => void };
+
+function BombConfirm({ onCancel, onAccept }: BombConfirmProps) {
+  return (
+    <>
+      <DialogHeader className="flex flex-col items-center justify-center gap-4 text-orange-500">
+        <FontAwesomeIcon icon={faBomb} size="5x" />
+        <DialogTitle className="uppercase">Light the fuse?</DialogTitle>
+        <DialogDescription>
+          The bomb has a 50/50 chance of winning or losing.
+        </DialogDescription>
+      </DialogHeader>
+      <div className="grid w-full grid-cols-2 gap-4 text-sm">
+        <div className="flex flex-col gap-2 rounded-md border-2 border-lime-600 bg-lime-50 p-4">
+          <p className="font-bold text-lime-600 uppercase">If you win</p>
+          <p>The word is revealed and the round is won.</p>
+          <p>You get the word's points plus 1,000 bonus points.</p>
+        </div>
+        <div className="flex flex-col gap-2 rounded-md border-2 border-red-600 bg-red-50 p-4">
+          <p className="font-bold text-red-600 uppercase">If you lose</p>
+          <p>You lose every life and the game ends.</p>
+          <p>Only a super shield can save you.</p>
+        </div>
+      </div>
+      <DialogFooter className="flex w-full flex-row justify-center gap-4">
+        <Button variant="outline" className="uppercase" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button
+          className="bg-orange-500 uppercase hover:bg-orange-600"
+          onClick={onAccept}
+        >
+          Accept
+        </Button>
+      </DialogFooter>
+    </>
+  );
+}
+
+function BombCountdown({ count }: { count: number }) {
+  return (
+    <DialogHeader className="flex flex-col items-center justify-center gap-4 text-orange-500">
+      <FontAwesomeIcon icon={faBomb} size="5x" shake />
+      <DialogTitle className="text-5xl font-bold" aria-live="assertive">
+        {count}...
+      </DialogTitle>
+      <DialogDescription>The fuse is lit.</DialogDescription>
+    </DialogHeader>
+  );
+}
+
+type BombResultProps = {
+  won: boolean;
+  superShield: boolean;
+  onContinue: () => void;
+};
+
+function BombResult({ won, superShield, onContinue }: BombResultProps) {
+  return (
+    <>
+      <DialogHeader
+        className={cn(
+          "flex flex-col items-center justify-center gap-4",
+          won ? "text-lime-600" : "text-red-600",
+        )}
+      >
+        <FontAwesomeIcon icon={faBomb} size="5x" beatFade />
+        <DialogTitle className="uppercase">
+          {won ? "Boom! You won" : "Boom! You lost"}
+        </DialogTitle>
+        <DialogDescription>
+          {won
+            ? "The bomb blew the word wide open. 1,000 bonus points are yours."
+            : superShield
+              ? "Your super shield saved you from the blast."
+              : "The blast caught you. Game over."}
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <Button className="uppercase" onClick={onContinue}>
+          Continue
+        </Button>
+      </DialogFooter>
+    </>
   );
 }
