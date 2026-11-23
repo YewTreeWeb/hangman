@@ -17,6 +17,7 @@ const actions = {
   superShield: noop,
   bernardsWatch: noop,
   magicStar: noop,
+  bomb: noop,
 };
 
 const fresh: PowerState = { lives: 3, usedPowers: [], unlockPowers: false };

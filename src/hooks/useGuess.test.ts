@@ -10,6 +10,7 @@ const noShields = { shield: false, superShield: false };
 
 const startRound = (word: string) => {
   useGameStore.setState({
+    difficulty: "easy",
     round: {
       ...useGameStore.getState().round,
       word,
@@ -34,7 +35,7 @@ test("guessing every letter wins and scores the word", () => {
   expect(round().status).toBe("won");
   expect(user().score).toBe(30);
   expect(user().streak).toBe(1);
-  expect(result.current.earned).toBe(30);
+  expect(user().earned).toBe(30);
   expect(useGameStore.getState().match.roundNumber).toBe(2);
 });
 
@@ -86,16 +87,6 @@ test("a super shield keeps both the life and the streak", () => {
 
   expect(user().lives).toBe(3);
   expect(user().streak).toBe(4);
-});
-
-test("revealing the word wins without points", () => {
-  const { result } = renderHook(() => useGuess("easy", [], noShields));
-
-  act(() => result.current.revealWord());
-
-  expect(round().status).toBe("won");
-  expect(result.current.earned).toBe(0);
-  expect(user().score).toBe(0);
 });
 
 test("letter keys guess and other keys are ignored", () => {

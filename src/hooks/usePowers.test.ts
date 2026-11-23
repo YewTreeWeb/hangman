@@ -25,7 +25,7 @@ beforeEach(() => {
 afterEach(() => mock.restore());
 
 test("blue potion heals one life on easy", () => {
-  const { result } = renderHook(() => usePowers("easy", () => {}));
+  const { result } = renderHook(() => usePowers("easy"));
 
   act(() => special(result, "Blue Potion").onUse());
 
@@ -34,7 +34,7 @@ test("blue potion heals one life on easy", () => {
 });
 
 test("red potion adds two lives and marks the extra life", () => {
-  const { result } = renderHook(() => usePowers("medium", () => {}));
+  const { result } = renderHook(() => usePowers("medium"));
 
   act(() => special(result, "Red Potion").onUse());
 
@@ -44,7 +44,7 @@ test("red potion adds two lives and marks the extra life", () => {
 
 test("potions can fail on hard levels", () => {
   spyOn(Math, "random").mockReturnValue(0);
-  const { result } = renderHook(() => usePowers("hard", () => {}));
+  const { result } = renderHook(() => usePowers("hard"));
 
   act(() => special(result, "Blue Potion").onUse());
 
@@ -57,7 +57,7 @@ test("potions can fail on hard levels", () => {
 
 test("a failed red potion poisons the player", () => {
   spyOn(Math, "random").mockReturnValue(0);
-  const { result } = renderHook(() => usePowers("hard", () => {}));
+  const { result } = renderHook(() => usePowers("hard"));
 
   act(() => special(result, "Red Potion").onUse());
 
@@ -67,7 +67,7 @@ test("a failed red potion poisons the player", () => {
 
 test("revival opens the restore dialog and frees the chosen power", () => {
   useUserStore.setState({ activePowers: ["Clue", "Skip"] });
-  const { result } = renderHook(() => usePowers("easy", () => {}));
+  const { result } = renderHook(() => usePowers("easy"));
 
   act(() => special(result, "Revival").onUse());
   expect(result.current.reviving).toBe(true);
@@ -78,8 +78,8 @@ test("revival opens the restore dialog and frees the chosen power", () => {
 });
 
 test("the first magic star unlocks powers, the next keeps the hint shown", () => {
-  let reveals = 0;
-  const { result } = renderHook(() => usePowers("easy", () => reveals++));
+  useGameStore.setState({ difficulty: "easy" });
+  const { result } = renderHook(() => usePowers("easy"));
 
   act(() => special(result, "Magic Star").onUse());
   expect(useGameStore.getState().unlockPowers).toBe(true);
@@ -89,11 +89,12 @@ test("the first magic star unlocks powers, the next keeps the hint shown", () =>
   act(() => special(result, "Magic Star").onUse());
   expect(result.current.alwaysShowClue).toBe(true);
   expect(result.current.showClue).toBe(true);
-  expect(reveals).toBe(2);
+  expect(useGameStore.getState().round.status).toBe("won");
+  expect(useUserStore.getState().streak).toBe(100);
 });
 
 test("a super shield survives a won round but not a lost one", () => {
-  const { result } = renderHook(() => usePowers("easy", () => {}));
+  const { result } = renderHook(() => usePowers("easy"));
 
   act(() => special(result, "Super Shield").onUse());
   expect(result.current.shieldKind).toBe("super");
@@ -107,7 +108,7 @@ test("a super shield survives a won round but not a lost one", () => {
 
 test("cancelling a reveal frees the Reveal power", () => {
   useUserStore.setState({ activePowers: ["Reveal"] });
-  const { result } = renderHook(() => usePowers("easy", () => {}));
+  const { result } = renderHook(() => usePowers("easy"));
 
   act(() => result.current.cancelReveal());
 
@@ -115,7 +116,7 @@ test("cancelling a reveal frees the Reveal power", () => {
 });
 
 test("special powers won are spent on use", () => {
-  const { result } = renderHook(() => usePowers("executioner", () => {}));
+  const { result } = renderHook(() => usePowers("executioner"));
 
   act(() => result.current.addWonPower("Super Zap", 1));
   expect(result.current.rollBlocked).toBe(true);

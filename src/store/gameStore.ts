@@ -53,12 +53,15 @@ type UserState = {
   solved: number;
   activePowers: string[];
   streak: number;
+  // Points the last won round added, shown in the win dialog
+  earned: number;
   setScore: (score: number) => void;
   setLives: (lives: number) => void;
   setSolved: (solved: number) => void;
   setActivePowers: (powers: string[]) => void;
   cancelPower: (power: string) => void;
   setStreak: (streak: number) => void;
+  setEarned: (earned: number) => void;
 };
 
 export const useGameStore = create<GameState>()(
@@ -113,6 +116,7 @@ export const useUserStore = create<UserState>((set) => ({
   solved: 0,
   activePowers: [],
   streak: 0,
+  earned: 0,
   setActivePowers: (powers: string[]) => set({ activePowers: powers }),
   // Frees one use of a power so its button enables again
   cancelPower: (power: string) =>
@@ -127,4 +131,5 @@ export const useUserStore = create<UserState>((set) => ({
   setLives: (lives: number) => set({ lives }),
   setSolved: (solved: number) => set({ solved }),
   setStreak: (streak: number) => set({ streak }),
+  setEarned: (earned: number) => set({ earned }),
 }));

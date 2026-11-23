@@ -4,9 +4,9 @@ import type { ShieldKind } from "@/components/gameBoard";
 import { useAutoClose } from "@/hooks/useRoundTimers";
 import { pickZapped } from "@/lib/guess";
 import { getPowers, getSpecialPowers } from "@/lib/powerList";
-import { getWord } from "@/lib/utils";
+import { getWord, revealWord, settleLoss } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
-import type { LevelKey, PowerTypes } from "@/types/game-types";
+import type { LevelKey, PowerTypes, Shields } from "@/types/game-types";
 
 const MAX_LIVES = 3;
 
@@ -19,14 +19,13 @@ const shieldKindOf = (shield: boolean, superShield: boolean): ShieldKind => {
 /**
  * Power state for one game: what each normal and special power does when
  * used, the shields and zapped letters guessing depends on, and the dialogs
- * powers open. `revealWord` is called by the Magic Star.
+ * powers open.
  */
-export function usePowers(difficulty: LevelKey, revealWord: () => void) {
+export function usePowers(difficulty: LevelKey) {
   const { category, round, setRound, unlockPowers, setUnlockPowers } =
     useGameStore();
 
-  const { lives, streak, setStreak, activePowers, cancelPower } =
-    useUserStore();
+  const { lives, activePowers, cancelPower } = useUserStore();
 
   const [showClue, setShowClue] = useState(false);
   const [alwaysShowClue, setAlwaysShowClue] = useState(false);
@@ -72,11 +71,10 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
 
   // The first star unlocks powers; later stars keep the hint on screen
   const magicStar = () => {
-    setStreak(streak + 50);
     setUnlockPowers(true);
     setAlwaysShowClue(alwaysShowClue || !!unlockPowers);
     setShowClue(showClue || !!unlockPowers);
-    revealWord();
+    revealWord(0, 50);
   };
 
   const state = {
@@ -106,6 +104,7 @@ export function usePowers(difficulty: LevelKey, revealWord: () => void) {
       superShield: () => raiseShield(setSuperShield),
       bernardsWatch: () => {},
       magicStar,
+      bomb: () => risky.bomb({ shield, superShield }),
     },
     difficulty,
     state,
@@ -200,5 +199,10 @@ function useRiskyPowers(hardMode: boolean) {
       setExtraLife(true);
     },
     revival: () => (sideEffect(0.2) ? setFailedPower(true) : setReviving(true)),
+    bomb: (shields: Shields) => {
+      if (sideEffect(0.5)) return settleLoss(shields, true);
+
+      revealWord(1000);
+    },
   };
 }

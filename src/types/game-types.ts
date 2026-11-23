@@ -19,3 +19,5 @@ export type PowerTypes = {
   weight?: number;
   className?: string;
 };
+
+export type Shields = { shield: boolean; superShield: boolean };

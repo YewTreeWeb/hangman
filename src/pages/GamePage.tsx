@@ -20,17 +20,12 @@ import type { LevelKey } from "@/types/game-types";
 
 export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   const { category, round, setRound } = useGameStore();
-  const { score, lives, streak, activePowers } = useUserStore();
+  const { score, lives, streak, activePowers, earned } = useUserStore();
   const { word, hint, guessedLetters, status } = round;
 
-  // Called on click, after useGuess below has run
-  const power = usePowers(difficulty, () => revealWord());
+  const power = usePowers(difficulty);
 
-  const { guessedLetter, revealWord, earned } = useGuess(
-    difficulty,
-    power.zapped,
-    power.shields,
-  );
+  const { guessedLetter } = useGuess(difficulty, power.zapped, power.shields);
 
   const gameWon = status === "won";
   const gameLost = status === "lost";

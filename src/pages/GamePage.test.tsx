@@ -9,6 +9,7 @@ import { GamePage } from "./GamePage";
 
 beforeEach(() => {
   useGameStore.setState({
+    difficulty: "easy",
     category: "Animals",
     unlockPowers: false,
     round: {

@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 import words from "@/data/words.json";
 import { useGameStore, useUserStore } from "@/store/gameStore";
-import type { LevelKey } from "@/types/game-types";
+import type { LevelKey, Shields } from "@/types/game-types";
 
 const { setDifficulty, setPage, setUnlockPowers, setRound } =
   useGameStore.getState();
@@ -13,7 +13,7 @@ type WordsObjType = {
   hint: string;
 };
 
-const { setScore, setLives, setSolved, setStreak, setActivePowers } =
+const { setScore, setLives, setSolved, setStreak, setActivePowers, setEarned } =
   useUserStore.getState();
 
 export function cn(...inputs: ClassValue[]) {
@@ -109,4 +109,45 @@ export const endGame = () => {
   setUnlockPowers(false);
   resetGame();
   setPage("home");
+};
+
+export const settleWin = (points = 0, streakAddon = 1) => {
+  const { round, difficulty } = useGameStore.getState();
+  const { score, streak } = useUserStore.getState();
+
+  if (!difficulty) return 0;
+
+  const roundedPoints = roundPoints(round.word, difficulty, streak);
+  const totalPoints = roundedPoints + points;
+
+  setScore(score + totalPoints);
+  setEarned(totalPoints);
+  setStreak(streak + streakAddon);
+
+  return totalPoints;
+};
+
+// A shield saves the life, a super shield saves the life, the streak and from the bomb
+export const settleLoss = (shields: Shields, bomb = false) => {
+  const { lives } = useUserStore.getState();
+
+  if (lives === 0) return;
+
+  if (!shields.superShield) setStreak(0);
+
+  if (lives > 0 && !shields.shield && !shields.superShield && !bomb)
+    setLives(lives - 1);
+
+  if (lives > 0 && bomb && !shields.superShield) setLives(0);
+};
+
+// Wins the round with or without points, for powers that reveal the word
+export const revealWord = (points = 0, streak = 0) => {
+  const { round } = useGameStore.getState();
+
+  setRound({
+    guessedLetters: [...new Set([...round.guessedLetters, ...round.word])],
+    status: "won",
+  });
+  settleWin(points, streak);
 };

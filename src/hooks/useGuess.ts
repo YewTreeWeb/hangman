@@ -1,11 +1,9 @@
-import { useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useEffectEvent } from "react";
 
 import { roundStatus } from "@/lib/guess";
-import { roundPoints } from "@/lib/utils";
-import { useGameStore, useUserStore } from "@/store/gameStore";
-import type { LevelKey } from "@/types/game-types";
-
-type Shields = { shield: boolean; superShield: boolean };
+import { settleLoss, settleWin } from "@/lib/utils";
+import { useGameStore } from "@/store/gameStore";
+import type { LevelKey, Shields } from "@/types/game-types";
 
 /**
  * Guessing for the current round: on-screen and physical keyboard input,
@@ -18,28 +16,7 @@ export function useGuess(
 ) {
   const { round, setRound, match, setMatch } = useGameStore();
 
-  const { score, setScore, streak, setStreak, lives, setLives } =
-    useUserStore();
-
-  const [earned, setEarned] = useState(0);
   const { word, guessedLetters, status } = round;
-
-  const settleWin = () => {
-    const points = roundPoints(word, difficulty, streak);
-
-    setEarned(points);
-    setScore(score + points);
-    setStreak(streak + 1);
-  };
-
-  // A shield saves the life, a super shield saves the life and the streak
-  const settleLoss = () => {
-    if (!shields.superShield) setStreak(0);
-
-    if (lives > 0 && !shields.shield && !shields.superShield) {
-      setLives(lives - 1);
-    }
-  };
 
   const canGuess = (letter: string) =>
     status === "in-progress" &&
@@ -58,17 +35,13 @@ export function useGuess(
 
     setMatch({ roundNumber: match.roundNumber + 1 });
 
-    if (outcome === "won") settleWin();
-    else settleLoss();
-  };
+    if (outcome === "won") {
+      settleWin();
 
-  // Wins the round without points, for powers that reveal the word
-  const revealWord = () => {
-    setRound({
-      guessedLetters: [...new Set([...guessedLetters, ...word])],
-      status: "won",
-    });
-    setEarned(0);
+      return;
+    }
+
+    settleLoss(shields);
   };
 
   const onKeyPress = useEffectEvent((e: KeyboardEvent) => {
@@ -84,5 +57,5 @@ export function useGuess(
     return () => document.removeEventListener("keypress", onKeyPress);
   }, []);
 
-  return { guessedLetter, revealWord, earned };
+  return { guessedLetter };
 }

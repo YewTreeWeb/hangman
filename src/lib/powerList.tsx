@@ -1,5 +1,6 @@
 import {
   faBolt,
+  faBomb,
   faClock,
   faCloudBolt,
   faFlask,
@@ -34,6 +35,7 @@ type SpecialPowerActions = {
   superShield: () => void;
   bernardsWatch: () => void;
   magicStar: () => void;
+  bomb: () => void;
 };
 
 export type PowerState = {
@@ -192,6 +194,12 @@ export const getSpecialPowers = (
       "Protects against losing one health and streak",
       faShieldHeart,
       actions.superShield,
+    ),
+    power(
+      "Bomb",
+      "50/50 chance of loosing game or winning round and gaining big points",
+      faBomb,
+      actions.bomb,
     ),
     difficulty === "easy"
       ? {
