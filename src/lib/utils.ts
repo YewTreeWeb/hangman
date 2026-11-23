@@ -76,11 +76,9 @@ const wordScores: Record<LevelKey, number> = {
 const randomWord = <T>(w: T[]) => w[Math.floor(Math.random() * w.length)]!;
 
 /**
- * Returns a random word from the selected category and difficulty range.
- *
- * @param cat - The word category, or "Random" to pool all categories.
- * @param lvl - The difficulty level that defines the valid word length range.
- * @returns A word object containing the chosen word and hint.
+ * Picks a random word whose length fits the level, from one category or all
+ * of them when `cat` is "Random". Falls back to any word in the pool when no
+ * word fits the length range.
  */
 export const getWord = (cat: string, lvl: LevelKey) => {
   // SAFETY: words.json maps each category name to an array of { word, hint } objects
@@ -99,11 +97,8 @@ export const getWord = (cat: string, lvl: LevelKey) => {
 };
 
 /**
- * Calculates the score for a guessed word based on its unique letters and the selected level.
+ * Scores 10 points per unique letter, multiplied by the level's word score.
  *
- * @param word - The guessed word to score.
- * @param level - The difficulty level determining the score multiplier. Must not be null.
- * @returns The computed score for the word.
  * @throws {Error} If the level is null.
  */
 export const wordPoints = (word: string, level: LevelKey | null) => {
@@ -112,14 +107,6 @@ export const wordPoints = (word: string, level: LevelKey | null) => {
   return Math.round(new Set(word).size * 10 * wordScores[level]);
 };
 
-/**
- * Ends the current game and returns the user to the home screen.
- *
- * Clears the selected difficulty, resets the game state, and navigates to the
- * main menu.
- *
- * @returns {void}
- */
 export const endGame = () => {
   setDifficulty(null);
   setUnlockPowers(false);
