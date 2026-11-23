@@ -17,6 +17,9 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
+      # bun.lock records tarball URLs from the LAN-only Verdaccio mirror; fetch the same tarballs from npm
+      - run: sed -i 's#https://verdaccio.teamteaguehomelab.uk/#https://registry.npmjs.org/#g' bun.lock
+
       - run: bun install --frozen-lockfile
 
       - name: Oxlint
@@ -37,6 +40,8 @@ jobs:
 
       # without node_modules fallow can't resolve the JSX runtime and flags react as unused
       - uses: oven-sh/setup-bun@v2
+
+      - run: sed -i 's#https://verdaccio.teamteaguehomelab.uk/#https://registry.npmjs.org/#g' bun.lock
 
       - run: bun install --frozen-lockfile
 
