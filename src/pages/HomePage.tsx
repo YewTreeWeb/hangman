@@ -21,6 +21,10 @@ export function HomePage() {
     resetGame();
     setPage("game");
   };
+
+  // SAFETY: levelOptions is a Record<LevelKey, ...> literal, so its keys are exactly the LevelKey values
+  const levels = Object.keys(levelOptions) as LevelKey[];
+
   const categories = [
     "Random",
     "Animals",
@@ -55,7 +59,7 @@ export function HomePage() {
           <CardTitle className="text-xs uppercase">Difficulty Levels</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center gap-3 px-0">
-          {(Object.keys(levelOptions) as LevelKey[]).map((level) => (
+          {levels.map((level) => (
             <DifficultyLevel
               active={level === difficulty}
               key={level}

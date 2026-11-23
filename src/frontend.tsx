@@ -11,6 +11,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { App } from "./App";
 
 const elem = document.getElementById("root")!;
+
 const app = (
   <StrictMode>
     <App />
@@ -19,4 +20,6 @@ const app = (
 
 // https://bun.com/docs/bundler/hot-reloading#import-meta-hot-data
 type HotData = { root?: Root };
+
+// SAFETY: hot.data is untyped and only this module writes to it, always storing { root }
 ((import.meta.hot.data as HotData).root ??= createRoot(elem)).render(app);

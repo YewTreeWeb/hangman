@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import words from "@/data/words.json";
 import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
+
 const { setDifficulty, setPage, setUnlockPowers, setRound } =
   useGameStore.getState();
 
@@ -11,6 +12,7 @@ type WordsObjType = {
   word: string;
   hint: string;
 };
+
 const { setScore, setLives, setSolved, setStreak, setActivePowers } =
   useUserStore.getState();
 
@@ -81,13 +83,18 @@ const randomWord = <T>(w: T[]) => w[Math.floor(Math.random() * w.length)]!;
  * @returns A word object containing the chosen word and hint.
  */
 export const getWord = (cat: string, lvl: LevelKey) => {
+  // SAFETY: words.json maps each category name to an array of { word, hint } objects
   const lists = words as Record<string, WordsObjType[]>;
+
   const wordPool =
     cat === "Random" ? Object.values(lists).flat() : (lists[cat] ?? []);
+
   const [min, max] = wordLengths[lvl];
+
   const wordLvlSize = wordPool.filter(
     (w) => w.word.length >= min && w.word.length <= max,
   );
+
   return randomWord(wordLvlSize.length ? wordLvlSize : wordPool);
 };
 

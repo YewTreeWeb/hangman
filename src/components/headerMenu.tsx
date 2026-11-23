@@ -26,6 +26,7 @@ import {
 
 export function HeaderMenu() {
   const { difficulty, setDifficulty } = useGameStore();
+  // SAFETY: levelOptions is a Record<LevelKey, ...> literal, so its keys are exactly the LevelKey values
   const levels = Object.keys(levelOptions) as LevelKey[];
   const filteredLevels = levels.filter((level) => level !== difficulty);
 

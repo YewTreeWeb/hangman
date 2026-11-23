@@ -27,7 +27,6 @@ export function DifficultyLevel({
   powers,
   active = false,
 }: DifficultyLevelProps) {
-  const numPowers = typeof powers === "number" ? powers : 0;
   const { setDifficulty, difficulty } = useGameStore();
 
   return (
@@ -54,7 +53,9 @@ export function DifficultyLevel({
                   <li>{timer ? "With timer" : "No timer"}</li>
                   <li>
                     {powers
-                      ? `${level === "easy" ? "All powers" : `${numPowers} powers`}`
+                      ? powers === true
+                        ? "All powers"
+                        : `${powers} powers`
                       : "No powers"}
                   </li>
                 </ul>

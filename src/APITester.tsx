@@ -21,8 +21,10 @@ export function APITester() {
     try {
       const form = e.currentTarget;
       const formData = new FormData(form);
+      // SAFETY: "endpoint" is a text input in this form, so FormData holds a string, never a File or null
       const endpoint = formData.get("endpoint") as string;
       const url = new URL(endpoint, location.href);
+      // SAFETY: the "method" Select has a defaultValue, so its hidden input always submits a string
       const method = formData.get("method") as string;
       const res = await fetch(url, { method });
 
