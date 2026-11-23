@@ -1,35 +1,25 @@
-import {
-  faCircleXmark,
-  faFaceGrinStars,
-  faHeart,
-  faRepeat,
-  faShield,
-  faShieldHeart,
-  faSkull,
-  faSkullCrossbones,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 import { FeelingLucky } from "@/components/feelingLucky";
+import {
+  FailedPowerDialog,
+  RevealDialog,
+  RevivalDialog,
+  RoundLostDialog,
+  RoundWonDialog,
+  ShieldDialog,
+} from "@/components/gameDialogs";
 import { HangmanDrawing } from "@/components/HangmanDrawing";
 import { HeaderMenu } from "@/components/headerMenu";
 import { Powers } from "@/components/powers";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Spinner } from "@/components/ui/spinner";
 import { useGuess } from "@/hooks/useGuess";
 import { useAutoAdvance, useAutoClose } from "@/hooks/useRoundTimers";
 import { wrongGuesses } from "@/lib/guess";
 import { getPowers, getSpecialPowers } from "@/lib/powerList";
-import { cn, endGame, getWord, wordPoints } from "@/lib/utils";
+import { cn, getWord, wordPoints } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
 
@@ -57,7 +47,6 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   const [revivePower, setRevivePower] = useState(false);
   const [wonPowers, setWonPowers] = useState<Record<string, number>>({});
   const [isPoisoned, setIsPoisoned] = useState(false);
-  const [restorePower, setRestorePower] = useState("");
   const [failedPower, setFailedPower] = useState(false);
   const [alwaysShowClue, setAlwaysShowClue] = useState(false);
 
@@ -180,12 +169,6 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
 
   const shielded = activeShield || activeSuperShield;
   const dead = lives === 0;
-
-  const failIcon = dead
-    ? faSkullCrossbones
-    : shielded
-      ? faShieldHeart
-      : faSkull;
 
   const loading = useAutoAdvance(status !== "in-progress", lives, () => {
     setRound({
@@ -378,239 +361,41 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
           </div>
         ))}
       </section>
-      <Dialog open={gameLost}>
-        <DialogContent
-          className="flex flex-col items-center justify-center gap-6 border-2 border-red-600 text-center"
-          showCloseButton={false}
-        >
-          <DialogHeader
-            className={cn(
-              "flex flex-col items-center justify-center gap-4",
-              shielded && !dead ? "text-blue-500" : "text-red-600",
-            )}
-          >
-            <FontAwesomeIcon icon={failIcon} size="5x" />
-            <DialogTitle className="uppercase">
-              {shielded ? "Shield Activated" : "Hanged!"}
-            </DialogTitle>
-          </DialogHeader>
-          <DialogDescription className="text-black">
-            The word was:{" "}
-            <span className="uppercase underline underline-offset-3">
-              {word}
-            </span>
-          </DialogDescription>
-          {(dead || shielded) && (
-            <p className="text-sm">
-              {dead
-                ? "You have died! Better luck next time."
-                : shielded
-                  ? "You were saved!"
-                  : ""}
-            </p>
-          )}
-          <DialogFooter className="flex flex-row items-center justify-center text-center text-xs">
-            {dead ? (
-              <Button size="lg" className="uppercase" onClick={endGame}>
-                Main Menu
-              </Button>
-            ) : (
-              loading && (
-                <>
-                  <Spinner />
-                  <p>... Loading next word</p>
-                </>
-              )
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={gameWon}>
-        <DialogContent
-          className="flex flex-col items-center justify-center gap-6 border-2 border-lime-600 text-center"
-          showCloseButton={false}
-        >
-          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-lime-600">
-            <FontAwesomeIcon icon={faFaceGrinStars} size="5x" />
-            <DialogTitle className="uppercase">You won!</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>You earned {earned} points.</DialogDescription>
-          {loading && (
-            <DialogFooter className="flex flex-row items-center justify-center text-center text-xs">
-              <Spinner />
-              <span>... Loading next word</span>
-            </DialogFooter>
-          )}
-        </DialogContent>
-      </Dialog>
-      <Dialog open={isRevealed}>
-        <DialogContent
-          className="flex flex-col items-center justify-center gap-6 border-2 border-purple-600 text-center"
-          showCloseButton={false}
-        >
-          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-purple-600">
-            <DialogTitle className="uppercase">Reveal a letter</DialogTitle>
-            <p>Choose a position — that letter will be uncovered.</p>
-          </DialogHeader>
-          <DialogDescription>
-            {[...word].map((char, i) => (
-              <>
-                {!guessedLetters.includes(char) && (
-                  <div key={i} className="w-6">
-                    <hr className={cn("border-b border-black")} />
-                  </div>
-                )}
-              </>
-            ))}
-            <p className="uppercase">hidden positions</p>
-            {[...word].map((char, i) => (
-              <>
-                {!guessedLetters.includes(char) && (
-                  <Button
-                    key={i}
-                    className="w-6"
-                    variant="outline"
-                    onClick={() => {
-                      guess(char);
-                      setIsRevealed(false);
-                    }}
-                  >
-                    {i + 1}
-                    {i === 0 ? "st" : "th"}
-                  </Button>
-                )}
-              </>
-            ))}
-            <Button
-              variant="outline"
-              onClick={() => {
-                cancelPower("Reveal");
-                setIsRevealed(false);
-              }}
-            >
-              Cancel Power
-            </Button>
-          </DialogDescription>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={showShield}>
-        <DialogContent
-          className="flex flex-col items-center justify-center gap-6 border-2 border-blue-400 text-center"
-          showCloseButton={false}
-        >
-          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-blue-400">
-            <FontAwesomeIcon icon={faShield} size="5x" />
-            <DialogTitle className="uppercase">Shield Activated</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            You have activated your shield. Protection awaits you.
-          </DialogDescription>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={revivePower}>
-        <DialogContent
-          className="flex flex-col items-center justify-center gap-6 border-2 border-indigo-400 text-center"
-          showCloseButton={false}
-        >
-          <DialogHeader className="flex flex-col items-center justify-center gap-4 text-indigo-400">
-            <FontAwesomeIcon icon={faRepeat} size="5x" />
-            <DialogTitle className="uppercase">
-              Restore a used power
-            </DialogTitle>
-            <p className="text-center text-sm">
-              You can only restore normal powers and not special ones you win
-            </p>
-          </DialogHeader>
-          <DialogDescription>
-            <div className="flex items-center justify-center gap-4">
-              {activePowers.map((power) => (
-                <Button
-                  key={power}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setRestorePower(power)}
-                  activeBtn={restorePower === power}
-                  className="uppercase"
-                >
-                  {power}
-                </Button>
-              ))}
-            </div>
-            <div className="mt-6 flex flex-col items-center justify-center gap-4">
-              {restorePower && (
-                <>
-                  <p className="text-xs">
-                    Are you sure you want to restore the power{" "}
-                    <span className="font-bold uppercase">{restorePower}</span>?
-                  </p>
-                  <div className="flex items-center justify-center gap-4">
-                    <Button
-                      variant="secondary"
-                      onClick={() => setRestorePower("")}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setRevivePower(false);
-                        setRestorePower("");
-                        cancelPower(restorePower);
-                      }}
-                    >
-                      Confirm
-                    </Button>
-                  </div>
-                </>
-              )}
-            </div>
-          </DialogDescription>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={failedPower}>
-        <DialogContent
-          className={cn(
-            "flex flex-col items-center justify-center gap-6 border-2 text-center",
-            isPoisoned
-              ? "border-green-700 dark:border-green-600"
-              : "border-red-400",
-          )}
-          showCloseButton={false}
-        >
-          <DialogHeader
-            className={cn(
-              "flex flex-col items-center justify-center gap-4",
-              isPoisoned
-                ? "text-green-700 dark:text-green-600"
-                : "text-red-400",
-            )}
-          >
-            {isPoisoned ? (
-              <FontAwesomeIcon icon={faSkull} size="5x" />
-            ) : (
-              <FontAwesomeIcon icon={faCircleXmark} size="5x" />
-            )}
-            <DialogTitle className="uppercase">
-              {isPoisoned
-                ? "Oh no! You've been poisoned!"
-                : "Oh no! Your power failed"}
-            </DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            {isPoisoned
-              ? "You will now loose a life due to the effects of being poisoned."
-              : "Your power failed to activate. It's affects have not been applied. Hopefully it will work next time."}
-          </DialogDescription>
-          <DialogFooter>
-            <Button
-              onClick={() => setFailedPower(false)}
-              variant="destructive"
-              className={cn(isPoisoned && "bg-green-700!")}
-            >
-              Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <RoundLostDialog
+        open={gameLost}
+        word={word}
+        dead={dead}
+        shielded={shielded}
+        loading={loading}
+      />
+      <RoundWonDialog open={gameWon} earned={earned} loading={loading} />
+      <RevealDialog
+        open={isRevealed}
+        word={word}
+        guessedLetters={guessedLetters}
+        onReveal={(letter) => {
+          guess(letter);
+          setIsRevealed(false);
+        }}
+        onCancel={() => {
+          cancelPower("Reveal");
+          setIsRevealed(false);
+        }}
+      />
+      <ShieldDialog open={showShield} />
+      <RevivalDialog
+        open={revivePower}
+        usedPowers={activePowers}
+        onRestore={(power) => {
+          setRevivePower(false);
+          cancelPower(power);
+        }}
+      />
+      <FailedPowerDialog
+        open={failedPower}
+        poisoned={isPoisoned}
+        onClose={() => setFailedPower(false)}
+      />
     </div>
   );
 }
