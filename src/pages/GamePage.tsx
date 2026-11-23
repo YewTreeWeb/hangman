@@ -9,7 +9,7 @@ import {
   faSkullCrossbones,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { FeelingLucky } from "@/components/feelingLucky";
 import { HangmanDrawing } from "@/components/HangmanDrawing";
@@ -25,27 +25,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
+import { useGuess } from "@/hooks/useGuess";
 import { useAutoAdvance, useAutoClose } from "@/hooks/useRoundTimers";
+import { wrongGuesses } from "@/lib/guess";
 import { getPowers, getSpecialPowers } from "@/lib/powerList";
-import { cn, endGame, getWord, roundPoints, wordPoints } from "@/lib/utils";
+import { cn, endGame, getWord, wordPoints } from "@/lib/utils";
 import { useGameStore, useUserStore } from "@/store/gameStore";
 import type { LevelKey } from "@/types/game-types";
 
 export function GamePage({ difficulty }: { difficulty: LevelKey }) {
-  const {
-    category,
-    round,
-    setRound,
-    match,
-    setMatch,
-    setUnlockPowers,
-    unlockPowers,
-  } = useGameStore();
+  const { category, round, setRound, setUnlockPowers, unlockPowers } =
+    useGameStore();
 
   const {
     score,
     lives,
-    setScore,
     streak,
     setStreak,
     setLives,
@@ -54,9 +48,6 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   } = useUserStore();
 
   const [showClue, setShowClue] = useState<boolean>();
-  const [success, setSuccess] = useState(false);
-  const [earned, setEarned] = useState(0);
-  const [failed, setFailed] = useState(false);
   const [activeShield, setActiveShield] = useState(false);
   const [activeSuperShield, setActiveSuperShield] = useState(false);
   const [zapped, setZapped] = useState<string[]>([]);
@@ -71,6 +62,11 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
   const [alwaysShowClue, setAlwaysShowClue] = useState(false);
 
   const { word, hint, guessedLetters, status } = round;
+
+  const { guess, revealWord, earned } = useGuess(difficulty, zapped, {
+    shield: activeShield,
+    superShield: activeSuperShield,
+  });
 
   const resetPowers = () => {
     if (!alwaysShowClue) setShowClue(false);
@@ -166,12 +162,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
           setShowClue(true);
         }
 
-        setRound({
-          guessedLetters: [...new Set([...guessedLetters, ...word])],
-          status: "won",
-        });
-        setEarned(0);
-        setSuccess(true);
+        revealWord();
       },
     },
     difficulty,
@@ -182,80 +173,10 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
     difficulty === "executioner" &&
     Object.values(wonPowers).some((count) => count > 0);
 
-  const wrongLetter = guessedLetters.filter(
-    (letter) => !word.includes(letter),
-  ).length;
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      const key = e.key;
-
-      if (!key.match(/^[a-z]$/)) return;
-
-      e.preventDefault();
-      guessedLetter(key);
-    };
-
-    document.addEventListener("keypress", handler);
-
-    return () => {
-      document.removeEventListener("keypress", handler);
-    };
-  });
-
-  const gameLost =
-    (hardMode && wrongLetter >= 6) || (!hardMode && wrongLetter >= 11);
-
-  const gameWon = [...word].every((letter) => guessedLetters.includes(letter));
-
-  const guessedLetter = (letter: string) => {
-    if (
-      guessedLetters.includes(letter) ||
-      zapped.includes(letter) ||
-      status !== "in-progress"
-    )
-      return;
-
-    const next = [...guessedLetters, letter];
-    const won = [...word].every((l) => next.includes(l));
-    const wrong = next.filter((l) => !word.includes(l)).length;
-    const lost = hardMode ? wrong >= 6 : wrong >= 11;
-
-    setRound({
-      guessedLetters: next,
-      status: won ? "won" : lost ? "lost" : "in-progress",
-    });
-
-    if (won) {
-      const points = roundPoints(word, difficulty, streak);
-
-      setEarned(points);
-      setScore(score + points);
-      setStreak(streak + 1);
-      setSuccess(true);
-    }
-
-    if (lost) {
-      setFailed(true);
-      setExtraLife(false);
-    }
-
-    if (lost && !activeSuperShield) {
-      setStreak(0);
-    }
-
-    if (lost && lives > 0 && !activeShield && !activeSuperShield) {
-      setLives(lives - 1);
-    }
-
-    if (won || lost) {
-      setMatch({
-        roundNumber: (match?.roundNumber ?? 0) + 1,
-      });
-    }
-  };
-
-  const roundOver = gameLost || gameWon;
+  const wrongLetter = wrongGuesses(word, guessedLetters);
+  const gameWon = status === "won";
+  const gameLost = status === "lost";
+  const roundOver = gameWon || gameLost;
 
   const shielded = activeShield || activeSuperShield;
   const dead = lives === 0;
@@ -273,10 +194,8 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
       status: "in-progress",
     });
 
-    if (failed) setActiveSuperShield(false);
+    if (gameLost) setActiveSuperShield(false);
     resetPowers();
-    setFailed(false);
-    setSuccess(false);
   });
 
   // Frees one use so the power button enables again
@@ -331,7 +250,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
                     icon={faHeart}
                     size="lg"
                     className={cn(
-                      extraLife && i === 0
+                      extraLife && !gameLost && i === 0
                         ? "text-yellow-400! drop-shadow-[0_0_0.25rem_var(--color-yellow-300)] dark:text-yellow-300!"
                         : isPoisoned && i === 0
                           ? "text-green-700! dark:text-green-600!"
@@ -445,7 +364,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
                     ? "hidden border border-orange-300 text-orange-300 hover:bg-yellow-100 hover:text-orange-300"
                     : "text-black",
                 )}
-                onClick={() => guessedLetter(char)}
+                onClick={() => guess(char)}
                 disabled={
                   guessedLetters.includes(char) ||
                   gameLost ||
@@ -459,7 +378,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
           </div>
         ))}
       </section>
-      <Dialog open={failed}>
+      <Dialog open={gameLost}>
         <DialogContent
           className="flex flex-col items-center justify-center gap-6 border-2 border-red-600 text-center"
           showCloseButton={false}
@@ -506,7 +425,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Dialog open={success}>
+      <Dialog open={gameWon}>
         <DialogContent
           className="flex flex-col items-center justify-center gap-6 border-2 border-lime-600 text-center"
           showCloseButton={false}
@@ -552,7 +471,7 @@ export function GamePage({ difficulty }: { difficulty: LevelKey }) {
                     className="w-6"
                     variant="outline"
                     onClick={() => {
-                      setRound({ guessedLetters: [...guessedLetters, char] });
+                      guess(char);
                       setIsRevealed(false);
                     }}
                   >

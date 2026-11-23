@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import type { RoundStatus } from "@/lib/guess";
 import type { GamePageProps, LevelKey } from "@/types/game-types";
 
 type MatchTypes = {
@@ -15,7 +16,7 @@ type RoundTypes = {
   word: string;
   hint: string;
   guessedLetters: string[];
-  status: "in-progress" | "won" | "lost";
+  status: RoundStatus;
   timeLeft: number | null;
   timerSpeed: number | null;
   revealedSlots: number;
