@@ -210,7 +210,7 @@ export function RevivalDialog({
   usedPowers,
   onRestore,
 }: RevivalDialogProps) {
-  const [selected, setSelected] = useState("");
+  const [restorePower, setRestorePower] = useState("");
 
   return (
     <Dialog open={open}>
@@ -232,8 +232,8 @@ export function RevivalDialog({
                 key={power}
                 variant="outline"
                 size="sm"
-                onClick={() => setSelected(power)}
-                activeBtn={selected === power}
+                onClick={() => setRestorePower(power)}
+                activeBtn={restorePower === power}
                 className="uppercase"
               >
                 {power}
@@ -241,20 +241,23 @@ export function RevivalDialog({
             ))}
           </div>
           <div className="mt-6 flex flex-col items-center justify-center gap-4">
-            {selected && (
+            {restorePower && (
               <>
                 <p className="text-xs">
                   Are you sure you want to restore the power{" "}
-                  <span className="font-bold uppercase">{selected}</span>?
+                  <span className="font-bold uppercase">{restorePower}</span>?
                 </p>
                 <div className="flex items-center justify-center gap-4">
-                  <Button variant="secondary" onClick={() => setSelected("")}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setRestorePower("")}
+                  >
                     Cancel
                   </Button>
                   <Button
                     onClick={() => {
-                      onRestore(selected);
-                      setSelected("");
+                      onRestore(restorePower);
+                      setRestorePower("");
                     }}
                   >
                     Confirm
