@@ -1,4 +1,5 @@
 import { serve } from "bun";
+
 import index from "./index.html";
 
 const server = serve({
@@ -23,6 +24,7 @@ const server = serve({
 
     "/api/hello/:name": (req) => {
       const name = req.params.name;
+
       return Response.json({
         message: `Hello, ${name}!`,
       });
@@ -30,7 +32,6 @@ const server = serve({
   },
 
   development: process.env.NODE_ENV !== "production" && {
-    // Enable browser hot reloading in development
     hmr: true,
 
     // Echo console logs from the browser to the server

@@ -1,0 +1,23 @@
+import type { ReactNode } from "react";
+
+export type LevelTypes = "Easy" | "Medium" | "Hard" | "Executioner";
+
+export type LevelKey = Lowercase<LevelTypes>;
+
+export type GamePageProps = "home" | "game" | "result";
+
+export type PowerTypes = {
+  name: string;
+  description: string;
+  Icon: () => ReactNode;
+  active: boolean;
+  multiUse?: boolean;
+  uses?: number;
+  locked?: boolean;
+  toUnlock?: number;
+  onUse: () => void;
+  weight?: number;
+  className?: string;
+};
+
+export type Shields = { shield: boolean; superShield: boolean };

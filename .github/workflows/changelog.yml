@@ -1,0 +1,35 @@
+name: Changelog
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # commitizen reads the whole commit history
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v10.3.3 # no major tags since v8
+
+      - run: uvx --from commitizen cz changelog
+
+      # pushes made with GITHUB_TOKEN don't trigger workflows, so this can't loop
+      - name: Commit changelog
+        run: |
+          # add first: git diff ignores untracked files, so the first CHANGELOG.md was never committed
+          git add CHANGELOG.md
+          git diff --cached --quiet && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898319+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: update changelog"
+          git push

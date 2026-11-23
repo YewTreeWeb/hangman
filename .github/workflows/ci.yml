@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: oven-sh/setup-bun@v2
+
+      # bun.lock records tarball URLs from the LAN-only Verdaccio mirror; fetch the same tarballs from npm
+      - run: sed -i 's#https://verdaccio.teamteaguehomelab.uk/#https://registry.npmjs.org/#g' bun.lock
+
+      - run: bun install --frozen-lockfile
+
+      - name: Oxlint
+        run: bunx oxlint
+
+      - name: Type check
+        run: bun check
+
+      - name: Test
+        run: bun test
+
+      - name: Build
+        run: bun run build
+
+  fallow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # without node_modules fallow can't resolve the JSX runtime and flags react as unused
+      - uses: oven-sh/setup-bun@v2
+
+      - run: sed -i 's#https://verdaccio.teamteaguehomelab.uk/#https://registry.npmjs.org/#g' bun.lock
+
+      - run: bun install --frozen-lockfile
+
+      # PRs gate only on findings they introduce; pushes run the full analysis against the saved backlog
+      - uses: fallow-rs/fallow@v3
+        with:
+          command: ${{ github.event_name == 'pull_request' && 'audit' || '' }}
+          # audit reads its baselines from .fallowrc.json and rejects these inputs
+          baseline: ${{ github.event_name != 'pull_request' && 'fallow-baselines/dead-code.json' || '' }}
+          health-baseline: ${{ github.event_name != 'pull_request' && 'fallow-baselines/health.json' || '' }}
+          dupes-baseline: ${{ github.event_name != 'pull_request' && 'fallow-baselines/dupes.json' || '' }}

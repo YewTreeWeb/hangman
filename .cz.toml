@@ -1,0 +1,31 @@
+[tool.commitizen]
+name = "cz_customize"
+version_provider = "npm"
+tag_format = "v$version"
+update_changelog_on_bump = true
+template = ".cz/CHANGELOG.md.j2"
+
+# Default cz_conventional_commits only lists feat/fix/refactor/perf; this lists every conventional type
+[tool.commitizen.customize]
+schema_pattern = "^(feat|fix|refactor|perf|chore|ci|docs|build|style|test|revert)(\\(\\S+\\))?!?:\\s.+"
+bump_pattern = "^((BREAKING[\\-\\ ]CHANGE|\\w+)(\\(.+\\))?!?):"
+bump_map = { "^.+!$" = "MAJOR", "^BREAKING[\\-\\ ]CHANGE" = "MAJOR", "^feat" = "MINOR", "^fix" = "PATCH", "^refactor" = "PATCH", "^perf" = "PATCH" }
+# The trailing body group captures the whole commit body so the changelog template can print it
+commit_parser = "^(?P<change_type>feat|fix|refactor|perf|chore|ci|docs|build|style|test|revert|BREAKING CHANGE)(?:\\((?P<scope>[^()\\r\\n]*)\\)|\\()?(?P<breaking>!)?:\\s(?P<message>.*)(?:\\n\\n(?P<body>[\\s\\S]+))?"
+changelog_pattern = "^(?!docs: update changelog)(feat|fix|refactor|perf|chore|ci|docs|build|style|test|revert|BREAKING CHANGE)(\\(.+\\))?(!)?:"
+change_type_map = { "BREAKING CHANGE" = "Breaking Changes", "feat" = "Features", "fix" = "Bug Fixes", "refactor" = "Refactoring", "perf" = "Performance", "revert" = "Reverts", "docs" = "Documentation", "style" = "Styling", "test" = "Tests", "build" = "Build", "ci" = "CI", "chore" = "Chores" }
+# Ordering runs after change_type_map, so these are the mapped section names
+change_type_order = [
+  "Breaking Changes",
+  "Features",
+  "Bug Fixes",
+  "Refactoring",
+  "Performance",
+  "Reverts",
+  "Documentation",
+  "Styling",
+  "Tests",
+  "Build",
+  "CI",
+  "Chores",
+]

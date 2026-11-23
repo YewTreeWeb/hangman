@@ -1,0 +1,64 @@
+import { useGameStore } from "@/store/gameStore";
+import type { LevelKey } from "@/types/game-types";
+
+import { Button } from "./ui/button";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "./ui/item";
+
+type DifficultyLevelProps = {
+  level: LevelKey;
+  tries: number;
+  timer: boolean;
+  powers: boolean | number;
+  active: boolean;
+};
+
+const powersLabel = (powers: boolean | number) => {
+  if (powers === true) return "All powers";
+
+  return powers ? `${powers} powers` : "No powers";
+};
+
+export function DifficultyLevel({
+  level,
+  tries,
+  timer,
+  powers,
+  active = false,
+}: DifficultyLevelProps) {
+  const { setDifficulty } = useGameStore();
+
+  return (
+    <Button
+      variant="outline"
+      className={`h-full w-full p-0 shadow-none ${active ? "border-2 border-lime-600 bg-lime-600/30 hover:bg-lime-600/50" : "border-2 bg-transparent"}`}
+      onClick={() => setDifficulty(level)}
+    >
+      <ItemGroup className="w-full">
+        <Item
+          variant="outline"
+          className="flex w-full items-center justify-start border-none"
+        >
+          <ItemActions className="flex-1">
+            <ItemContent className="flex flex-row items-center justify-start gap-5">
+              <ItemTitle className="font-bold capitalize">{level}</ItemTitle>
+              <ItemDescription asChild>
+                <ul className="flex w-full items-center justify-start gap-2.5 text-xs *:flex *:items-center *:gap-2.5 *:after:size-1 *:after:rounded-full *:after:bg-black/70 *:last:after:hidden">
+                  <li>{tries} tries</li>
+                  <li>{timer ? "With timer" : "No timer"}</li>
+                  <li>{powersLabel(powers)}</li>
+                </ul>
+              </ItemDescription>
+            </ItemContent>
+          </ItemActions>
+        </Item>
+      </ItemGroup>
+    </Button>
+  );
+}

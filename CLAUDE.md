@@ -125,3 +125,8 @@ Default canonical labels: needs-triage, needs-info, ready-for-agent, ready-for-h
 ### Domain docs
 
 Single-context: root `GLOSSARY.md` + `docs/adr/`. See `docs/agents/domain.md`.
+
+<!-- fallow:agent-install v1 claude-import:start -->
+
+@AGENTS.md
+<!-- fallow:agent-install v1 claude-import:end -->

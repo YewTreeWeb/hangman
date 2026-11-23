@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": false,
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": ".*",
+        "cmd": "bun fmt --ignore-unknown \"${file}\""
+      }
+    ]
+  }
+}

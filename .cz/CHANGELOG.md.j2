@@ -1,0 +1,26 @@
+{% set repo = "https://github.com/YewTreeWeb/hangman" %}
+{% for entry in tree %}
+{% set previous = loop.nextitem.version if loop.nextitem else None %}
+{% set head = "HEAD" if entry.version == "Unreleased" else entry.version %}
+
+## {% if previous %}[{{ entry.version }}]({{ repo }}/compare/{{ previous }}...{{ head }}){% else %}{{ entry.version }}{% endif %}{% if entry.date %} ({{ entry.date }}){% endif %}
+
+{% for change_key, changes in entry.changes.items() %}
+
+{% if change_key %}
+### {{ change_key }}
+{% endif %}
+
+{% for change in changes %}
+{% if change.message %}
+- {% if change.breaking %}**BREAKING** {% endif %}{% if change.scope %}**{{ change.scope }}**: {% endif %}{{ change.message }} ([`{{ change.sha1[:7] }}`]({{ repo }}/commit/{{ change.sha1 }})) by {{ change.author }}{% if change.parents | length > 1 %} (merge){% endif %}
+
+{% if change.body %}
+
+{{ change.body | trim | indent(2, first=True) }}
+
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
